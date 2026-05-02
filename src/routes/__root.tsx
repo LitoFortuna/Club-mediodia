@@ -1,0 +1,95 @@
+import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { GrainOverlay } from "@/components/GrainOverlay";
+import { FloatingBalloon } from "@/components/FloatingBalloon";
+
+import appCss from "../styles.css?url";
+
+function NotFoundComponent() {
+  return (
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <div className="max-w-md text-center">
+        <h1 className="text-7xl font-display font-bold" style={{ color: "var(--color-globo)" }}>
+          404
+        </h1>
+        <h2 className="mt-4 text-xl font-display font-semibold">
+          La memoria no llega tan lejos
+        </h2>
+        <p className="mt-2 text-sm opacity-70" style={{ color: "var(--color-teal)" }}>
+          La página que buscas no existe o se borró con la luz del mediodía.
+        </p>
+        <div className="mt-6">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center px-6 py-3 font-display uppercase tracking-widest text-sm hard-shadow"
+            style={{ background: "var(--color-globo)", color: "var(--color-arena)" }}
+          >
+            Volver al inicio
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export const Route = createRootRoute({
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Club Mediodía — Un globo en la terraza" },
+      {
+        name: "description",
+        content:
+          "Club Mediodía. Psicodelia doméstica desde la terraza. Nuevo álbum: Un globo en la terraza.",
+      },
+      { name: "author", content: "Club Mediodía" },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "Club Mediodía — Un globo en la terraza" },
+      {
+        property: "og:description",
+        content: "Memoria borrosa al mediodía. Nuevo álbum próximamente.",
+      },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap",
+      },
+    ],
+  }),
+  shellComponent: RootShell,
+  component: RootComponent,
+  notFoundComponent: NotFoundComponent,
+});
+
+function RootShell({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="es">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+function RootComponent() {
+  return (
+    <>
+      <GrainOverlay />
+      <FloatingBalloon />
+      <Header />
+      <main className="mediodia-enter">
+        <Outlet />
+      </main>
+      <Footer />
+    </>
+  );
+}
