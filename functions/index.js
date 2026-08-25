@@ -1,11 +1,16 @@
 import { onRequest } from "firebase-functions/v2/https";
-import ssrHandler from "./dist/server.js";
+
+let ssrHandler;
 
 export const ssr_server = onRequest({ 
   region: "us-central1",
   memory: "512MiB",
   maxInstances: 10,
 }, async (req, res) => {
+  if (!ssrHandler) {
+    const mod = await import("./dist/server.js");
+    ssrHandler = mod.default;
+  }
 
   const protocol = req.headers['x-forwarded-proto'] || 'http';
   const host = req.headers.host;

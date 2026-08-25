@@ -41,8 +41,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* New Tokens */
-  --color-orange: #FF6B00;
+  /* New Tokens & Artbook Colors */
+  --color-orange: #C12523;
+  --color-rojo-globo: #C12523;
+  --color-azul-cielo: #6DC0E4;
+  --color-sol-arena: #E8CA88;
+  --color-verde-menta: #01947F;
   --color-dark: #000000;
   --color-gray: #333333;
 
@@ -56,8 +60,8 @@
   --background: #000000;
   --foreground: #FFFFFF;
 
-  --primary: #FF6B00;
-  --primary-foreground: #000000;
+  --primary: #C12523;
+  --primary-foreground: #FFFFFF;
 
   --secondary: #333333;
   --secondary-foreground: #FFFFFF;
@@ -65,12 +69,12 @@
   --muted: #1A1A1A;
   --muted-foreground: #888888;
 
-  --accent: #FF6B00;
-  --accent-foreground: #000000;
+  --accent: #C12523;
+  --accent-foreground: #FFFFFF;
 
   --border: #333333;
   --input: #1A1A1A;
-  --ring: #FF6B00;
+  --ring: #C12523;
 }
 
 @layer base {

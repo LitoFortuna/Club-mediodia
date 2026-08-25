@@ -10,7 +10,7 @@ const tracklist = [
   { 
     n: "01", 
     title: "Domingo", 
-    duration: "3:42",
+    duration: "4:10",
     lyrics: `Esta vez salió más poético nena,
 me abriste los brazos y me regalaste tu espacio mental.
 
@@ -24,8 +24,8 @@ Domingo, la lluvia mental.`
   },
   { 
     n: "02", 
-    title: "Aquí y Ahora", 
-    duration: "4:15",
+    title: "Aquí y Ahora (Amigo)", 
+    duration: "3:06",
     lyrics: `Buscábamos sentidos para el amor,
 vimos decaer de nuevo el sol.
 Amigo no me dejes descansar,
@@ -39,82 +39,84 @@ los días más felices van a pasar
 Y no regresan, no regresan,
 no regresan, no… 
 
-Amigo no me dejes descansar,
-los días más felices van a pasar.`
+Miro al espejo y me lleva hacia adentro,
+miro el reflejo y me trae un recuerdo
+
+Que no regresa, no regresa.`
   },
   { 
     n: "03", 
     title: "Tirito", 
-    duration: "2:58",
+    duration: "2:46",
     lyrics: `Nos sobran Adanes, pecados capitales,
-Iluminan mi ciudad nubarrones de otra edad,
-Y cerras los ojos y miras miles de años transformados,
-Un panal y vos la reina, gobernas haces colmena.
+Iluminan mi ciudad nubarrones de otredad,
+Y cerrás los ojos y miras miles de años transformados,
+Un panal y vos la reina, gobernás haces colmena.
 Sin vos me cansa, con vos no alcanza…
 Sin vos me cansa, con vos no alcanza…
 
 Memoria borrosa, paraíso infernal,
-tempano sentimental,
-en la ventana el calor se va,
-y cerras los ojos y miras miles de años transformados,
-un panal y vos la reina, gobernas haces colmena.
-Sin vos me cansa, con vos no alcanza…
-Sin vos me cansa, con vos no alcanza, no alcanza…
+tímpano sentimental, en la ventana el calor se va.
 
-Llamarada siempre inocua,
-se quema mi piel, el tirito entró,
-y en la calle falta amor.
+Cerrás los ojos y miras miles de años transformados,
+un panal y vos la reina, gobernás haces colmena.
 Sin vos me cansa, con vos no alcanza…
-Sin vos me cansa, con vos no alcanza, no alcanza…`
+
+Llamarada siempre inocua, se quema mi piel,
+tirito adentro y en la calle falta amor.
+Sin vos me cansa, con vos no alcanza.`
   },
   { 
     n: "04", 
     title: "Perdido", 
-    duration: "5:11",
-    lyrics: `Sí me perdí fue porqué, a veces, no entiendo
-Si me perdí, fue porqué muchas veces mambeo.
+    duration: "3:04",
+    lyrics: `Si me perdí es porque a veces no entiendo,
+Si me perdí es porque a veces mambeo.
 
-Yo vi la piel psicodélica
+Yo vi la piel, sentí la piel psicodélica.
 
-Sí me perdí fue porqué, nadie importaba
-Sí, me perdí es porqué el mañana no me alcanza.
+Si me perdí es porque nadie importaba,
+Si me perdí es porque el mañana no llegaba.
 
-Yo vi la piel, sentí la piel psicodélica
-psicodélica`
+Yo vi la piel, sentí la piel psicodélica.
+
+Si me perdí es porque con humo no miraba,
+Déjalo así, a veces me encuentro.`
   },
   { 
     n: "05", 
     title: "Las Mañanas", 
-    duration: "4:33",
+    duration: "3:44",
     lyrics: `Las mañanas eran para vos
 Y no me despertabas a desayunar
 La corbata me ahorcaba
 Mientras tecleaba para madurar
 
-Des del banco me avisaban
+Desde el banco me avisaban
 Sin papeles puedes ser deudor
 Mis caricias no llegaban
 Ahora es tiempo para descansar
+
 Mañana las mañanas serán mías
 Sin opciones para postergar
-Llegas tarde a trabajar, a trabajar…`
+Llegas tarde a trabajar.`
   },
   { 
     n: "06", 
     title: "Mundial '94", 
-    duration: "3:21",
+    duration: "4:29",
     lyrics: `Contemplo la idea
 De que todos venimos a pedazos
 Y nos vamos armando mal
+
 Me esquiva la pelota
 Y el mundo me tira para abajo
 Si no comparto con vos
 
-(Psicodepresivo argentino)
-
 Acepto la idea
 De que todos venimos a pedazos
 Y nos vamos armando mal
+
 Me esquiva la pelota
 Y el mundo me tira para abajo
 Si no comparto con vos`
@@ -122,20 +124,21 @@ Si no comparto con vos`
   { 
     n: "07", 
     title: "Rimpiangere", 
-    duration: "4:48",
+    duration: "3:21",
     lyrics: `Barrio de las letras yo te extraño
 Me veo en tus soles reflejar
 Necesito descansar
-Son tus anos son mis sueños
+Son tus años son mis sueños
 Los que infringen la obviedad
 
 Miel y polen se escurren por mis dedos
-Dicen no se puede alcanzaran las manos
+Dicen no se puede alcanzarán las manos
 Una fábula sin viento
 Escapa donde no hay más viento
+
 Al sur siempre un tormento
-Un po, un posible encuentro
-Nuestro virulento porvenir
+Un po' un posible encuentro
+
 Nuestro virulento porvenir
 Nuestro virulento porvenir
 Nuestro virulento porvenir`
@@ -143,8 +146,22 @@ Nuestro virulento porvenir`
   { 
     n: "08", 
     title: "Versiones", 
-    duration: "3:07",
-    lyrics: "(Instrumental)"
+    duration: "3:11",
+    lyrics: `(Instrumental)
+
+Las mañanas eran para vos
+Y no me despertabas a desayunar
+La corbata me ahorcaba
+Mientras tecleaba para madurar
+
+Desde el banco me avisaban
+Sin papeles puedes ser deudor
+Mis caricias no llegaban
+Ahora es tiempo para descansar
+
+Mañana las mañanas serán mías
+Sin opciones para postergar
+Llegas tarde a trabajar.`
   },
 ];
 
