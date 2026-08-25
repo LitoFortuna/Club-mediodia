@@ -61,12 +61,12 @@ function ShowsPage() {
           LIVE
         </div>
         <div className="mx-auto max-w-5xl relative z-10">
-          <p className="font-display uppercase tracking-[0.4em] text-xs mb-6 text-accent">
+          <p className="font-display uppercase tracking-[0.4em] text-xs mb-6 text-arena font-semibold">
             Gira 2026
           </p>
           <h1 className="font-display text-6xl md:text-9xl font-bold tracking-tighter leading-[0.8] text-white">
             PRÓXIMAS<br />
-            <span className="text-accent">FECHAS</span>
+            <span className="text-arena">FECHAS</span>
           </h1>
           <p className="mt-8 font-body text-lg md:text-xl max-w-xl text-white/50">
             Llevamos el mediodía a salas pequeñas. Ven a recordar con nosotros en la penumbra.
@@ -77,13 +77,13 @@ function ShowsPage() {
       <section className="px-6 pb-24 bg-background">
         <div className="mx-auto max-w-4xl flex flex-col gap-4">
           {error && (
-            <p className="text-center text-accent py-12 border border-accent/20 bg-accent/5">{error}</p>
+            <p className="text-center text-arena py-12 border border-arena/20 bg-arena/5">{error}</p>
           )}
           {!error && upcoming.length === 0 && (
             <div className="text-center py-24 border border-white/10 bg-white/5">
               <p className="font-display text-2xl text-white/40">
                 No hay fechas anunciadas.<br />
-                <span className="text-sm uppercase tracking-widest text-accent mt-4 block">Pronto, en alguna terraza.</span>
+                <span className="text-sm uppercase tracking-widest text-arena mt-4 block font-semibold">Pronto, en alguna terraza.</span>
               </p>
             </div>
           )}
@@ -94,7 +94,7 @@ function ShowsPage() {
       </section>
 
       {/* NEWSLETTER */}
-      <section className="px-6 py-20 md:py-32 bg-accent text-black relative">
+      <section className="px-6 py-20 md:py-32 bg-arena text-black relative">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="font-display text-4xl md:text-6xl font-bold tracking-tighter leading-tight mb-8">
             AÚN INTENTANDO RECORDAR QUÉ NOS DIJIMOS

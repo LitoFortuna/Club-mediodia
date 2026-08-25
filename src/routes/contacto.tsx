@@ -49,33 +49,33 @@ function ContactoPage() {
 
           <aside className="space-y-12 py-4">
             <div className="group">
-              <p className="font-display uppercase tracking-widest text-[10px] mb-4 text-accent">
+              <p className="font-display uppercase tracking-widest text-[10px] mb-4 text-rojo font-bold">
                 Email directo
               </p>
               <a
                 href="mailto:info@clubmediodia.es"
-                className="font-display text-xl md:text-2xl text-white hover:text-accent transition-colors flex items-center gap-3"
+                className="font-display text-xl md:text-2xl text-white hover:text-rojo transition-colors flex items-center gap-3"
               >
-                <Mail size={20} className="text-accent" />
+                <Mail size={20} className="text-rojo" />
                 info@clubmediodia.es
               </a>
             </div>
 
             <div className="group">
-              <p className="font-display uppercase tracking-widest text-[10px] mb-4 text-accent">
+              <p className="font-display uppercase tracking-widest text-[10px] mb-4 text-cielo font-bold">
                 Booking
               </p>
               <a
                 href="mailto:booking@clubmediodia.es"
-                className="font-display text-xl md:text-2xl text-white hover:text-accent transition-colors flex items-center gap-3"
+                className="font-display text-xl md:text-2xl text-white hover:text-cielo transition-colors flex items-center gap-3"
               >
-                <Mail size={20} className="text-accent" />
+                <Mail size={20} className="text-cielo" />
                 booking@clubmediodia.es
               </a>
             </div>
 
             <div>
-              <p className="font-display uppercase tracking-widest text-[10px] mb-6 text-accent">
+              <p className="font-display uppercase tracking-widest text-[10px] mb-6 text-white/40">
                 Redes
               </p>
               <div className="flex gap-6">
@@ -90,7 +90,7 @@ function ContactoPage() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={social.label}
-                    className="p-3 border border-white/10 text-white/60 hover:text-accent hover:border-accent transition-all"
+                    className="p-3 border border-white/10 text-white/60 hover:text-arena hover:border-arena transition-all"
                   >
                     <social.icon size={24} />
                   </a>
@@ -99,8 +99,8 @@ function ContactoPage() {
             </div>
 
             <div className="pt-8">
-              <div className="p-6 border-l-2 border-accent bg-accent/5">
-                <p className="font-body text-sm text-white/40 italic">
+              <div className="p-6 border-l-2 border-arena bg-arena/5">
+                <p className="font-body text-sm text-white/60 italic">
                   "El mediodía es el único momento donde la sombra no nos puede engañar."
                 </p>
               </div>

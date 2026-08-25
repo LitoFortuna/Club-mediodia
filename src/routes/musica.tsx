@@ -206,12 +206,12 @@ function MusicaPage() {
             </div>
           </div>
           <div>
-            <p className="font-display uppercase tracking-[0.4em] text-xs mb-4 text-accent">
+            <p className="font-display uppercase tracking-[0.4em] text-xs mb-4 text-cielo font-semibold">
               Lanzamiento · 1 Mayo 2026
             </p>
             <h1 className="font-display text-6xl md:text-8xl font-bold tracking-tighter leading-[0.85] text-white">
               UN GLOBO<br />
-              <span className="text-accent">EN LA TERRAZA</span>
+              <span className="text-rojo">EN LA TERRAZA</span>
             </h1>
             <div className="mt-8 space-y-2 font-body text-sm uppercase tracking-widest text-white/40">
               <p>Producido por <span className="text-white/70">Daniel O'Connell</span> (O'Connell Mastering)</p>
@@ -229,10 +229,10 @@ function MusicaPage() {
         <div className="mx-auto max-w-5xl grid lg:grid-cols-[1fr_400px] gap-20 items-start">
           <div>
             <div className="flex items-baseline gap-4 mb-12">
-              <h2 className="font-display text-sm uppercase tracking-[0.4em] text-accent">
+              <h2 className="font-display text-sm uppercase tracking-[0.4em] text-cielo font-bold">
                 Tracklist
               </h2>
-              <div className="h-[1px] flex-1 bg-accent/20"></div>
+              <div className="h-[1px] flex-1 bg-cielo/20"></div>
             </div>
             <ul className="space-y-1">
               {tracklist.map((t, index) => (
@@ -240,10 +240,10 @@ function MusicaPage() {
                   key={t.n}
                   onClick={() => setSelectedTrack(index)}
                   className={`grid grid-cols-[40px_1fr_auto] items-center gap-4 py-6 font-display group border-b border-white/5 cursor-pointer transition-all ${
-                    selectedTrack === index ? "border-accent/60 bg-white/5" : "hover:border-white/20"
+                    selectedTrack === index ? "border-cielo/60 bg-white/5" : "hover:border-white/20"
                   }`}
                 >
-                  <span className={`text-sm transition-colors ${selectedTrack === index ? "text-accent" : "text-white/30 group-hover:text-white/60"}`}>
+                  <span className={`text-sm transition-colors ${selectedTrack === index ? "text-cielo" : "text-white/30 group-hover:text-white/60"}`}>
                     {t.n}
                   </span>
                   <span className={`text-xl md:text-2xl font-bold transition-all ${selectedTrack === index ? "text-white translate-x-2" : "text-white/60 group-hover:text-white group-hover:translate-x-1"}`}>
@@ -265,7 +265,7 @@ function MusicaPage() {
             
             {selectedTrack !== null ? (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <h3 className="font-display text-3xl font-bold text-accent mb-8 uppercase tracking-tighter">
+                <h3 className="font-display text-3xl font-bold text-cielo mb-8 uppercase tracking-tighter">
                   {tracklist[selectedTrack].title}
                 </h3>
                 <div className="font-body text-base leading-relaxed text-white/70 whitespace-pre-wrap max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">

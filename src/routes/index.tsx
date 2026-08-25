@@ -116,16 +116,16 @@ function Index() {
         
         <div className="relative z-10 max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-[1fr_2fr] gap-12 items-start">
-            <h2 className="text-vertical text-4xl md:text-6xl font-display font-black text-orange sticky top-24">
+            <h2 className="text-vertical text-4xl md:text-6xl font-display font-black text-rojo sticky top-24">
               Manifiesto
             </h2>
             <div className="space-y-12 text-2xl md:text-4xl font-display font-bold leading-tight tracking-tight uppercase">
               <p className="mediodia-enter">
-                Vivimos en el <span className="text-orange">mediodía mental</span>.
+                Vivimos en el <span className="text-cielo">mediodía mental</span>.
                 Ese instante suspendido donde el calor pesa demasiado para moverse.
               </p>
               <p className="mediodia-enter [animation-delay:200ms]">
-                Somos los observadores de la <span className="text-orange">psicodelia doméstica</span>:
+                Somos los observadores de la <span className="text-arena">psicodelia doméstica</span>:
                 un globo abandonado, una taza fría, el reflejo distorsionado.
               </p>
               <p className="mediodia-enter [animation-delay:400ms] text-gray-500">
@@ -153,12 +153,12 @@ function Index() {
             </div>
             
             <div>
-              <p className="text-orange font-display font-bold tracking-[0.3em] text-xs mb-6 uppercase">
+              <p className="text-arena font-display font-bold tracking-[0.3em] text-xs mb-6 uppercase">
                 Próxima fecha
               </p>
               <h2 className="text-5xl md:text-8xl font-display font-black leading-[0.85] tracking-tighter uppercase mb-8">
                 {show.city} <br />
-                <span className="text-orange">{new Date(show.show_date + "T00:00:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" })}</span>
+                <span className="text-arena">{new Date(show.show_date + "T00:00:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" })}</span>
               </h2>
               <div className="space-y-2 mb-12">
                 <p className="text-xl font-display font-bold uppercase">{show.venue}</p>
@@ -166,7 +166,7 @@ function Index() {
               </div>
               <Link
                 to="/shows"
-                className="inline-block px-10 py-4 bg-white text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-orange hover:text-black"
+                className="inline-block px-10 py-4 bg-white text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-arena hover:text-black"
               >
                 Ver todas las fechas
               </Link>
@@ -182,12 +182,13 @@ function Index() {
         </div>
         <div className="relative z-10">
           <h2 className="text-5xl md:text-9xl font-display font-black tracking-tighter uppercase mb-12">
-            Explora el <br /> <span className="text-orange">Universo</span>
+            Explora el <br /> <span className="text-rojo">Universo</span>
           </h2>
           <div className="flex justify-center gap-8 font-display font-bold uppercase tracking-[0.4em] text-sm md:text-base">
-            <Link to="/musica" className="hover:text-orange transition-colors">Música</Link>
-            <Link to="/shows" className="hover:text-orange transition-colors">Shows</Link>
-            <Link to="/contacto" className="hover:text-orange transition-colors">Contacto</Link>
+            <Link to="/musica" className="hover:text-cielo transition-colors">Música</Link>
+            <Link to="/el-club" className="hover:text-menta transition-colors">El Club</Link>
+            <Link to="/shows" className="hover:text-arena transition-colors">Shows</Link>
+            <Link to="/contacto" className="hover:text-rojo transition-colors">Contacto</Link>
           </div>
         </div>
       </section>

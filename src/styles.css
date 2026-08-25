@@ -124,6 +124,22 @@
   .eroded {
     filter: contrast(1.2) brightness(1.1);
   }
+
+  /* Artbook Subtle Color Utility Classes */
+  .text-rojo { color: #C12523; }
+  .text-cielo { color: #6DC0E4; }
+  .text-arena { color: #E8CA88; }
+  .text-menta { color: #01947F; }
+
+  .border-rojo { border-color: #C12523; }
+  .border-cielo { border-color: #6DC0E4; }
+  .border-arena { border-color: #E8CA88; }
+  .border-menta { border-color: #01947F; }
+
+  .bg-rojo { background-color: #C12523; }
+  .bg-cielo { background-color: #6DC0E4; }
+  .bg-arena { background-color: #E8CA88; }
+  .bg-menta { background-color: #01947F; }
 }
 
 /* ===== Virtuoso Effects ===== */
