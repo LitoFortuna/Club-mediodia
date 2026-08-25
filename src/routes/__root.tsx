@@ -4,6 +4,8 @@ import { Footer } from "@/components/Footer";
 import { GrainOverlay } from "@/components/GrainOverlay";
 import { FloatingBalloon } from "@/components/FloatingBalloon";
 
+const favicon = "/favicon.png";
+
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -54,6 +56,7 @@ export const Route = createRootRoute({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      { rel: "icon", href: favicon },
       { rel: "stylesheet", href: appCss },
       {
         rel: "stylesheet",
@@ -84,12 +87,12 @@ function RootComponent() {
   return (
     <>
       <GrainOverlay />
-      <FloatingBalloon />
       <Header />
-      <main className="mediodia-enter">
+      <main>
         <Outlet />
       </main>
       <Footer />
     </>
   );
 }
+

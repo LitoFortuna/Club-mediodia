@@ -1,10 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+const logo = "/logo.png";
 
 const links = [
   { to: "/", label: "Inicio" },
   { to: "/musica", label: "Música" },
+  { to: "/el-club", label: "El Club" },
   { to: "/shows", label: "Shows" },
   { to: "/contacto", label: "Contacto" },
 ] as const;
@@ -13,25 +15,23 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-background/70 border-b border-teal/20">
+    <header className="sticky top-0 z-50 bg-black border-b border-white/5">
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
         <Link
           to="/"
           onClick={() => setOpen(false)}
-          className="font-display text-xl md:text-2xl font-bold tracking-tighter eroded"
-          style={{ color: "var(--color-teal)" }}
+          className="h-8 md:h-10 block"
         >
-          <span className="double-expo" data-text="CLUB MEDIODÍA">
-            CLUB MEDIODÍA
-          </span>
+          <img src={logo} alt="Club Mediodía" className="h-full object-contain" />
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 font-display text-sm uppercase tracking-widest">
+        <nav className="hidden md:flex items-center gap-10 font-display text-xs font-bold uppercase tracking-[0.3em]">
           {links.map((l) => (
             <Link
               key={l.to}
               to={l.to}
-              className="memory-link"
+              className="text-white/60 hover:text-orange transition-colors"
+              activeProps={{ className: "text-orange" }}
               activeOptions={{ exact: l.to === "/" }}
             >
               {l.label}
@@ -40,23 +40,22 @@ export function Header() {
         </nav>
 
         <button
-          className="md:hidden text-teal"
+          className="md:hidden text-white"
           onClick={() => setOpen((v) => !v)}
           aria-label="Menú"
-          style={{ color: "var(--color-teal)" }}
         >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {open && (
-        <nav className="md:hidden border-t border-teal/20 bg-background/95">
-          <ul className="flex flex-col px-6 py-4 gap-4 font-display uppercase tracking-widest text-sm">
+        <nav className="md:hidden border-t border-white/5 bg-black">
+          <ul className="flex flex-col px-6 py-8 gap-6 font-display font-bold uppercase tracking-[0.3em] text-sm">
             {links.map((l) => (
               <li key={l.to}>
                 <Link
                   to={l.to}
-                  className="memory-link block"
+                  className="text-white/60 active:text-orange"
                   activeOptions={{ exact: l.to === "/" }}
                   onClick={() => setOpen(false)}
                 >
@@ -70,3 +69,4 @@ export function Header() {
     </header>
   );
 }
+

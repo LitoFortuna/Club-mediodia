@@ -1,14 +1,4 @@
-import balloon from "@/assets/balloon.png";
-
-interface Show {
-  id: string;
-  city: string;
-  venue: string;
-  show_date: string;
-  show_time: string | null;
-  ticket_url: string | null;
-  sold_out: boolean;
-}
+import type { Show } from "@/lib/types";
 
 const months = [
   "Ene", "Feb", "Mar", "Abr", "May", "Jun",
@@ -20,72 +10,71 @@ export function ShowCard({ show }: { show: Show }) {
   const day = d.getDate();
   const month = months[d.getMonth()];
   const year = d.getFullYear();
+  const poster = show.poster_url ?? null;
 
   return (
-    <div
-      className="relative grid grid-cols-[auto_1fr_auto] items-center gap-6 p-5 md:p-7 hard-shadow border-2 border-teal/30 transition-transform hover:translate-x-[-3px] hover:translate-y-[-3px]"
-      style={{ background: "var(--color-arena)" }}
-    >
-      <div className="text-center min-w-[72px]">
-        <div
-          className="font-display text-5xl md:text-6xl font-bold leading-none"
-          style={{ color: "var(--color-teal)" }}
-        >
-          {day}
-        </div>
-        <div
-          className="font-display uppercase tracking-widest text-xs mt-1"
-          style={{ color: "var(--color-teal)" }}
-        >
-          {month} · {year}
-        </div>
-      </div>
-
-      <div>
-        <div
-          className="font-display text-xl md:text-2xl font-bold"
-          style={{ color: "var(--color-teal)" }}
-        >
-          {show.city}
-        </div>
-        <div className="font-body text-sm md:text-base opacity-80" style={{ color: "var(--color-teal)" }}>
-          {show.venue}{show.show_time ? ` · ${show.show_time}h` : ""}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3">
-        {show.sold_out && (
+    <div className="group relative flex flex-col md:flex-row gap-0 border border-white/10 overflow-hidden transition-all hover:border-orange/40">
+      {/* POSTER */}
+      {poster && (
+        <div className="relative w-full md:w-48 aspect-[3/4] md:aspect-auto shrink-0 overflow-hidden">
           <img
-            src={balloon}
-            alt=""
-            width={24}
-            height={32}
-            className="balloon-tiny"
-            style={{ filter: "drop-shadow(2px 2px 0 rgba(1,148,127,0.5))" }}
+            src={poster}
+            alt={`Cartel ${show.city}`}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-        )}
-        {show.sold_out ? (
-          <span
-            className="px-4 py-2 font-display uppercase tracking-widest text-xs border-2"
-            style={{ borderColor: "var(--color-globo)", color: "var(--color-globo)" }}
-          >
-            Agotado
-          </span>
-        ) : show.ticket_url ? (
-          <a
-            href={show.ticket_url}
-            target="_blank"
-            rel="noreferrer"
-            className="px-4 md:px-6 py-2 md:py-3 font-display uppercase tracking-widest text-xs md:text-sm transition-transform hover:scale-105"
-            style={{ background: "var(--color-globo)", color: "var(--color-arena)" }}
-          >
-            Entradas
-          </a>
-        ) : (
-          <span className="font-display uppercase tracking-widest text-xs opacity-60" style={{ color: "var(--color-teal)" }}>
-            Próximamente
-          </span>
-        )}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/60 md:block hidden" />
+        </div>
+      )}
+
+      {/* INFO */}
+      <div className="flex flex-1 items-center gap-6 p-5 md:p-7 bg-zinc-950">
+        {/* DATE BLOCK */}
+        <div className="text-center min-w-[64px]">
+          <div className="font-display text-5xl md:text-6xl font-black leading-none text-white">
+            {day}
+          </div>
+          <div className="font-display uppercase tracking-widest text-[10px] mt-1 text-orange">
+            {month} · {year}
+          </div>
+        </div>
+
+        {/* VERTICAL DIVIDER */}
+        <div className="w-px self-stretch bg-white/10" />
+
+        {/* VENUE */}
+        <div className="flex-1 min-w-0">
+          <div className="font-display text-xl md:text-2xl font-bold text-white truncate">
+            {show.city}
+          </div>
+          <div className="font-body text-sm md:text-base text-white/50 truncate">
+            {show.venue}
+            {show.show_time ? (
+              <span className="ml-2 text-orange/80">· {show.show_time}h</span>
+            ) : null}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="flex items-center gap-3 shrink-0">
+          {show.sold_out ? (
+            <span className="px-4 py-2 font-display uppercase tracking-widest text-xs border border-white/20 text-white/40">
+              Agotado
+            </span>
+          ) : show.ticket_url ? (
+            <a
+              href={show.ticket_url}
+              target="_blank"
+              rel="noreferrer"
+              className="px-5 md:px-7 py-3 bg-orange text-black font-display font-bold uppercase tracking-widest text-xs md:text-sm transition-all hover:bg-white hover:scale-105 active:scale-95"
+            >
+              Entradas
+            </a>
+          ) : (
+            <span className="font-display uppercase tracking-widest text-xs text-white/40">
+              Próximamente
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

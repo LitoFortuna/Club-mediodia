@@ -3,72 +3,65 @@ import { Instagram, Youtube, Music2 } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer
-      className="mt-24 border-t border-teal/20 px-6 py-12"
-      style={{ background: "var(--color-arena)" }}
-    >
-      <div className="mx-auto max-w-7xl grid gap-8 md:grid-cols-3">
+    <footer className="bg-black border-t border-white/5 px-6 py-24">
+      <div className="mx-auto max-w-7xl grid gap-16 md:grid-cols-3">
         <div>
-          <p
-            className="font-display text-2xl font-bold tracking-tighter"
-            style={{ color: "var(--color-teal)" }}
-          >
-            CLUB MEDIODÍA
+          <p className="font-display text-2xl font-black tracking-tighter">
+            <span className="text-white">CLUB</span>
+            <span className="text-orange">MEDIODÍA</span>
           </p>
-          <p className="mt-3 text-sm max-w-xs" style={{ color: "var(--color-teal)" }}>
-            Memoria borrosa al mediodía. Un globo en la terraza —
-            disponible próximamente.
+          <p className="mt-4 text-sm max-w-xs text-gray-500 font-body leading-relaxed">
+            Explorando la psicodelia doméstica y la memoria borrosa desde la terraza.
+          </p>
+          <p className="text-xs mt-6 text-gray-700">
+            © {new Date().getFullYear()} Club Mediodía
           </p>
         </div>
 
-        <div className="flex flex-col gap-2 font-display uppercase tracking-widest text-sm">
-          <Link to="/" className="memory-link w-fit">Inicio</Link>
-          <Link to="/musica" className="memory-link w-fit">Música</Link>
-          <Link to="/shows" className="memory-link w-fit">Shows</Link>
-          <Link to="/contacto" className="memory-link w-fit">Contacto</Link>
+        <div className="grid grid-cols-2 gap-4 font-display font-bold uppercase tracking-[0.2em] text-xs">
+          <Link to="/" className="text-gray-500 hover:text-orange transition-colors">Inicio</Link>
+          <Link to="/musica" className="text-gray-500 hover:text-orange transition-colors">Música</Link>
+          <Link to="/el-club" className="text-gray-500 hover:text-orange transition-colors">El Club</Link>
+          <Link to="/shows" className="text-gray-500 hover:text-orange transition-colors">Shows</Link>
+          <Link to="/contacto" className="text-gray-500 hover:text-orange transition-colors">Contacto</Link>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <p
-            className="font-display uppercase tracking-widest text-sm"
-            style={{ color: "var(--color-teal)" }}
-          >
-            Síguenos
+        <div className="flex flex-col gap-6">
+          <p className="font-display font-bold uppercase tracking-[0.3em] text-xs text-orange">
+            CONECTA
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-6">
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/club.mediodia/"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
-              className="memory-link"
+              className="text-white hover:text-orange transition-all hover:scale-110"
             >
-              <Instagram size={22} />
+              <Instagram size={20} />
             </a>
             <a
-              href="https://youtube.com"
+              href="https://www.youtube.com/channel/UCobKsproqA8miDdGqqVNwRA"
               target="_blank"
               rel="noreferrer"
               aria-label="YouTube"
-              className="memory-link"
+              className="text-white hover:text-orange transition-all hover:scale-110"
             >
-              <Youtube size={22} />
+              <Youtube size={20} />
             </a>
             <a
-              href="https://open.spotify.com"
+              href="https://open.spotify.com/artist/573822769419"
               target="_blank"
               rel="noreferrer"
               aria-label="Spotify"
-              className="memory-link"
+              className="text-white hover:text-orange transition-all hover:scale-110"
             >
-              <Music2 size={22} />
+              <Music2 size={20} />
             </a>
           </div>
-          <p className="text-xs mt-3 opacity-60" style={{ color: "var(--color-teal)" }}>
-            © {new Date().getFullYear()} Club Mediodía
-          </p>
         </div>
       </div>
     </footer>
   );
 }
+

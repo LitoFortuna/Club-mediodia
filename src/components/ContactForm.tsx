@@ -36,19 +36,18 @@ export function ContactForm() {
   };
 
   const inputCls =
-    "w-full px-4 py-3 bg-background border-2 border-teal/40 focus:border-globo focus:outline-none font-body text-base";
+    "w-full px-4 py-3 bg-zinc-950 border-2 border-white/10 focus:border-orange focus:outline-none font-body text-base text-white transition-colors";
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5">
       <div>
-        <label className="block font-display uppercase tracking-widest text-xs mb-2">
+        <label className="block font-display uppercase tracking-widest text-[10px] mb-2 text-gray-500">
           Motivo
         </label>
         <select
           value={form.reason}
           onChange={(e) => update("reason", e.target.value as Reason)}
           className={inputCls}
-          style={{ color: "var(--color-teal)" }}
         >
           <option value="booking">Booking</option>
           <option value="prensa">Prensa</option>
@@ -59,7 +58,7 @@ export function ContactForm() {
 
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
-          <label className="block font-display uppercase tracking-widest text-xs mb-2">
+          <label className="block font-display uppercase tracking-widest text-[10px] mb-2 text-gray-500">
             Nombre
           </label>
           <input
@@ -67,11 +66,10 @@ export function ContactForm() {
             value={form.name}
             onChange={(e) => update("name", e.target.value)}
             className={inputCls}
-            style={{ color: "var(--color-teal)" }}
           />
         </div>
         <div>
-          <label className="block font-display uppercase tracking-widest text-xs mb-2">
+          <label className="block font-display uppercase tracking-widest text-[10px] mb-2 text-gray-500">
             Email
           </label>
           <input
@@ -79,13 +77,12 @@ export function ContactForm() {
             value={form.email}
             onChange={(e) => update("email", e.target.value)}
             className={inputCls}
-            style={{ color: "var(--color-teal)" }}
           />
         </div>
       </div>
 
       <div>
-        <label className="block font-display uppercase tracking-widest text-xs mb-2">
+        <label className="block font-display uppercase tracking-widest text-[10px] mb-2 text-gray-500">
           Asunto
         </label>
         <input
@@ -93,12 +90,11 @@ export function ContactForm() {
           value={form.subject}
           onChange={(e) => update("subject", e.target.value)}
           className={inputCls}
-          style={{ color: "var(--color-teal)" }}
         />
       </div>
 
       <div>
-        <label className="block font-display uppercase tracking-widest text-xs mb-2">
+        <label className="block font-display uppercase tracking-widest text-[10px] mb-2 text-gray-500">
           Mensaje
         </label>
         <textarea
@@ -106,7 +102,6 @@ export function ContactForm() {
           value={form.message}
           onChange={(e) => update("message", e.target.value)}
           className={inputCls}
-          style={{ color: "var(--color-teal)" }}
         />
       </div>
 
@@ -114,15 +109,13 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === "loading"}
-          className="px-8 py-3 font-display uppercase tracking-widest text-sm hard-shadow transition-transform hover:translate-x-[-2px] hover:translate-y-[-2px] disabled:opacity-50"
-          style={{ background: "var(--color-globo)", color: "var(--color-arena)" }}
+          className="px-10 py-4 bg-orange text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-white hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
         >
-          {status === "loading" ? "Enviando…" : "Enviar"}
+          {status === "loading" ? "Enviando…" : "Enviar mensaje"}
         </button>
         {feedback && (
           <p
-            className="text-sm font-body"
-            style={{ color: status === "ok" ? "var(--color-teal)" : "var(--color-globo)" }}
+            className={`text-sm font-display uppercase tracking-widest ${status === "ok" ? "text-orange" : "text-red-500"}`}
           >
             {feedback}
           </p>

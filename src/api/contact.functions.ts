@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { adminDb } from "@/lib/firebase.server";
 
 const schema = z.object({
   reason: z.enum(["booking", "prensa", "management", "general"]),
@@ -13,17 +13,18 @@ const schema = z.object({
 export const sendContactMessage = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => schema.parse(input))
   .handler(async ({ data }) => {
-    const { error } = await supabaseAdmin.from("contact_messages").insert({
-      reason: data.reason,
-      name: data.name,
-      email: data.email.toLowerCase(),
-      subject: data.subject,
-      message: data.message,
-    });
-
-    if (error) {
-      console.error("Contact error:", error);
+    try {
+      await adminDb.collection("contact_messages").add({
+        reason: data.reason,
+        name: data.name,
+        email: data.email.toLowerCase(),
+        subject: data.subject,
+        message: data.message,
+        created_at: new Date().toISOString(),
+      });
+      return { ok: true, message: "Mensaje enviado. Te responderemos pronto." };
+    } catch (err) {
+      console.error("Contact error:", err);
       return { ok: false, message: "No pudimos enviar el mensaje. Inténtalo de nuevo." };
     }
-    return { ok: true, message: "Mensaje enviado. Te responderemos pronto." };
   });

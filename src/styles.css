@@ -5,14 +5,14 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * CLUB MEDIODÍA — Sistema de diseño
- * "Un globo en la terraza"
+ * CLUB MEDIODÍA — Virtuoso Nocturnal Design System
+ * Inspired by the provided industrial/music aesthetic.
  *
- * Paleta exacta:
- *  Cielo Mediodía  #6DC0E4
- *  Arena           #E8CA88
- *  Globo (anomalía)#C12523
- *  Teal Sombra     #01947F
+ * Palette:
+ *  Nocturnal Black  #000000
+ *  Virtuoso Orange  #FF6B00
+ *  High Contrast    #FFFFFF
+ *  Industrial Gray  #333333
  */
 
 @theme inline {
@@ -41,55 +41,36 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Tokens semánticos del proyecto */
-  --color-sky: var(--sky);
-  --color-arena: var(--arena);
-  --color-globo: var(--globo);
-  --color-teal: var(--teal);
-  --color-teal-soft: var(--teal-soft);
+  /* New Tokens */
+  --color-orange: #FF6B00;
+  --color-dark: #000000;
+  --color-gray: #333333;
 
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0rem; /* Industrial look uses sharp corners */
 
-  /* Paleta Club Mediodía en oklch */
-  --sky: oklch(0.81 0.085 230);          /* #6DC0E4 */
-  --arena: oklch(0.85 0.085 85);         /* #E8CA88 */
-  --globo: oklch(0.55 0.215 27);         /* #C12523 */
-  --teal: oklch(0.52 0.105 175);         /* #01947F */
-  --teal-soft: oklch(0.52 0.105 175 / 0.15);
+  --background: #000000;
+  --foreground: #FFFFFF;
 
-  /* Mapeo a sistema base */
-  --background: oklch(0.95 0.045 85);    /* arena clara */
-  --foreground: var(--teal);
+  --primary: #FF6B00;
+  --primary-foreground: #000000;
 
-  --card: oklch(0.97 0.025 85);
-  --card-foreground: var(--teal);
+  --secondary: #333333;
+  --secondary-foreground: #FFFFFF;
 
-  --popover: oklch(0.97 0.025 85);
-  --popover-foreground: var(--teal);
+  --muted: #1A1A1A;
+  --muted-foreground: #888888;
 
-  --primary: var(--globo);
-  --primary-foreground: oklch(0.97 0.025 85);
+  --accent: #FF6B00;
+  --accent-foreground: #000000;
 
-  --secondary: var(--arena);
-  --secondary-foreground: var(--teal);
-
-  --muted: oklch(0.92 0.04 85);
-  --muted-foreground: oklch(0.45 0.08 175);
-
-  --accent: var(--sky);
-  --accent-foreground: var(--teal);
-
-  --destructive: var(--globo);
-  --destructive-foreground: oklch(0.97 0.025 85);
-
-  --border: oklch(0.52 0.105 175 / 0.2);
-  --input: oklch(0.52 0.105 175 / 0.25);
-  --ring: var(--globo);
+  --border: #333333;
+  --input: #1A1A1A;
+  --ring: #FF6B00;
 }
 
 @layer base {
@@ -111,133 +92,86 @@
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
-    color: var(--color-teal);
+    letter-spacing: -0.05em;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 }
 
-/* ===== Efectos y utilidades de la banda ===== */
+@layer utilities {
+  .text-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
 
-/* Grano analógico SVG */
+  .smoke-gradient {
+    background: radial-gradient(circle at top right, rgba(255, 107, 0, 0.05), transparent 60%),
+                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.05), transparent 60%);
+  }
+
+  .big-number {
+    font-size: clamp(8rem, 20vw, 16rem);
+    line-height: 0.8;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .eroded {
+    filter: contrast(1.2) brightness(1.1);
+  }
+}
+
+/* ===== Virtuoso Effects ===== */
+
 .grain-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 60;
-  opacity: 0.18;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.15 0 0 0 0 0.13 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  background-size: 240px 240px;
-  animation: grain-shift 1.2s steps(6) infinite;
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  animation: grain-shift 0.8s steps(4) infinite;
 }
 
 @keyframes grain-shift {
   0% { transform: translate(0,0); }
-  20% { transform: translate(-3%, 2%); }
-  40% { transform: translate(2%, -4%); }
-  60% { transform: translate(-2%, 3%); }
-  80% { transform: translate(3%, 1%); }
+  25% { transform: translate(-1%, 1%); }
+  50% { transform: translate(1%, -1%); }
+  75% { transform: translate(-1%, -1%); }
   100% { transform: translate(0,0); }
 }
 
-/* Viñeta amarilla en bordes */
-.vignette {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 55;
-  background: radial-gradient(ellipse at center, transparent 55%, oklch(0.85 0.12 85 / 0.35) 100%);
-}
-
-/* Doble exposición tipográfica */
 .double-expo {
   position: relative;
   display: inline-block;
-  color: var(--color-teal);
-}
-.double-expo::before,
-.double-expo::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  pointer-events: none;
 }
 .double-expo::before {
-  color: var(--color-globo);
-  transform: translate(3px, 2px);
-  opacity: 0.55;
-  mix-blend-mode: multiply;
-  filter: blur(0.4px);
-}
-.double-expo::after {
-  color: var(--color-sky);
-  transform: translate(-2px, -1px);
-  opacity: 0.45;
-  mix-blend-mode: multiply;
-}
-
-/* Sombras duras estilo mediodía */
-.hard-shadow {
-  box-shadow: 8px 8px 0 0 var(--color-teal);
-}
-.hard-shadow-lg {
-  box-shadow: 14px 14px 0 0 var(--color-teal);
-}
-
-/* Globo flotante */
-@keyframes balloon-float {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-30px) rotate(2deg); }
-}
-.balloon-float { animation: balloon-float 6s ease-in-out infinite; }
-
-@keyframes balloon-tiny {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-6px) rotate(3deg); }
-}
-.balloon-tiny { animation: balloon-tiny 4s ease-in-out infinite; }
-
-/* Fade-in al entrar */
-@keyframes mediodia-enter {
-  from { opacity: 0; transform: translateY(12px) scale(0.99); filter: blur(2px); }
-  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-}
-.mediodia-enter { animation: mediodia-enter 0.6s ease-out both; }
-
-/* Efecto memoria erosionada en titulares grandes */
-.eroded {
-  filter: blur(0.3px);
-}
-
-/* Link estilo memoria */
-.memory-link {
-  position: relative;
-  color: var(--color-teal);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.memory-link::after {
-  content: "";
+  content: attr(data-text);
   position: absolute;
-  left: 0; bottom: -2px;
-  width: 100%; height: 2px;
-  background: var(--color-globo);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s ease;
+  top: 0; left: 0;
+  color: var(--color-orange);
+  transform: translate(2px, 2px);
+  z-index: -1;
+  opacity: 0.8;
 }
-.memory-link:hover { color: var(--color-globo); }
-.memory-link:hover::after { transform: scaleX(1); transform-origin: left; }
 
-/* Active link */
-[data-status="active"].memory-link { color: var(--color-globo); }
-[data-status="active"].memory-link::after { transform: scaleX(1); }
-
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce) {
-  .balloon-float, .balloon-tiny, .grain-overlay, .mediodia-enter {
-    animation: none !important;
-  }
+.hard-shadow {
+  box-shadow: 4px 4px 0 0 var(--color-orange);
 }
+
+.bw-high-contrast {
+  filter: grayscale(1) contrast(1.2) brightness(0.9);
+  transition: filter 0.5s ease;
+}
+.bw-high-contrast:hover {
+  filter: grayscale(0) contrast(1.1);
+}
+
+@keyframes mediodia-enter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.mediodia-enter { animation: mediodia-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+

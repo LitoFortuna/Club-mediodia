@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShowsRouteImport } from './routes/shows'
 import { Route as MusicaRouteImport } from './routes/musica'
+import { Route as ElClubRouteImport } from './routes/el-club'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,6 +23,11 @@ const ShowsRoute = ShowsRouteImport.update({
 const MusicaRoute = MusicaRouteImport.update({
   id: '/musica',
   path: '/musica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ElClubRoute = ElClubRouteImport.update({
+  id: '/el-club',
+  path: '/el-club',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactoRoute = ContactoRouteImport.update({
@@ -38,12 +44,14 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/el-club': typeof ElClubRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/el-club': typeof ElClubRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/el-club': typeof ElClubRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contacto' | '/musica' | '/shows'
+  fullPaths: '/' | '/contacto' | '/el-club' | '/musica' | '/shows'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contacto' | '/musica' | '/shows'
-  id: '__root__' | '/' | '/contacto' | '/musica' | '/shows'
+  to: '/' | '/contacto' | '/el-club' | '/musica' | '/shows'
+  id: '__root__' | '/' | '/contacto' | '/el-club' | '/musica' | '/shows'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactoRoute: typeof ContactoRoute
+  ElClubRoute: typeof ElClubRoute
   MusicaRoute: typeof MusicaRoute
   ShowsRoute: typeof ShowsRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/musica'
       fullPath: '/musica'
       preLoaderRoute: typeof MusicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/el-club': {
+      id: '/el-club'
+      path: '/el-club'
+      fullPath: '/el-club'
+      preLoaderRoute: typeof ElClubRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contacto': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactoRoute: ContactoRoute,
+  ElClubRoute: ElClubRoute,
   MusicaRoute: MusicaRoute,
   ShowsRoute: ShowsRoute,
 }

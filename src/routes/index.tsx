@@ -1,25 +1,28 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { adminDb } from "@/lib/firebase.server";
 import { DoubleExposure } from "@/components/DoubleExposure";
 import balloon from "@/assets/balloon.png";
-import albumCover from "@/assets/album-cover.jpg";
-import bandPhoto from "@/assets/band-photo.jpg";
+import albumCover from "@/assets/CM_portada.jpg";
+import bandPhoto from "@/assets/CM_header.jpg";
 
 const getNextShow = createServerFn({ method: "GET" }).handler(async () => {
   const today = new Date().toISOString().slice(0, 10);
-  const { data, error } = await supabaseAdmin
-    .from("shows")
-    .select("*")
-    .gte("show_date", today)
-    .order("show_date", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-  if (error) {
-    console.error("getNextShow error:", error);
+  try {
+    const snapshot = await adminDb
+      .collection("shows")
+      .where("show_date", ">=", today)
+      .orderBy("show_date", "asc")
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) return { show: null };
+    const doc = snapshot.docs[0];
+    return { show: { id: doc.id, ...doc.data() } };
+  } catch (err) {
+    console.error("getNextShow error:", err);
     return { show: null };
   }
-  return { show: data };
 });
 
 export const Route = createFileRoute("/")({
@@ -51,213 +54,144 @@ function Index() {
   const { show } = Route.useLoaderData();
 
   return (
-    <>
-      {/* HERO */}
-      <section
-        className="relative min-h-[88vh] overflow-hidden flex items-center justify-center"
-        style={{
-          background:
-            "linear-gradient(180deg, var(--color-sky) 0%, oklch(0.88 0.07 220) 60%, var(--color-arena) 100%)",
-        }}
-      >
-        {/* sol difuso */}
-        <div
-          className="absolute top-[18%] left-1/2 -translate-x-1/2 w-[420px] h-[420px] rounded-full opacity-60 blur-3xl"
-          style={{ background: "var(--color-arena)" }}
-          aria-hidden="true"
-        />
-        {/* globo grande flotando */}
-        <img
-          src={balloon}
-          alt=""
-          width={220}
-          height={280}
-          className="absolute right-[8%] md:right-[15%] top-[20%] w-32 md:w-52 balloon-float"
-          style={{ filter: "drop-shadow(8px 14px 0 rgba(1,148,127,0.55))" }}
-        />
-
-        <div className="relative z-10 px-6 max-w-5xl text-center">
-          <p
-            className="font-display uppercase tracking-[0.4em] text-xs md:text-sm mb-6 opacity-80"
-            style={{ color: "var(--color-teal)" }}
-          >
-            Nuevo álbum · 2026
+    <div className="bg-black text-white selection:bg-orange selection:text-black">
+      {/* HERO SECTION */}
+      <section className="relative min-h-screen flex flex-col md:flex-row items-center justify-center overflow-hidden smoke-gradient px-6 py-20">
+        {/* Vertical Decoration Text */}
+        <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden lg:block">
+          <p className="text-vertical text-6xl font-display font-black opacity-10 tracking-tighter uppercase select-none">
+            Club Mediodía · Club Mediodía · Club Mediodía
           </p>
-          <h1 className="font-display font-bold text-5xl sm:text-7xl md:text-8xl leading-[0.95] tracking-tighter eroded">
-            <span className="double-expo block" data-text="Un globo">Un globo</span>
-            <span className="double-expo block" data-text="en la terraza">en la terraza</span>
-          </h1>
-          <p
-            className="mt-8 font-body text-lg md:text-xl max-w-2xl mx-auto"
-            style={{ color: "var(--color-teal)" }}
-          >
-            Memoria borrosa al mediodía. Una grabación de Club Mediodía.
-          </p>
-          <div className="mt-10 flex gap-4 justify-center flex-wrap">
-            <Link
-              to="/musica"
-              className="px-7 py-3 font-display uppercase tracking-widest text-sm hard-shadow transition-transform hover:translate-x-[-2px] hover:translate-y-[-2px]"
-              style={{ background: "var(--color-globo)", color: "var(--color-arena)" }}
-            >
-              Escuchar
-            </Link>
-            <Link
-              to="/shows"
-              className="px-7 py-3 font-display uppercase tracking-widest text-sm border-2 transition-transform hover:scale-105"
-              style={{ borderColor: "var(--color-teal)", color: "var(--color-teal)" }}
-            >
-              Próximas fechas
-            </Link>
+        </div>
+
+        <div className="relative z-10 w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <div className="order-2 lg:order-1">
+            <p className="text-orange font-display font-bold tracking-[0.3em] text-xs mb-4 uppercase">
+              Nuevo álbum · 2026
+            </p>
+            <h1 className="text-6xl sm:text-8xl md:text-9xl font-display font-black leading-[0.8] tracking-tighter uppercase mb-8">
+              <span className="block">Un globo</span>
+              <span className="block text-orange">en la terraza</span>
+            </h1>
+            <p className="text-gray-400 font-body text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
+              Memoria borrosa al mediodía. Una grabación visceral de Club Mediodía capturada en una azotea de barrio.
+            </p>
+            <div className="flex flex-wrap gap-6">
+              <Link
+                to="/musica"
+                className="px-10 py-4 bg-orange text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-white hover:scale-105 active:scale-95"
+              >
+                Escuchar ahora
+              </Link>
+              <Link
+                to="/shows"
+                className="px-10 py-4 border border-white/20 font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-white hover:text-black"
+              >
+                Gira 2026
+              </Link>
+            </div>
+          </div>
+
+          <div className="order-1 lg:order-2 relative">
+            <div className="relative aspect-square w-full max-w-md mx-auto">
+              <div className="absolute -inset-4 border border-orange/30 translate-x-4 translate-y-4 -z-10" />
+              <img
+                src={albumCover}
+                alt="Portada del álbum"
+                className="w-full h-full object-cover bw-high-contrast hard-shadow shadow-orange/20"
+              />
+              <div className="absolute -bottom-6 -right-6 text-8xl font-display font-black text-orange/10 select-none">
+                01
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* MANIFIESTO */}
-      <section className="px-6 py-24 md:py-32" style={{ background: "var(--color-arena)" }}>
-        <div className="mx-auto max-w-3xl">
-          <DoubleExposure
-            text="Manifiesto"
-            as="h2"
-            className="font-display text-sm uppercase tracking-[0.4em] mb-10 opacity-70"
-          />
-          <div
-            className="font-display text-2xl md:text-3xl leading-snug font-medium space-y-6"
-            style={{ color: "var(--color-teal)" }}
-          >
-            <p>
-              Vivimos en el <em style={{ color: "var(--color-globo)", fontStyle: "normal" }}>mediodía mental</em>.
-              Ese instante suspendido bajo un cielo pálido, donde el calor pesa demasiado para moverse y la mente empieza a divagar.
-            </p>
-            <p>
-              Somos los observadores de la <em style={{ color: "var(--color-globo)", fontStyle: "normal" }}>psicodelia doméstica</em>:
-              un globo rojo abandonado en una terraza, una taza a medio beber, el reflejo distorsionado en una ventana.
-            </p>
-            <p>
-              No confiamos en nuestra <em style={{ color: "var(--color-globo)", fontStyle: "normal" }}>memoria</em>; sabemos que la luz dura del mediodía erosiona los recuerdos y nos deja con miles de versiones de lo que nos dijimos.
-            </p>
-            <p>
-              Nuestra música es el eco de un domingo largo que se resiste a terminar.
-            </p>
-          </div>
+      {/* MANIFESTO SECTION */}
+      <section className="relative py-32 border-t border-white/5 overflow-hidden">
+        <div className="absolute right-0 top-0 big-number select-none">
+          02
         </div>
-      </section>
-
-      {/* ANTICIPO ÁLBUM */}
-      <section className="px-6 py-20 md:py-28">
-        <div className="mx-auto max-w-6xl grid md:grid-cols-2 gap-12 items-center">
-          <Link to="/musica" className="block group">
-            <img
-              src={albumCover}
-              alt="Portada del álbum Un globo en la terraza"
-              width={1024}
-              height={1024}
-              loading="lazy"
-              className="w-full hard-shadow-lg transition-transform group-hover:translate-x-[-4px] group-hover:translate-y-[-4px]"
-            />
-          </Link>
-          <div>
-            <p
-              className="font-display uppercase tracking-[0.4em] text-xs mb-4 opacity-70"
-              style={{ color: "var(--color-teal)" }}
-            >
-              El álbum
-            </p>
-            <DoubleExposure
-              text="Memoria borrosa al mediodía"
-              as="h2"
-              className="font-display text-4xl md:text-5xl font-bold tracking-tighter leading-tight"
-            />
-            <p
-              className="mt-6 font-body text-lg max-w-md"
-              style={{ color: "var(--color-teal)" }}
-            >
-              Diez canciones grabadas en una terraza de barrio. Diez intentos
-              de recordar lo mismo de diez maneras distintas.
-            </p>
-            <Link
-              to="/musica"
-              className="inline-block mt-8 px-7 py-3 font-display uppercase tracking-widest text-sm hard-shadow transition-transform hover:translate-x-[-2px] hover:translate-y-[-2px]"
-              style={{ background: "var(--color-globo)", color: "var(--color-arena)" }}
-            >
-              Escuchar el álbum
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* NEXT SHOW */}
-      {show && (
-        <section
-          className="px-6 py-20"
-          style={{ background: "var(--color-sky)" }}
-        >
-          <div className="mx-auto max-w-4xl text-center">
-            <p
-              className="font-display uppercase tracking-[0.4em] text-xs mb-4 opacity-80"
-              style={{ color: "var(--color-teal)" }}
-            >
-              Próximo show
-            </p>
-            <h2
-              className="font-display text-4xl md:text-6xl font-bold tracking-tighter eroded"
-              style={{ color: "var(--color-teal)" }}
-            >
-              {show.city} · {new Date(show.show_date + "T00:00:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" })}
+        
+        <div className="relative z-10 max-w-5xl mx-auto px-6">
+          <div className="grid md:grid-cols-[1fr_2fr] gap-12 items-start">
+            <h2 className="text-vertical text-4xl md:text-6xl font-display font-black text-orange sticky top-24">
+              Manifiesto
             </h2>
-            <p
-              className="mt-3 font-body text-lg"
-              style={{ color: "var(--color-teal)" }}
-            >
-              {show.venue}{show.show_time ? ` · ${show.show_time}h` : ""}
-            </p>
-            <Link
-              to="/shows"
-              className="inline-block mt-8 px-7 py-3 font-display uppercase tracking-widest text-sm hard-shadow transition-transform hover:translate-x-[-2px] hover:translate-y-[-2px]"
-              style={{ background: "var(--color-globo)", color: "var(--color-arena)" }}
-            >
-              Todas las fechas
-            </Link>
+            <div className="space-y-12 text-2xl md:text-4xl font-display font-bold leading-tight tracking-tight uppercase">
+              <p className="mediodia-enter">
+                Vivimos en el <span className="text-orange">mediodía mental</span>.
+                Ese instante suspendido donde el calor pesa demasiado para moverse.
+              </p>
+              <p className="mediodia-enter [animation-delay:200ms]">
+                Somos los observadores de la <span className="text-orange">psicodelia doméstica</span>:
+                un globo abandonado, una taza fría, el reflejo distorsionado.
+              </p>
+              <p className="mediodia-enter [animation-delay:400ms] text-gray-500">
+                No confiamos en la memoria; la luz erosiona los recuerdos y nos deja solo ecos de lo que fuimos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SHOWS SECTION (Asymmetric) */}
+      {show && (
+        <section className="py-32 bg-zinc-950 relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
+            <div className="relative">
+              <img
+                src={bandPhoto}
+                alt="La banda"
+                className="w-full aspect-[4/5] object-cover bw-high-contrast grayscale opacity-50"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+              <div className="absolute -bottom-10 -left-10 big-number select-none text-white/5">
+                03
+              </div>
+            </div>
+            
+            <div>
+              <p className="text-orange font-display font-bold tracking-[0.3em] text-xs mb-6 uppercase">
+                Próxima fecha
+              </p>
+              <h2 className="text-5xl md:text-8xl font-display font-black leading-[0.85] tracking-tighter uppercase mb-8">
+                {show.city} <br />
+                <span className="text-orange">{new Date(show.show_date + "T00:00:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" })}</span>
+              </h2>
+              <div className="space-y-2 mb-12">
+                <p className="text-xl font-display font-bold uppercase">{show.venue}</p>
+                <p className="text-gray-500 font-display uppercase tracking-widest text-sm">{show.show_time ? `${show.show_time}H` : "HORARIO POR CONFIRMAR"}</p>
+              </div>
+              <Link
+                to="/shows"
+                className="inline-block px-10 py-4 bg-white text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-orange hover:text-black"
+              >
+                Ver todas las fechas
+              </Link>
+            </div>
           </div>
         </section>
       )}
 
-      {/* BIO */}
-      <section className="px-6 py-20 md:py-28">
-        <div className="mx-auto max-w-6xl grid md:grid-cols-2 gap-12 items-center">
-          <div className="order-2 md:order-1">
-            <DoubleExposure
-              text="La banda"
-              as="h2"
-              className="font-display text-sm uppercase tracking-[0.4em] mb-6 opacity-70"
-            />
-            <p
-              className="font-display text-2xl md:text-3xl font-medium leading-snug"
-              style={{ color: "var(--color-teal)" }}
-            >
-              Cuatro personas escribiendo canciones desde la misma terraza desde hace demasiado tiempo.
-            </p>
-            <p
-              className="mt-6 font-body text-base md:text-lg max-w-md opacity-80"
-              style={{ color: "var(--color-teal)" }}
-            >
-              Influencias entre la guitarra de cámara, el indie de los noventa y los domingos largos.
-              Club Mediodía nació en un mediodía cualquiera, observando un globo rojo
-              que nadie se atrevía a recoger.
-            </p>
-          </div>
-          <div className="order-1 md:order-2">
-            <img
-              src={bandPhoto}
-              alt="Club Mediodía — la banda"
-              width={1600}
-              height={1067}
-              loading="lazy"
-              className="w-full hard-shadow"
-              style={{ filter: "saturate(1.05) contrast(1.05)" }}
-            />
+      {/* FOOTER CALL TO ACTION */}
+      <section className="py-40 text-center relative overflow-hidden">
+        <div className="big-number absolute inset-0 flex items-center justify-center opacity-5 select-none">
+          MEDIODÍA
+        </div>
+        <div className="relative z-10">
+          <h2 className="text-5xl md:text-9xl font-display font-black tracking-tighter uppercase mb-12">
+            Explora el <br /> <span className="text-orange">Universo</span>
+          </h2>
+          <div className="flex justify-center gap-8 font-display font-bold uppercase tracking-[0.4em] text-sm md:text-base">
+            <Link to="/musica" className="hover:text-orange transition-colors">Música</Link>
+            <Link to="/shows" className="hover:text-orange transition-colors">Shows</Link>
+            <Link to="/contacto" className="hover:text-orange transition-colors">Contacto</Link>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
+

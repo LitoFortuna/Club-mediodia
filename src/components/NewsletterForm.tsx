@@ -30,22 +30,19 @@ export function NewsletterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="tu@email.com"
-        className="flex-1 px-4 py-3 bg-background border-2 border-teal/40 focus:border-globo focus:outline-none font-body text-base"
-        style={{ color: "var(--color-teal)" }}
+        className="flex-1 px-4 py-3 bg-black/40 border-2 border-white/10 focus:border-orange focus:outline-none font-body text-base text-white transition-all placeholder:text-gray-600"
         disabled={status === "loading"}
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="px-6 py-3 font-display uppercase tracking-widest text-sm hard-shadow transition-transform hover:translate-x-[-2px] hover:translate-y-[-2px] disabled:opacity-50"
-        style={{ background: "var(--color-globo)", color: "var(--color-arena)" }}
+        className="px-8 py-3 bg-orange text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-white active:scale-95 disabled:opacity-50"
       >
-        {status === "loading" ? "Enviando…" : "Suscribir"}
+        {status === "loading" ? "..." : "Suscribir"}
       </button>
       {message && (
         <p
-          className="sm:absolute sm:mt-16 text-sm font-body w-full"
-          style={{ color: status === "ok" ? "var(--color-teal)" : "var(--color-globo)" }}
+          className={`sm:absolute sm:mt-16 text-sm font-display uppercase tracking-widest w-full ${status === "ok" ? "text-white" : "text-orange"}`}
         >
           {message}
         </p>

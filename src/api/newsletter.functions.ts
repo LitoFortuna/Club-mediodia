@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { adminDb } from "@/lib/firebase.server";
 
 const schema = z.object({
   email: z.string().trim().email("Email inválido").max(255),
@@ -9,17 +9,28 @@ const schema = z.object({
 export const subscribeNewsletter = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => schema.parse(input))
   .handler(async ({ data }) => {
-    const { error } = await supabaseAdmin
-      .from("newsletter_subscribers")
-      .insert({ email: data.email.toLowerCase() });
+    try {
+      const email = data.email.toLowerCase();
 
-    if (error) {
-      // Duplicate email = success from user's POV
-      if (error.code === "23505") {
+      // Check for duplicate
+      const existing = await adminDb
+        .collection("newsletter_subscribers")
+        .where("email", "==", email)
+        .limit(1)
+        .get();
+
+      if (!existing.empty) {
         return { ok: true, message: "Ya estás suscrito. Gracias." };
       }
-      console.error("Newsletter error:", error);
+
+      await adminDb.collection("newsletter_subscribers").add({
+        email,
+        created_at: new Date().toISOString(),
+      });
+
+      return { ok: true, message: "Suscrito. Te avisaremos." };
+    } catch (err) {
+      console.error("Newsletter error:", err);
       return { ok: false, message: "No pudimos suscribirte. Inténtalo de nuevo." };
     }
-    return { ok: true, message: "Suscrito. Te avisaremos." };
   });
