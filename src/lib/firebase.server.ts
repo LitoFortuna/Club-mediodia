@@ -15,7 +15,18 @@ function getAdminDb() {
   const admin = require("firebase-admin");
 
   if (!admin.apps.length) {
-    admin.initializeApp();
+    const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
+    if (raw) {
+      // En Vercel (u otros hosts sin ADC): credenciales de una service account
+      // pasadas por variable de entorno. Admite JSON en claro o en base64.
+      const json = raw.trim().startsWith("{")
+        ? raw
+        : Buffer.from(raw, "base64").toString("utf8");
+      admin.initializeApp({ credential: admin.credential.cert(JSON.parse(json)) });
+    } else {
+      // En Firebase Hosting/Functions: Application Default Credentials
+      admin.initializeApp();
+    }
   }
 
   _adminDb = admin.firestore();
