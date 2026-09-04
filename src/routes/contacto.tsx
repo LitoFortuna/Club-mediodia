@@ -61,19 +61,6 @@ function ContactoPage() {
               </a>
             </div>
 
-            <div className="group">
-              <p className="font-display uppercase tracking-widest text-[10px] mb-4 text-cielo font-bold">
-                Booking
-              </p>
-              <a
-                href="mailto:booking@clubmediodia.es"
-                className="font-display text-xl md:text-2xl text-white hover:text-cielo transition-colors flex items-center gap-3"
-              >
-                <Mail size={20} className="text-cielo" />
-                booking@clubmediodia.es
-              </a>
-            </div>
-
             <div>
               <p className="font-display uppercase tracking-widest text-[10px] mb-6 text-white/40">
                 Redes

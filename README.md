@@ -49,8 +49,7 @@
 
 ## 📬 Contacto & Booking
 
-- 📧 **Información general:** [info@clubmediodia.es](mailto:info@clubmediodia.es)
-- 🎸 **Booking & Contratación:** [booking@clubmediodia.es](mailto:booking@clubmediodia.es)
+- 📧 **Información general y booking:** [info@clubmediodia.es](mailto:info@clubmediodia.es)
 - 🌐 **Sitio Web:** [https://clubmediodia.web.app/](https://clubmediodia.web.app/)
 
 ---
