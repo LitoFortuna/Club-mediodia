@@ -313,7 +313,7 @@ function MusicaPage() {
               <div className="aspect-video relative">
                 <iframe
                   title="YouTube"
-                  src="https://www.youtube.com/embed/RQvYWml1ixw"
+                  src="https://www.youtube.com/embed/Cd3wi7RJoMo"
                   className="w-full h-full grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -322,7 +322,7 @@ function MusicaPage() {
               </div>
               <div className="mt-8 p-4 border border-white/5 bg-white/2">
                 <p className="font-body text-xs text-white/40 text-center italic">
-                  "CLUB MEDIODIA @ DioBar" - Directo en Barcelona
+                  Club Mediodía | @ DioBar Live Aftermovie
                 </p>
               </div>
             </div>
