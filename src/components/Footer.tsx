@@ -23,6 +23,7 @@ export function Footer() {
           <Link to="/musica" className="text-gray-500 hover:text-orange transition-colors">Música</Link>
           <Link to="/el-club" className="text-gray-500 hover:text-orange transition-colors">El Club</Link>
           <Link to="/shows" className="text-gray-500 hover:text-orange transition-colors">Shows</Link>
+          <Link to="/entradas" className="text-gray-500 hover:text-orange transition-colors">Entradas</Link>
           <Link to="/contacto" className="text-gray-500 hover:text-orange transition-colors">Contacto</Link>
         </div>
 

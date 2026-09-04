@@ -27,3 +27,24 @@ export interface NewsletterSubscriber {
   email: string;
   created_at: string;
 }
+
+export interface ConcertRegistration {
+  id?: string;
+  event: string;
+  contact_name: string;
+  contact_email: string;
+  party_size: number;
+  created_at: string;
+}
+
+export interface ConcertGuest {
+  token: string; // también es el ID del documento
+  event: string;
+  registration_id: string;
+  name: string;
+  email: string | null;
+  is_lead: boolean;
+  checked_in: boolean;
+  checked_in_at: string | null;
+  created_at: string;
+}

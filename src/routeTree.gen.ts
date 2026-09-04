@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShowsRouteImport } from './routes/shows'
 import { Route as MusicaRouteImport } from './routes/musica'
+import { Route as EntradasRouteImport } from './routes/entradas'
 import { Route as ElClubRouteImport } from './routes/el-club'
 import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as CheckinRouteImport } from './routes/checkin'
 import { Route as IndexRouteImport } from './routes/index'
 
 const ShowsRoute = ShowsRouteImport.update({
@@ -25,6 +27,11 @@ const MusicaRoute = MusicaRouteImport.update({
   path: '/musica',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EntradasRoute = EntradasRouteImport.update({
+  id: '/entradas',
+  path: '/entradas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ElClubRoute = ElClubRouteImport.update({
   id: '/el-club',
   path: '/el-club',
@@ -35,6 +42,11 @@ const ContactoRoute = ContactoRouteImport.update({
   path: '/contacto',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckinRoute = CheckinRouteImport.update({
+  id: '/checkin',
+  path: '/checkin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,38 +55,68 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
+  '/entradas': typeof EntradasRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
+  '/entradas': typeof EntradasRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
+  '/entradas': typeof EntradasRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contacto' | '/el-club' | '/musica' | '/shows'
+  fullPaths:
+    | '/'
+    | '/checkin'
+    | '/contacto'
+    | '/el-club'
+    | '/entradas'
+    | '/musica'
+    | '/shows'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contacto' | '/el-club' | '/musica' | '/shows'
-  id: '__root__' | '/' | '/contacto' | '/el-club' | '/musica' | '/shows'
+  to:
+    | '/'
+    | '/checkin'
+    | '/contacto'
+    | '/el-club'
+    | '/entradas'
+    | '/musica'
+    | '/shows'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkin'
+    | '/contacto'
+    | '/el-club'
+    | '/entradas'
+    | '/musica'
+    | '/shows'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckinRoute: typeof CheckinRoute
   ContactoRoute: typeof ContactoRoute
   ElClubRoute: typeof ElClubRoute
+  EntradasRoute: typeof EntradasRoute
   MusicaRoute: typeof MusicaRoute
   ShowsRoute: typeof ShowsRoute
 }
@@ -95,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MusicaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/entradas': {
+      id: '/entradas'
+      path: '/entradas'
+      fullPath: '/entradas'
+      preLoaderRoute: typeof EntradasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/el-club': {
       id: '/el-club'
       path: '/el-club'
@@ -109,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkin': {
+      id: '/checkin'
+      path: '/checkin'
+      fullPath: '/checkin'
+      preLoaderRoute: typeof CheckinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,8 +177,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckinRoute: CheckinRoute,
   ContactoRoute: ContactoRoute,
   ElClubRoute: ElClubRoute,
+  EntradasRoute: EntradasRoute,
   MusicaRoute: MusicaRoute,
   ShowsRoute: ShowsRoute,
 }

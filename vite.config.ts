@@ -19,6 +19,6 @@ export default defineConfig({
     // Bundle everything EXCEPT firebase-admin (CJS, uses __dirname)
     // and firebase (large, works better as external)
     noExternal: true,
-    external: ["firebase-admin", "firebase-admin/app", "firebase-admin/firestore"],
+    external: ["firebase-admin", "firebase-admin/app", "firebase-admin/firestore", "nodemailer"],
   },
 });
