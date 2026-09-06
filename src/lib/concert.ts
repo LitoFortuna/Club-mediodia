@@ -28,3 +28,19 @@ export function formatConcertDateEs(): string {
 export function isRegistrationOpen(): boolean {
   return new Date() < new Date(CONCERT.registrationDeadlineISO);
 }
+
+// Código corto de entrada (también es el ID del documento en concert_guests).
+// Alfabeto sin caracteres ambiguos: sin I, L, O, 0, 1.
+export const GUEST_CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+export const GUEST_CODE_LENGTH = 6;
+
+// Limpia lo que teclee/escanee el staff: mayúsculas y solo letras/números.
+export function normalizeGuestCode(raw: string): string {
+  return raw.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+// Formato bonito para mostrar: ABC-D23
+export function formatGuestCode(code: string): string {
+  const c = normalizeGuestCode(code);
+  return c.length > 3 ? `${c.slice(0, 3)}-${c.slice(3)}` : c;
+}

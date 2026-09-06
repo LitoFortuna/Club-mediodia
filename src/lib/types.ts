@@ -38,7 +38,7 @@ export interface ConcertRegistration {
 }
 
 export interface ConcertGuest {
-  token: string; // también es el ID del documento
+  code: string; // también es el ID del documento
   event: string;
   registration_id: string;
   name: string;

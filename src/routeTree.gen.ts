@@ -15,6 +15,7 @@ import { Route as EntradasRouteImport } from './routes/entradas'
 import { Route as ElClubRouteImport } from './routes/el-club'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CheckinRouteImport } from './routes/checkin'
+import { Route as AsistentesRouteImport } from './routes/asistentes'
 import { Route as IndexRouteImport } from './routes/index'
 
 const ShowsRoute = ShowsRouteImport.update({
@@ -47,6 +48,11 @@ const CheckinRoute = CheckinRouteImport.update({
   path: '/checkin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AsistentesRoute = AsistentesRouteImport.update({
+  id: '/asistentes',
+  path: '/asistentes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +61,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/asistentes': typeof AsistentesRoute
   '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/asistentes': typeof AsistentesRoute
   '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/asistentes': typeof AsistentesRoute
   '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/asistentes'
     | '/checkin'
     | '/contacto'
     | '/el-club'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/asistentes'
     | '/checkin'
     | '/contacto'
     | '/el-club'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/asistentes'
     | '/checkin'
     | '/contacto'
     | '/el-club'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AsistentesRoute: typeof AsistentesRoute
   CheckinRoute: typeof CheckinRoute
   ContactoRoute: typeof ContactoRoute
   ElClubRoute: typeof ElClubRoute
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/asistentes': {
+      id: '/asistentes'
+      path: '/asistentes'
+      fullPath: '/asistentes'
+      preLoaderRoute: typeof AsistentesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -177,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AsistentesRoute: AsistentesRoute,
   CheckinRoute: CheckinRoute,
   ContactoRoute: ContactoRoute,
   ElClubRoute: ElClubRoute,

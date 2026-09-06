@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { Link } from "@tanstack/react-router";
 import { checkInGuest, type CheckInStatus } from "@/api/checkin.functions";
+import { normalizeGuestCode } from "@/lib/concert";
 
 export const Route = createFileRoute("/checkin")({
   head: () => ({
@@ -10,9 +12,8 @@ export const Route = createFileRoute("/checkin")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  validateSearch: (search: Record<string, unknown>) => ({
-    t: typeof search.t === "string" ? search.t : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { t?: string } =>
+    typeof search.t === "string" ? { t: search.t } : {},
   component: CheckinPage,
 });
 
@@ -38,8 +39,9 @@ function CheckinPage() {
   const scannerRef = useRef<import("html5-qrcode").Html5Qrcode | null>(null);
   const busyRef = useRef(false);
 
-  const runCheckIn = async (token: string) => {
-    if (busyRef.current) return;
+  const runCheckIn = async (raw: string) => {
+    const token = normalizeGuestCode(raw);
+    if (!token || busyRef.current) return;
     busyRef.current = true;
     try {
       const res = await checkIn({ data: { pin, token } });
@@ -173,9 +175,9 @@ function CheckinPage() {
         </div>
       )}
 
-      <details className="w-full max-w-sm text-white/40">
+      <details className="w-full max-w-sm text-white/40" open={!!t}>
         <summary className="font-display uppercase tracking-widest text-[10px] cursor-pointer">
-          ¿No lee el QR? Meter código a mano
+          ¿No lee el QR? Meter el código a mano
         </summary>
         <form
           onSubmit={(e) => {
@@ -186,15 +188,23 @@ function CheckinPage() {
         >
           <input
             value={manualToken}
-            onChange={(e) => setManualToken(e.target.value)}
-            placeholder="token"
-            className="flex-1 px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm"
+            onChange={(e) => setManualToken(e.target.value.toUpperCase())}
+            placeholder="ABC-D23"
+            autoCapitalize="characters"
+            className="flex-1 px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm tracking-widest uppercase"
           />
           <button type="submit" className="px-4 py-2 border border-white/20 text-white text-sm">
             Comprobar
           </button>
         </form>
       </details>
+
+      <Link
+        to="/asistentes"
+        className="font-display uppercase tracking-widest text-[10px] text-white/40 hover:text-orange"
+      >
+        Ver listado de apuntados →
+      </Link>
     </div>
   );
 }
