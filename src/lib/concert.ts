@@ -10,7 +10,6 @@ export const CONCERT = {
   doorsTime: "18:45",
   startTime: "19:00",
   priceInfo: "Entrada libre reservando desde la web",
-  ageInfo: "Sin edad mínima",
   // Las inscripciones se cierran al empezar este instante (medianoche del 12 en Madrid)
   registrationDeadlineISO: "2026-09-12T00:00:00+02:00",
   // Máximo de acompañantes por inscripción (además del titular)

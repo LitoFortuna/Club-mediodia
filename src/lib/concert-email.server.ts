@@ -41,7 +41,7 @@ export function renderConfirmationEmail(people: Person[], cids: string[]): strin
       <p style="margin:0 0 12px;color:#555;">${escapeHtml(CONCERT.address)}</p>
       <p style="margin:0;">${formatConcertDateEs()}</p>
       <p style="margin:0;">Puertas: ${CONCERT.doorsTime}h &middot; Inicio: ${CONCERT.startTime}h</p>
-      <p style="margin:12px 0 0;font-size:13px;color:#555;">${CONCERT.priceInfo}. ${CONCERT.ageInfo}.</p>
+      <p style="margin:12px 0 0;font-size:13px;color:#555;">${CONCERT.priceInfo}.</p>
     </div>
 
     <p style="margin:0 0 8px;">Presenta este código QR en la puerta — <strong>uno por persona</strong>:</p>

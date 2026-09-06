@@ -49,7 +49,7 @@ function EntradasPage() {
             </p>
             <p className="flex items-center gap-3">
               <Ticket size={20} className="text-orange shrink-0" />
-              {CONCERT.priceInfo}. {CONCERT.ageInfo}.
+              {CONCERT.priceInfo}.
             </p>
           </div>
         </div>
