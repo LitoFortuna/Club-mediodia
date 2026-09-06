@@ -54,6 +54,13 @@ export const Route = createRootRoute({
         content: "Memoria borrosa al mediodía. Nuevo álbum próximamente.",
       },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: "https://clubmediodia.es/og-default.jpg" },
+      { property: "og:image:secure_url", content: "https://clubmediodia.es/og-default.jpg" },
+      { property: "og:image:type", content: "image/jpeg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "1200" },
+      { property: "og:image:alt", content: "Club Mediodía" },
+      { name: "twitter:image", content: "https://clubmediodia.es/og-default.jpg" },
     ],
     links: [
       { rel: "icon", href: favicon },

@@ -179,7 +179,7 @@ export const Route = createFileRoute("/musica")({
         property: "og:description",
         content: "Ocho canciones desde una terraza de barrio. Un globo en la terraza.",
       },
-      { property: "og:image", content: albumCover },
+      { property: "og:image", content: "https://clubmediodia.es/og-default.jpg" },
     ],
   }),
   component: MusicaPage,
