@@ -47,6 +47,10 @@ export const Route = createRootRoute({
           "Club Mediodía. Psicodelia doméstica desde la terraza. Nuevo álbum: Un globo en la terraza.",
       },
       { name: "author", content: "Club Mediodía" },
+      {
+        name: "google-site-verification",
+        content: "n9Y52v1RM5CIckSDJmTYLYLM38GWwVAj4-TY41tpRCE",
+      },
       { property: "og:type", content: "website" },
       { property: "og:title", content: "Club Mediodía — Un globo en la terraza" },
       {
