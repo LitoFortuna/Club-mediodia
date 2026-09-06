@@ -4,17 +4,31 @@ import { EntradasForm } from "@/components/EntradasForm";
 import { CONCERT, formatConcertDateEs, isRegistrationOpen } from "@/lib/concert";
 
 export const Route = createFileRoute("/entradas")({
-  head: () => ({
-    meta: [
-      { title: `Entradas ${CONCERT.dateISO} — Club Mediodía` },
-      {
-        name: "description",
-        content: `Reserva tu entrada gratuita para ${CONCERT.bandName} en ${CONCERT.venue}, ${CONCERT.city}, el ${formatConcertDateEs()}.`,
-      },
-      { property: "og:title", content: `${CONCERT.bandName} en directo — ${formatConcertDateEs()}` },
-      { property: "og:image", content: `https://clubmediodia.es${CONCERT.posterPath}` },
-    ],
-  }),
+  head: () => {
+    const poster = `https://clubmediodia.es${CONCERT.posterPath}`;
+    const title = `${CONCERT.bandName} en directo — ${formatConcertDateEs()}`;
+    const desc = `Reserva tu entrada gratuita para ${CONCERT.bandName} en ${CONCERT.venue}, ${CONCERT.city}, el ${formatConcertDateEs()}.`;
+    return {
+      meta: [
+        { title: `Entradas ${CONCERT.dateISO} — Club Mediodía` },
+        { name: "description", content: desc },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: "https://clubmediodia.es/entradas" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:image", content: poster },
+        { property: "og:image:secure_url", content: poster },
+        { property: "og:image:type", content: "image/png" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "1600" },
+        { property: "og:image:alt", content: `Cartel del concierto de ${CONCERT.bandName}` },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: poster },
+      ],
+    };
+  },
   component: EntradasPage,
 });
 
