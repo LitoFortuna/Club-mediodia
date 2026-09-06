@@ -4,7 +4,15 @@ import { adminDb } from "@/lib/firebase.server";
 import { DoubleExposure } from "@/components/DoubleExposure";
 import { ShowCard } from "@/components/ShowCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { CONCERT } from "@/lib/concert";
 import type { Show } from "@/lib/types";
+
+// Usa el cartel del concierto anunciado si el show no trae poster propio
+function withConcertPoster(s: Show): Show {
+  return s.show_date === CONCERT.dateISO && !s.poster_url
+    ? { ...s, poster_url: CONCERT.posterPath }
+    : s;
+}
 
 const getShows = createServerFn({ method: "GET" }).handler(async () => {
   try {
@@ -13,7 +21,8 @@ const getShows = createServerFn({ method: "GET" }).handler(async () => {
       .orderBy("show_date", "asc")
       .get();
 
-    const shows: Show[] = snapshot.docs.map((doc) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const shows: Show[] = snapshot.docs.map((doc: any) => ({
       id: doc.id,
       ...(doc.data() as Omit<Show, "id">),
     }));
@@ -51,7 +60,7 @@ function ShowsPage() {
   const data = Route.useLoaderData() as { shows: Show[]; error: string | null };
   const { shows, error } = data;
   const today = new Date().toISOString().slice(0, 10);
-  const upcoming = shows.filter((s: Show) => s.show_date >= today);
+  const upcoming = shows.filter((s: Show) => s.show_date >= today).map(withConcertPoster);
   const past = shows.filter((s: Show) => s.show_date < today).reverse();
 
   return (

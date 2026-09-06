@@ -20,6 +20,7 @@ export function ShowCard({ show }: { show: Show }) {
           <img
             src={poster}
             alt={`Cartel ${show.city}`}
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/60 md:block hidden" />
