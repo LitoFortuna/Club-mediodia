@@ -87,7 +87,7 @@ function Index() {
                 to="/shows"
                 className="px-10 py-4 border border-white/20 font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-white hover:text-black"
               >
-                Gira 2026
+                Shows
               </Link>
             </div>
           </div>

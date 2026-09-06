@@ -62,7 +62,7 @@ function ShowsPage() {
         </div>
         <div className="mx-auto max-w-5xl relative z-10">
           <p className="font-display uppercase tracking-[0.4em] text-xs mb-6 text-arena font-semibold">
-            Gira 2026
+            Shows
           </p>
           <h1 className="font-display text-6xl md:text-9xl font-bold tracking-tighter leading-[0.8] text-white">
             PRÓXIMAS<br />
