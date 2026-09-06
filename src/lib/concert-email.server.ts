@@ -14,6 +14,13 @@ interface Person {
   code: string;
 }
 
+function posterUrl(): string {
+  const base = process.env.PUBLIC_BASE_URL || "https://clubmediodia.es";
+  return `${base}${CONCERT.posterPath}`;
+}
+
+const posterImg = `<img src="${posterUrl()}" alt="Cartel del concierto" width="480" style="display:block;width:100%;max-width:480px;height:auto;margin:0 0 20px;border:1px solid #e5e5e5;" />`;
+
 export function renderConfirmationEmail(people: Person[], cids: string[]): string {
   const qrBlocks = people
     .map(
@@ -31,6 +38,7 @@ export function renderConfirmationEmail(people: Person[], cids: string[]): strin
 
   return `
   <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;color:#111;line-height:1.5;">
+    ${posterImg}
     <p style="text-transform:uppercase;letter-spacing:2px;font-size:11px;color:#C12523;font-weight:700;margin:0 0 4px;">
       Confirmación de asistencia
     </p>
@@ -68,6 +76,7 @@ export function renderRegistrationNotification(opts: {
 
   return `
   <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;color:#111;line-height:1.5;">
+    ${posterImg}
     <h1 style="font-size:18px;margin:0 0 12px;">Nueva inscripción &mdash; ${CONCERT.venue}, ${formatConcertDateEs()}</h1>
     <p style="margin:0 0 4px;"><strong>${escapeHtml(opts.contactName)}</strong> &lt;${escapeHtml(opts.contactEmail)}&gt;</p>
     <p style="margin:0 0 8px;color:#555;">${opts.people.length} ${opts.people.length === 1 ? "persona" : "personas"}:</p>

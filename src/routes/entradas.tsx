@@ -11,6 +11,8 @@ export const Route = createFileRoute("/entradas")({
         name: "description",
         content: `Reserva tu entrada gratuita para ${CONCERT.bandName} en ${CONCERT.venue}, ${CONCERT.city}, el ${formatConcertDateEs()}.`,
       },
+      { property: "og:title", content: `${CONCERT.bandName} en directo — ${formatConcertDateEs()}` },
+      { property: "og:image", content: `https://clubmediodia.es${CONCERT.posterPath}` },
     ],
   }),
   component: EntradasPage,
@@ -25,33 +27,43 @@ function EntradasPage() {
         <div className="absolute top-0 right-0 big-number opacity-5 translate-x-1/4 -translate-y-1/4 select-none">
           11
         </div>
-        <div className="mx-auto max-w-4xl relative z-10">
-          <p className="font-display uppercase tracking-[0.4em] text-xs mb-6 text-orange font-semibold">
-            Concierto en directo
-          </p>
-          <h1 className="font-display text-6xl md:text-9xl font-bold tracking-tighter leading-[0.8] text-white">
-            RESERVA<br />
-            <span className="text-orange">TU ENTRADA</span>
-          </h1>
+        <div className="mx-auto max-w-5xl relative z-10 grid md:grid-cols-[1.4fr_1fr] gap-12 items-center">
+          <div>
+            <p className="font-display uppercase tracking-[0.4em] text-xs mb-6 text-orange font-semibold">
+              Concierto en directo
+            </p>
+            <h1 className="font-display text-6xl md:text-8xl font-bold tracking-tighter leading-[0.8] text-white">
+              RESERVA<br />
+              <span className="text-orange">TU ENTRADA</span>
+            </h1>
 
-          <div className="mt-10 flex flex-col gap-3 text-white/70 font-body text-base md:text-lg max-w-xl">
-            <p className="flex items-start gap-3">
-              <MapPin size={20} className="text-orange shrink-0 mt-0.5" />
-              <span>
-                <strong className="text-white">{CONCERT.venue}</strong>
-                <br />
-                {CONCERT.address}
-              </span>
-            </p>
-            <p className="flex items-center gap-3">
-              <Clock size={20} className="text-orange shrink-0" />
-              {formatConcertDateEs()} · Puertas {CONCERT.doorsTime}h · Inicio {CONCERT.startTime}h
-            </p>
-            <p className="flex items-center gap-3">
-              <Ticket size={20} className="text-orange shrink-0" />
-              {CONCERT.priceInfo}.
-            </p>
+            <div className="mt-10 flex flex-col gap-3 text-white/70 font-body text-base md:text-lg">
+              <p className="flex items-start gap-3">
+                <MapPin size={20} className="text-orange shrink-0 mt-0.5" />
+                <span>
+                  <strong className="text-white">{CONCERT.venue}</strong>
+                  <br />
+                  {CONCERT.address}
+                </span>
+              </p>
+              <p className="flex items-center gap-3">
+                <Clock size={20} className="text-orange shrink-0" />
+                {formatConcertDateEs()} · Puertas {CONCERT.doorsTime}h · Inicio {CONCERT.startTime}h
+              </p>
+              <p className="flex items-center gap-3">
+                <Ticket size={20} className="text-orange shrink-0" />
+                {CONCERT.priceInfo}.
+              </p>
+            </div>
           </div>
+
+          <img
+            src={CONCERT.posterPath}
+            alt={`Cartel del concierto de ${CONCERT.bandName}`}
+            className="w-full max-w-sm mx-auto border border-white/10"
+            width={1200}
+            height={1600}
+          />
         </div>
       </section>
 
