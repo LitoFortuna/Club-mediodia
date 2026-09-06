@@ -4,7 +4,11 @@ import { randomBytes } from "crypto";
 import { adminDb } from "@/lib/firebase.server";
 import { sendMail } from "@/lib/mailer.server";
 import { generateQrPng } from "@/lib/qr.server";
-import { renderConfirmationEmail, renderRegistrationNotification } from "@/lib/concert-email.server";
+import {
+  renderConfirmationEmail,
+  renderWaitlistEmail,
+  renderRegistrationNotification,
+} from "@/lib/concert-email.server";
 import {
   CONCERT,
   GUEST_CODE_ALPHABET,
@@ -38,7 +42,6 @@ function randomCode(): string {
   return out;
 }
 
-// Genera un código que no exista ya en Firestore ni en este mismo grupo
 async function uniqueCode(used: Set<string>): Promise<string> {
   for (let attempt = 0; attempt < 10; attempt++) {
     const code = randomCode();
@@ -52,17 +55,43 @@ async function uniqueCode(used: Set<string>): Promise<string> {
   throw new Error("No se pudo generar un código único");
 }
 
+// Cuenta cuántas personas tienen entrada confirmada y cuántas en lista de espera
+async function countGuests(): Promise<{ confirmed: number; waitlist: number }> {
+  const snap = await adminDb
+    .collection("concert_guests")
+    .where("event", "==", CONCERT.id)
+    .get();
+  let confirmed = 0;
+  let waitlist = 0;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (snap.docs as any[]).forEach((d) => {
+    const s = d.data().status ?? "confirmed";
+    if (s === "confirmed") confirmed++;
+    else if (s === "waitlist") waitlist++;
+  });
+  return { confirmed, waitlist };
+}
+
+export const getConcertAvailability = createServerFn({ method: "GET" }).handler(
+  async (): Promise<{ capacity: number; confirmed: number; full: boolean }> => {
+    try {
+      const { confirmed } = await countGuests();
+      return { capacity: CONCERT.capacity, confirmed, full: confirmed >= CONCERT.capacity };
+    } catch {
+      return { capacity: CONCERT.capacity, confirmed: 0, full: false };
+    }
+  },
+);
+
 export const registerForConcert = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => schema.parse(input))
   .handler(async ({ data }) => {
     if (!isRegistrationOpen()) {
-      return { ok: false, message: "Las inscripciones para este concierto ya han cerrado." };
+      return { ok: false, waitlisted: false, message: "Las inscripciones para este concierto ya han cerrado." };
     }
 
     try {
-      const registrationRef = adminDb.collection("concert_registrations").doc();
-      const created_at = new Date().toISOString();
-
+      const { confirmed, waitlist } = await countGuests();
       const people = [
         { name: data.contactName, email: data.contactEmail, isLead: true },
         ...data.guests.map((g) => ({
@@ -71,6 +100,14 @@ export const registerForConcert = createServerFn({ method: "POST" })
           isLead: false,
         })),
       ];
+
+      // El grupo entra entero: si no cabe completo en el aforo, va a lista de espera
+      const available = CONCERT.capacity - confirmed;
+      const waitlisted = people.length > available;
+      const status: "confirmed" | "waitlist" = waitlisted ? "waitlist" : "confirmed";
+
+      const registrationRef = adminDb.collection("concert_registrations").doc();
+      const created_at = new Date().toISOString();
 
       const usedCodes = new Set<string>();
       const guests: { code: string; name: string; email: string | null }[] = [];
@@ -88,6 +125,7 @@ export const registerForConcert = createServerFn({ method: "POST" })
         contact_name: data.contactName,
         contact_email: data.contactEmail.toLowerCase(),
         party_size: people.length,
+        status,
         created_at,
       });
       guests.forEach((g, i) => {
@@ -98,6 +136,7 @@ export const registerForConcert = createServerFn({ method: "POST" })
           name: g.name,
           email: g.email,
           is_lead: people[i].isLead,
+          status,
           checked_in: false,
           checked_in_at: null,
           created_at,
@@ -105,63 +144,83 @@ export const registerForConcert = createServerFn({ method: "POST" })
       });
       await batch.commit();
 
-      // Email al titular con el QR + código de todo el grupo
-      const attachments = await Promise.all(
-        guests.map(async (g, i) => ({
-          filename: `qr-${i + 1}.png`,
-          content: await generateQrPng(`${baseUrl()}/checkin?t=${g.code}`),
-          cid: `qr${i}`,
-        })),
-      );
+      const contactEmail = data.contactEmail.toLowerCase();
 
-      await sendMail({
-        to: data.contactEmail,
-        subject: `Confirmación · ${CONCERT.bandName} en directo — ${CONCERT.dateISO}`,
-        html: renderConfirmationEmail(guests, attachments.map((a) => a.cid)),
-        attachments,
-      });
-
-      // Email individual a cada acompañante con email distinto al del titular
-      for (let i = 1; i < guests.length; i++) {
-        const g = guests[i];
-        if (g.email && g.email !== data.contactEmail.toLowerCase()) {
-          const png = await generateQrPng(`${baseUrl()}/checkin?t=${g.code}`);
-          await sendMail({
-            to: g.email,
-            subject: `Tu entrada · ${CONCERT.bandName} — ${CONCERT.dateISO}`,
-            html: renderConfirmationEmail([g], ["qr0"]),
-            attachments: [{ filename: "qr.png", content: png, cid: "qr0" }],
-          });
+      if (waitlisted) {
+        await sendMail({
+          to: data.contactEmail,
+          subject: `Lista de espera · ${CONCERT.bandName} — ${CONCERT.dateISO}`,
+          html: renderWaitlistEmail(guests),
+        });
+        for (let i = 1; i < guests.length; i++) {
+          const g = guests[i];
+          if (g.email && g.email !== contactEmail) {
+            await sendMail({
+              to: g.email,
+              subject: `Lista de espera · ${CONCERT.bandName} — ${CONCERT.dateISO}`,
+              html: renderWaitlistEmail([g]),
+            });
+          }
+        }
+      } else {
+        const attachments = await Promise.all(
+          guests.map(async (g, i) => ({
+            filename: `qr-${i + 1}.png`,
+            content: await generateQrPng(`${baseUrl()}/checkin?t=${g.code}`),
+            cid: `qr${i}`,
+          })),
+        );
+        await sendMail({
+          to: data.contactEmail,
+          subject: `Confirmación · ${CONCERT.bandName} en directo — ${CONCERT.dateISO}`,
+          html: renderConfirmationEmail(guests, attachments.map((a) => a.cid)),
+          attachments,
+        });
+        for (let i = 1; i < guests.length; i++) {
+          const g = guests[i];
+          if (g.email && g.email !== contactEmail) {
+            const png = await generateQrPng(`${baseUrl()}/checkin?t=${g.code}`);
+            await sendMail({
+              to: g.email,
+              subject: `Tu entrada · ${CONCERT.bandName} — ${CONCERT.dateISO}`,
+              html: renderConfirmationEmail([g], ["qr0"]),
+              attachments: [{ filename: "qr.png", content: png, cid: "qr0" }],
+            });
+          }
         }
       }
 
       // Aviso a la banda (no bloquea la inscripción si falla)
       try {
-        const countSnap = await adminDb
-          .collection("concert_guests")
-          .where("event", "==", CONCERT.id)
-          .count()
-          .get();
         await sendMail({
           to: process.env.NOTIFY_EMAIL || process.env.SMTP_USER!,
-          subject: `Nueva inscripción · ${data.contactName} (+${guests.length - 1}) — ${CONCERT.dateISO}`,
+          subject: `${waitlisted ? "Lista de espera" : "Nueva inscripción"} · ${data.contactName} (+${guests.length - 1}) — ${CONCERT.dateISO}`,
           html: renderRegistrationNotification({
             contactName: data.contactName,
             contactEmail: data.contactEmail,
             people: guests,
-            totalPeople: countSnap.data().count,
+            waitlisted,
+            confirmedTotal: confirmed + (waitlisted ? 0 : guests.length),
+            waitlistTotal: waitlist + (waitlisted ? guests.length : 0),
           }),
         });
       } catch (notifyErr) {
         console.error("Registration notification failed:", notifyErr);
       }
 
-      return {
-        ok: true,
-        message: "¡Inscripción confirmada! Revisa tu email (y la carpeta de spam) para ver tu entrada.",
-      };
+      return waitlisted
+        ? {
+            ok: true,
+            waitlisted: true,
+            message: `El aforo (${CONCERT.capacity}) está completo. Te hemos puesto en la lista de espera: si hay alguna cancelación te enviaremos la entrada por orden de reserva. Revisa tu email.`,
+          }
+        : {
+            ok: true,
+            waitlisted: false,
+            message: "¡Inscripción confirmada! Revisa tu email (y la carpeta de spam) para ver tu entrada.",
+          };
     } catch (err) {
       console.error("Concert registration error:", err);
-      return { ok: false, message: "No pudimos completar la inscripción. Inténtalo de nuevo." };
+      return { ok: false, waitlisted: false, message: "No pudimos completar la inscripción. Inténtalo de nuevo." };
     }
   });

@@ -61,26 +61,58 @@ export function renderConfirmationEmail(people: Person[], cids: string[]): strin
   </div>`;
 }
 
-export function renderRegistrationNotification(opts: {
-  contactName: string;
-  contactEmail: string;
-  people: Person[];
-  totalPeople: number;
-}): string {
-  const rows = opts.people
-    .map(
-      (p) =>
-        `<li>${escapeHtml(p.name)} &mdash; <span style="font-family:monospace;">${formatGuestCode(p.code)}</span></li>`,
-    )
-    .join("");
+export function renderWaitlistEmail(people: { name: string }[]): string {
+  const names = people.map((p) => `<li>${escapeHtml(p.name)}</li>`).join("");
 
   return `
   <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;color:#111;line-height:1.5;">
     ${posterImg}
-    <h1 style="font-size:18px;margin:0 0 12px;">Nueva inscripción &mdash; ${CONCERT.venue}, ${formatConcertDateEs()}</h1>
+    <p style="text-transform:uppercase;letter-spacing:2px;font-size:11px;color:#C12523;font-weight:700;margin:0 0 4px;">
+      Lista de espera
+    </p>
+    <h1 style="font-size:22px;margin:0 0 20px;">${CONCERT.bandName} en directo</h1>
+
+    <div style="padding:16px;background:#f7f7f7;margin-bottom:20px;">
+      <p style="margin:0 0 4px;font-weight:700;">${escapeHtml(CONCERT.venue)}</p>
+      <p style="margin:0 0 12px;color:#555;">${escapeHtml(CONCERT.address)}</p>
+      <p style="margin:0;">${formatConcertDateEs()}</p>
+      <p style="margin:0;">Puertas: ${CONCERT.doorsTime}h &middot; Inicio: ${CONCERT.startTime}h</p>
+    </div>
+
+    <p style="margin:0 0 8px;">
+      El aforo (${CONCERT.capacity} personas) está completo, así que
+      ${people.length === 1 ? "has quedado" : "habéis quedado"} en <strong>lista de espera</strong>:
+    </p>
+    <ul style="margin:0 0 16px;padding-left:20px;">${names}</ul>
+    <p style="margin:0 0 8px;">
+      Si hay alguna cancelación, enviaremos las entradas por <strong>orden de reserva</strong>.
+      Te avisaremos por email si te toca. No hace falta que hagas nada.
+    </p>
+  </div>`;
+}
+
+export function renderRegistrationNotification(opts: {
+  contactName: string;
+  contactEmail: string;
+  people: Person[];
+  waitlisted: boolean;
+  confirmedTotal: number;
+  waitlistTotal: number;
+}): string {
+  const rows = opts.people
+    .map((p) => `<li>${escapeHtml(p.name)}</li>`)
+    .join("");
+  const tag = opts.waitlisted
+    ? `<span style="color:#C12523;font-weight:700;">LISTA DE ESPERA</span>`
+    : `<span style="color:#01947F;font-weight:700;">CONFIRMADA</span>`;
+
+  return `
+  <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;color:#111;line-height:1.5;">
+    ${posterImg}
+    <h1 style="font-size:18px;margin:0 0 12px;">Nueva inscripción (${tag}) &mdash; ${CONCERT.venue}, ${formatConcertDateEs()}</h1>
     <p style="margin:0 0 4px;"><strong>${escapeHtml(opts.contactName)}</strong> &lt;${escapeHtml(opts.contactEmail)}&gt;</p>
     <p style="margin:0 0 8px;color:#555;">${opts.people.length} ${opts.people.length === 1 ? "persona" : "personas"}:</p>
     <ul style="margin:0 0 16px;padding-left:20px;">${rows}</ul>
-    <p style="font-weight:700;">Total apuntados hasta ahora: ${opts.totalPeople} personas</p>
+    <p style="font-weight:700;">Confirmados: ${opts.confirmedTotal}/${CONCERT.capacity} &middot; Lista de espera: ${opts.waitlistTotal}</p>
   </div>`;
 }

@@ -1,7 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { listConcertGuests, type RosterGuest } from "@/api/checkin.functions";
+import {
+  listConcertGuests,
+  promoteWaitlist,
+  cancelGuest,
+  type RosterGuest,
+} from "@/api/checkin.functions";
 import { CONCERT, formatGuestCode } from "@/lib/concert";
 
 export const Route = createFileRoute("/asistentes")({
@@ -16,17 +21,29 @@ export const Route = createFileRoute("/asistentes")({
 
 type Data = {
   guests: RosterGuest[];
-  totalPeople: number;
+  capacity: number;
+  totalConfirmed: number;
+  totalWaitlist: number;
   totalCheckedIn: number;
   totalRegistrations: number;
 };
 
+const STATUS_LABEL: Record<RosterGuest["status"], string> = {
+  confirmed: "",
+  waitlist: "espera",
+  cancelled: "cancelada",
+};
+
 function AsistentesPage() {
   const list = useServerFn(listConcertGuests);
+  const promote = useServerFn(promoteWaitlist);
+  const cancel = useServerFn(cancelGuest);
+
   const [pin, setPin] = useState("");
   const [data, setData] = useState<Data | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [q, setQ] = useState("");
 
   const load = async (e?: React.FormEvent) => {
@@ -47,6 +64,22 @@ function AsistentesPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const onPromote = async () => {
+    if (!confirm("¿Promover la lista de espera para llenar las plazas libres?")) return;
+    setNotice("");
+    const res = await promote({ data: { pin } });
+    setNotice(res.message);
+    await load();
+  };
+
+  const onCancel = async (g: RosterGuest) => {
+    if (!confirm(`¿Cancelar la entrada de ${g.name} (${formatGuestCode(g.code)})?`)) return;
+    setNotice("");
+    const res = await cancel({ data: { pin, code: g.code } });
+    setNotice(res.message);
+    await load();
   };
 
   if (!data) {
@@ -81,6 +114,8 @@ function AsistentesPage() {
   const filtered = data.guests.filter((g) =>
     `${g.name} ${g.email ?? ""} ${g.code}`.toLowerCase().includes(q.toLowerCase()),
   );
+  const freeSlots = data.capacity - data.totalConfirmed;
+  const canPromote = data.totalWaitlist > 0 && freeSlots > 0;
 
   return (
     <div className="min-h-[70vh] px-4 py-8 bg-background max-w-3xl mx-auto">
@@ -93,20 +128,32 @@ function AsistentesPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 mb-6 font-display text-center">
+      <div className="grid grid-cols-3 gap-3 mb-4 font-display text-center">
         <div className="p-3 border border-white/10 bg-white/5">
-          <div className="text-3xl font-black text-white">{data.totalPeople}</div>
-          <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">Personas</div>
+          <div className="text-2xl font-black text-white">
+            {data.totalConfirmed}<span className="text-white/30 text-base">/{data.capacity}</span>
+          </div>
+          <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">Confirmados</div>
         </div>
         <div className="p-3 border border-white/10 bg-white/5">
-          <div className="text-3xl font-black text-menta">{data.totalCheckedIn}</div>
-          <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">Dentro</div>
+          <div className="text-2xl font-black text-menta">{data.totalCheckedIn}</div>
+          <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">En puerta</div>
         </div>
         <div className="p-3 border border-white/10 bg-white/5">
-          <div className="text-3xl font-black text-white">{data.totalRegistrations}</div>
-          <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">Reservas</div>
+          <div className="text-2xl font-black text-arena">{data.totalWaitlist}</div>
+          <div className="text-[10px] uppercase tracking-widest text-white/40 mt-1">Lista espera</div>
         </div>
       </div>
+
+      {canPromote && (
+        <button
+          onClick={onPromote}
+          className="w-full mb-4 px-4 py-3 bg-arena text-black font-display font-bold uppercase tracking-widest text-xs"
+        >
+          Promover lista de espera ({freeSlots} {freeSlots === 1 ? "plaza libre" : "plazas libres"})
+        </button>
+      )}
+      {notice && <p className="text-arena text-sm mb-4">{notice}</p>}
 
       <div className="flex gap-2 mb-4">
         <input
@@ -125,7 +172,10 @@ function AsistentesPage() {
 
       <ul className="divide-y divide-white/5 border-y border-white/10">
         {filtered.map((g) => (
-          <li key={g.code} className="flex items-center gap-3 py-3">
+          <li
+            key={g.code}
+            className={`flex items-center gap-3 py-3 ${g.status === "cancelled" ? "opacity-40" : ""}`}
+          >
             <span
               className={`w-2 h-2 rounded-full shrink-0 ${g.checked_in ? "bg-menta" : "bg-white/20"}`}
               title={g.checked_in ? "Dentro" : "Sin entrar"}
@@ -134,6 +184,15 @@ function AsistentesPage() {
               <p className="text-white text-sm truncate">
                 {g.name}
                 {g.is_lead && <span className="text-white/30 text-xs"> · reserva</span>}
+                {STATUS_LABEL[g.status] && (
+                  <span
+                    className={`ml-2 text-[10px] uppercase tracking-widest ${
+                      g.status === "waitlist" ? "text-arena" : "text-white/30"
+                    }`}
+                  >
+                    {STATUS_LABEL[g.status]}
+                  </span>
+                )}
               </p>
               <p className="text-white/40 text-xs truncate">{g.email ?? "—"}</p>
             </div>
@@ -146,6 +205,14 @@ function AsistentesPage() {
                 })}
               </span>
             )}
+            {g.status === "confirmed" && (
+              <button
+                onClick={() => onCancel(g)}
+                className="shrink-0 text-[10px] uppercase tracking-widest text-white/30 hover:text-rojo"
+              >
+                Cancelar
+              </button>
+            )}
           </li>
         ))}
       </ul>
@@ -157,7 +224,7 @@ function AsistentesPage() {
       )}
 
       <p className="text-white/30 text-[10px] mt-6 font-display uppercase tracking-widest">
-        {CONCERT.venue} · {CONCERT.dateISO}
+        {CONCERT.venue} · {CONCERT.dateISO} · aforo {CONCERT.capacity}
       </p>
     </div>
   );

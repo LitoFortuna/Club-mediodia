@@ -15,6 +15,7 @@ export function EntradasForm() {
   const [contactEmail, setContactEmail] = useState("");
   const [guests, setGuests] = useState<Guest[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
+  const [waitlisted, setWaitlisted] = useState(false);
   const [feedback, setFeedback] = useState("");
 
   const addGuest = () =>
@@ -39,6 +40,7 @@ export function EntradasForm() {
         },
       });
       setFeedback(res.message);
+      setWaitlisted(!!res.waitlisted);
       setStatus(res.ok ? "ok" : "error");
       if (res.ok) {
         setContactName("");
@@ -56,8 +58,18 @@ export function EntradasForm() {
 
   if (status === "ok") {
     return (
-      <div className="p-8 border-2 border-orange/40 bg-orange/5 text-center">
-        <p className="font-display text-2xl font-bold text-orange mb-2 uppercase">¡Ya estáis dentro!</p>
+      <div
+        className={`p-8 border-2 text-center ${
+          waitlisted ? "border-arena/50 bg-arena/5" : "border-orange/40 bg-orange/5"
+        }`}
+      >
+        <p
+          className={`font-display text-2xl font-bold mb-2 uppercase ${
+            waitlisted ? "text-arena" : "text-orange"
+          }`}
+        >
+          {waitlisted ? "Estás en lista de espera" : "¡Ya estáis dentro!"}
+        </p>
         <p className="text-white/70 font-body">{feedback}</p>
       </div>
     );

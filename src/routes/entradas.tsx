@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MapPin, Clock, Ticket } from "lucide-react";
 import { EntradasForm } from "@/components/EntradasForm";
+import { getConcertAvailability } from "@/api/concert.functions";
 import { CONCERT, formatConcertDateEs, isRegistrationOpen } from "@/lib/concert";
 
 export const Route = createFileRoute("/entradas")({
@@ -29,11 +30,13 @@ export const Route = createFileRoute("/entradas")({
       ],
     };
   },
+  loader: () => getConcertAvailability(),
   component: EntradasPage,
 });
 
 function EntradasPage() {
   const open = isRegistrationOpen();
+  const { full } = Route.useLoaderData();
 
   return (
     <>
@@ -86,10 +89,18 @@ function EntradasPage() {
           {open ? (
             <div className="p-1 border border-white/10 bg-white/5">
               <div className="p-8 md:p-12 border border-white/10 bg-background">
-                <p className="text-white/60 font-body text-sm mb-8">
-                  Recibirás un email de confirmación con un código QR por persona. Preséntalo en la
-                  puerta el día del concierto.
-                </p>
+                {full ? (
+                  <p className="text-arena font-body text-sm mb-8 border-l-2 border-arena pl-4">
+                    El aforo ({CONCERT.capacity} personas) está completo. Puedes apuntarte igualmente:
+                    entrarás en la <strong>lista de espera</strong> y, si hay alguna cancelación, te
+                    enviaremos la entrada por orden de reserva.
+                  </p>
+                ) : (
+                  <p className="text-white/60 font-body text-sm mb-8">
+                    Recibirás un email de confirmación con un código QR por persona. Preséntalo en la
+                    puerta el día del concierto.
+                  </p>
+                )}
                 <EntradasForm />
               </div>
             </div>

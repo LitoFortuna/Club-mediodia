@@ -22,6 +22,7 @@ type Result = { status: CheckInStatus; name?: string; checked_in_at?: string | n
 const RESULT_STYLES: Record<CheckInStatus, { bg: string; label: string }> = {
   ok: { bg: "bg-menta", label: "ENTRADA VÁLIDA" },
   already: { bg: "bg-arena", label: "YA HABÍA ENTRADO" },
+  waitlist: { bg: "bg-rojo", label: "EN LISTA DE ESPERA — SIN ENTRADA" },
   notfound: { bg: "bg-rojo", label: "QR NO VÁLIDO" },
   badpin: { bg: "bg-rojo", label: "PIN INCORRECTO" },
   error: { bg: "bg-rojo", label: "ERROR — REINTENTA" },

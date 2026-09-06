@@ -37,6 +37,8 @@ export interface ConcertRegistration {
   created_at: string;
 }
 
+export type ConcertGuestStatus = "confirmed" | "waitlist" | "cancelled";
+
 export interface ConcertGuest {
   code: string; // también es el ID del documento
   event: string;
@@ -44,6 +46,7 @@ export interface ConcertGuest {
   name: string;
   email: string | null;
   is_lead: boolean;
+  status: ConcertGuestStatus;
   checked_in: boolean;
   checked_in_at: string | null;
   created_at: string;

@@ -16,6 +16,9 @@ export const CONCERT = {
   registrationDeadlineISO: "2026-09-12T00:00:00+02:00",
   // Máximo de acompañantes por inscripción (además del titular)
   maxGuestsPerRegistration: 9,
+  // Aforo: nº de personas con entrada confirmada. Al llenarse, el resto
+  // entra en lista de espera por orden cronológico de reserva.
+  capacity: 90,
 } as const;
 
 export function formatConcertDateEs(): string {
