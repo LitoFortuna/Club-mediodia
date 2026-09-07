@@ -1,21 +1,14 @@
 {
   "hosting": {
-    "public": "dist/client",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
       {
-        "source": "**",
-        "function": "ssr_server"
+        "source": "/:path*",
+        "destination": "https://clubmediodia.es/:path*",
+        "type": 301
       }
     ]
-  },
-  "functions": {
-    "source": "functions",
-    "runtime": "nodejs20"
   },
   "firestore": {
     "database": "(default)",

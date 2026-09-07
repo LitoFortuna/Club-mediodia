@@ -38,3 +38,6 @@ dist-ssr
 .env.local
 .env.test
 .env.*.local
+
+# Firebase (cache local de deploy)
+.firebase/
