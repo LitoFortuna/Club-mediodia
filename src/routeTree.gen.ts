@@ -9,43 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ShowsRouteImport } from './routes/shows'
-import { Route as MusicaRouteImport } from './routes/musica'
-import { Route as EntradasRouteImport } from './routes/entradas'
-import { Route as ElClubRouteImport } from './routes/el-club'
-import { Route as ContactoRouteImport } from './routes/contacto'
-import { Route as CheckinRouteImport } from './routes/checkin'
-import { Route as AsistentesRouteImport } from './routes/asistentes'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AsistentesRouteImport } from './routes/asistentes'
+import { Route as CheckinRouteImport } from './routes/checkin'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as ElClubRouteImport } from './routes/el-club'
+import { Route as EntradasRouteImport } from './routes/entradas'
+import { Route as MusicaRouteImport } from './routes/musica'
+import { Route as ShowsRouteImport } from './routes/shows'
 
-const ShowsRoute = ShowsRouteImport.update({
-  id: '/shows',
-  path: '/shows',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MusicaRoute = MusicaRouteImport.update({
-  id: '/musica',
-  path: '/musica',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EntradasRoute = EntradasRouteImport.update({
-  id: '/entradas',
-  path: '/entradas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ElClubRoute = ElClubRouteImport.update({
-  id: '/el-club',
-  path: '/el-club',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactoRoute = ContactoRouteImport.update({
-  id: '/contacto',
-  path: '/contacto',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckinRoute = CheckinRouteImport.update({
-  id: '/checkin',
-  path: '/checkin',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AsistentesRoute = AsistentesRouteImport.update({
@@ -53,9 +28,34 @@ const AsistentesRoute = AsistentesRouteImport.update({
   path: '/asistentes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const CheckinRoute = CheckinRouteImport.update({
+  id: '/checkin',
+  path: '/checkin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ElClubRoute = ElClubRouteImport.update({
+  id: '/el-club',
+  path: '/el-club',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EntradasRoute = EntradasRouteImport.update({
+  id: '/entradas',
+  path: '/entradas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MusicaRoute = MusicaRouteImport.update({
+  id: '/musica',
+  path: '/musica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShowsRoute = ShowsRouteImport.update({
+  id: '/shows',
+  path: '/shows',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -136,46 +136,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/shows': {
-      id: '/shows'
-      path: '/shows'
-      fullPath: '/shows'
-      preLoaderRoute: typeof ShowsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/musica': {
-      id: '/musica'
-      path: '/musica'
-      fullPath: '/musica'
-      preLoaderRoute: typeof MusicaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/entradas': {
-      id: '/entradas'
-      path: '/entradas'
-      fullPath: '/entradas'
-      preLoaderRoute: typeof EntradasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/el-club': {
-      id: '/el-club'
-      path: '/el-club'
-      fullPath: '/el-club'
-      preLoaderRoute: typeof ElClubRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contacto': {
-      id: '/contacto'
-      path: '/contacto'
-      fullPath: '/contacto'
-      preLoaderRoute: typeof ContactoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkin': {
-      id: '/checkin'
-      path: '/checkin'
-      fullPath: '/checkin'
-      preLoaderRoute: typeof CheckinRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/asistentes': {
@@ -185,11 +150,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AsistentesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/checkin': {
+      id: '/checkin'
+      path: '/checkin'
+      fullPath: '/checkin'
+      preLoaderRoute: typeof CheckinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/el-club': {
+      id: '/el-club'
+      path: '/el-club'
+      fullPath: '/el-club'
+      preLoaderRoute: typeof ElClubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entradas': {
+      id: '/entradas'
+      path: '/entradas'
+      fullPath: '/entradas'
+      preLoaderRoute: typeof EntradasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/musica': {
+      id: '/musica'
+      path: '/musica'
+      fullPath: '/musica'
+      preLoaderRoute: typeof MusicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shows': {
+      id: '/shows'
+      path: '/shows'
+      fullPath: '/shows'
+      preLoaderRoute: typeof ShowsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

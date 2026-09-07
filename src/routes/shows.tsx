@@ -51,7 +51,7 @@ export const Route = createFileRoute("/shows")({
   component: ShowsPage,
   errorComponent: ({ error }) => (
     <div className="px-6 py-24 text-center text-orange">
-      <p>{error.message}</p>
+      <p>{error instanceof Error ? error.message : "No se pudieron cargar las fechas."}</p>
     </div>
   ),
 });

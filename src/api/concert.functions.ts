@@ -72,11 +72,27 @@ async function countGuests(): Promise<{ confirmed: number; waitlist: number }> {
   return { confirmed, waitlist };
 }
 
+// Cache en memoria (por instancia serverless) para no escanear la colección
+// en cada carga de /entradas. La cuenta exacta para el aforo se hace aparte
+// y sin cache dentro de registerForConcert.
+type Availability = { capacity: number; confirmed: number; full: boolean };
+let availCache: { at: number; value: Availability } | null = null;
+const AVAIL_TTL_MS = 60_000;
+
 export const getConcertAvailability = createServerFn({ method: "GET" }).handler(
-  async (): Promise<{ capacity: number; confirmed: number; full: boolean }> => {
+  async (): Promise<Availability> => {
+    if (availCache && Date.now() - availCache.at < AVAIL_TTL_MS) {
+      return availCache.value;
+    }
     try {
       const { confirmed } = await countGuests();
-      return { capacity: CONCERT.capacity, confirmed, full: confirmed >= CONCERT.capacity };
+      const value: Availability = {
+        capacity: CONCERT.capacity,
+        confirmed,
+        full: confirmed >= CONCERT.capacity,
+      };
+      availCache = { at: Date.now(), value };
+      return value;
     } catch {
       return { capacity: CONCERT.capacity, confirmed: 0, full: false };
     }

@@ -45,7 +45,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   errorComponent: ({ error }) => (
     <div className="px-6 py-24 text-center" style={{ color: "var(--color-teal)" }}>
-      <p>{error.message}</p>
+      <p>{error instanceof Error ? error.message : "No se pudo cargar."}</p>
     </div>
   ),
 });

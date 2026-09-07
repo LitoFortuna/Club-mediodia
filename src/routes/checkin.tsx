@@ -107,9 +107,14 @@ function CheckinPage() {
           { facingMode: "environment" },
           { fps: 10, qrbox: { width: 250, height: 250 } },
           (decodedText) => {
-            const token = decodedText.includes("t=")
-              ? new URL(decodedText).searchParams.get("t") ?? decodedText
-              : decodedText;
+            let token = decodedText;
+            try {
+              if (decodedText.includes("t=")) {
+                token = new URL(decodedText).searchParams.get("t") ?? decodedText;
+              }
+            } catch {
+              /* no era una URL válida: se usa el texto tal cual */
+            }
             runCheckIn(token);
           },
           undefined,

@@ -73,6 +73,7 @@ export const checkInGuest = createServerFn({ method: "POST" })
 
       const checked_in_at = new Date().toISOString();
       await ref.update({ checked_in: true, checked_in_at });
+      console.log(`[audit] check-in OK code=${code} name=${guest.name}`);
       return { status: "ok", name: guest.name, checked_in_at };
     } catch (err) {
       console.error("Check-in error:", err);
@@ -178,6 +179,7 @@ export const cancelGuest = createServerFn({ method: "POST" })
       const snap = await ref.get();
       if (!snap.exists) return { ok: false, message: "No existe ese código." };
       await ref.update({ status: "cancelled", checked_in: false, checked_in_at: null });
+      console.log(`[audit] cancelación code=${code}`);
       return { ok: true, message: "Entrada cancelada. Ya puedes promover la lista de espera." };
     } catch (err) {
       console.error("Cancel error:", err);
@@ -254,6 +256,7 @@ export const promoteWaitlist = createServerFn({ method: "POST" })
 
         free -= group.length;
         promoted += group.length;
+        console.log(`[audit] promoción reg=${group[0].registration_id} personas=${group.length}`);
         if (free <= 0) break;
       }
 
