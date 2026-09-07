@@ -4,6 +4,11 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "redirects": [
       {
+        "source": "/",
+        "destination": "https://clubmediodia.es",
+        "type": 301
+      },
+      {
         "source": "/:path*",
         "destination": "https://clubmediodia.es/:path*",
         "type": 301
