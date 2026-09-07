@@ -3,6 +3,7 @@ import { MapPin, Clock, Ticket } from "lucide-react";
 import { EntradasForm } from "@/components/EntradasForm";
 import { getConcertAvailability } from "@/api/concert.functions";
 import { CONCERT, formatConcertDateEs, isRegistrationOpen } from "@/lib/concert";
+import { concertEventLd } from "@/lib/band";
 
 export const Route = createFileRoute("/entradas")({
   head: () => {
@@ -28,6 +29,8 @@ export const Route = createFileRoute("/entradas")({
         { name: "twitter:description", content: desc },
         { name: "twitter:image", content: poster },
       ],
+      links: [{ rel: "canonical", href: "https://clubmediodia.es/entradas" }],
+      scripts: [{ type: "application/ld+json", children: concertEventLd() }],
     };
   },
   loader: () => getConcertAvailability(),

@@ -5,6 +5,7 @@ import { DoubleExposure } from "@/components/DoubleExposure";
 import { ShowCard } from "@/components/ShowCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { CONCERT } from "@/lib/concert";
+import { concertEventLd } from "@/lib/band";
 import type { Show } from "@/lib/types";
 
 // Usa el cartel del concierto anunciado si el show no trae poster propio
@@ -41,11 +42,13 @@ export const Route = createFileRoute("/shows")({
       {
         name: "description",
         content:
-          "Próximas fechas de Club Mediodía. Conciertos en Madrid, Barcelona, Valencia y más.",
+          "Próximas fechas de Club Mediodía en directo. Presentación del álbum «Un globo en la terraza» en Hangar 05, Barcelona, el 11 de septiembre de 2026.",
       },
       { property: "og:title", content: "Shows — Club Mediodía" },
-      { property: "og:description", content: "Próximas fechas y entradas." },
+      { property: "og:description", content: "Próximas fechas y entradas de Club Mediodía." },
     ],
+    links: [{ rel: "canonical", href: "https://clubmediodia.es/shows" }],
+    scripts: [{ type: "application/ld+json", children: concertEventLd() }],
   }),
   loader: () => getShows(),
   component: ShowsPage,

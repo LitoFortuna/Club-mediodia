@@ -40,6 +40,7 @@ export const Route = createFileRoute("/")({
         content: "Memoria borrosa al mediodía. Nuevo álbum: Un globo en la terraza.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://clubmediodia.es/" }],
   }),
   loader: () => getNextShow(),
   component: Index,

@@ -12,6 +12,7 @@ export const Route = createFileRoute("/el-club")({
         content: "Conoce a la banda detrás del mediodía mental. Psicodelia doméstica y memoria borrosa.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://clubmediodia.es/el-club" }],
   }),
   component: ElClubPage,
 });

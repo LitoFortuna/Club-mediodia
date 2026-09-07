@@ -1,8 +1,10 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { GrainOverlay } from "@/components/GrainOverlay";
-import { FloatingBalloon } from "@/components/FloatingBalloon";
+import { musicGroupLd } from "@/lib/band";
 
 const favicon = "/favicon.png";
 
@@ -55,7 +57,8 @@ export const Route = createRootRoute({
       { property: "og:title", content: "Club Mediodía — Un globo en la terraza" },
       {
         property: "og:description",
-        content: "Memoria borrosa al mediodía. Nuevo álbum próximamente.",
+        content:
+          "Psicodelia doméstica desde una terraza de Barcelona. Nuevo álbum «Un globo en la terraza», 1 de mayo de 2026.",
       },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:image", content: "https://clubmediodia.es/og-default.jpg" },
@@ -74,6 +77,7 @@ export const Route = createRootRoute({
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap",
       },
     ],
+    scripts: [{ type: "application/ld+json", children: musicGroupLd() }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -103,6 +107,8 @@ function RootComponent() {
         <Outlet />
       </main>
       <Footer />
+      <Analytics />
+      <SpeedInsights />
     </>
   );
 }

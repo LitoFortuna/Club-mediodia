@@ -2,9 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DoubleExposure } from "@/components/DoubleExposure";
 import albumCover from "@/assets/CM_portada.jpg";
 import gallery1 from "@/assets/CM_header.jpg";
-import gallery2 from "@/assets/CM_portada.jpg";
-import gallery3 from "@/assets/CM_header.jpg";
 import { useState } from "react";
+import { musicAlbumLd } from "@/lib/band";
 
 const tracklist = [
   { 
@@ -181,6 +180,8 @@ export const Route = createFileRoute("/musica")({
       },
       { property: "og:image", content: "https://clubmediodia.es/og-default.jpg" },
     ],
+    links: [{ rel: "canonical", href: "https://clubmediodia.es/musica" }],
+    scripts: [{ type: "application/ld+json", children: musicAlbumLd() }],
   }),
   component: MusicaPage,
 });
@@ -356,17 +357,13 @@ function MusicaPage() {
             LIMINALIDAD<br />
             <span className="text-accent">DOMÉSTICA</span>
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-            <div className="row-span-2 overflow-hidden border border-white/10">
-              <img src={gallery1} alt="Vaso a medio beber" loading="lazy" width={1024} height={1024}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="overflow-hidden border border-white/10">
+              <img src={gallery1} alt="Club Mediodía en una azotea de Barcelona" loading="lazy" width={1280} height={1024}
                    className="w-full grayscale hover:grayscale-0 transition-all duration-1000 object-cover h-full scale-105 hover:scale-100" />
             </div>
             <div className="overflow-hidden border border-white/10">
-              <img src={gallery3} alt="Cielo del mediodía" loading="lazy" width={1280} height={1024}
-                   className="w-full grayscale hover:grayscale-0 transition-all duration-1000 object-cover h-full scale-105 hover:scale-100" />
-            </div>
-            <div className="overflow-hidden border border-white/10">
-              <img src={gallery2} alt="Sombra en la terraza" loading="lazy" width={1024} height={1280}
+              <img src={albumCover} alt="Portada del álbum «Un globo en la terraza»" loading="lazy" width={1024} height={1024}
                    className="w-full grayscale hover:grayscale-0 transition-all duration-1000 object-cover h-full scale-105 hover:scale-100" />
             </div>
           </div>

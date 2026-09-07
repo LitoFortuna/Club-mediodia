@@ -15,6 +15,7 @@ export const Route = createFileRoute("/contacto")({
       { property: "og:title", content: "Contacto — Club Mediodía" },
       { property: "og:description", content: "Booking, prensa, management y más." },
     ],
+    links: [{ rel: "canonical", href: "https://clubmediodia.es/contacto" }],
   }),
   component: ContactoPage,
 });
