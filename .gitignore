@@ -33,6 +33,8 @@ dist-ssr
 
 .vercel
 
-# Credenciales — nunca deben subirse al repo (es público)
+# Credenciales / entorno — nunca deben subirse al repo (es público)
 *service-account*.json
 .env.local
+.env.test
+.env.*.local

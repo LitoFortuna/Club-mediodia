@@ -54,7 +54,7 @@ function AsistentesPage() {
     try {
       const res = await list({ data: { pin } });
       if (!res.ok) {
-        setError("PIN incorrecto.");
+        setError(res.message || "PIN incorrecto.");
         setData(null);
       } else {
         setData(res);

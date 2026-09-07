@@ -17,7 +17,12 @@ export const Route = createFileRoute("/checkin")({
   component: CheckinPage,
 });
 
-type Result = { status: CheckInStatus; name?: string; checked_in_at?: string | null } | null;
+type Result = {
+  status: CheckInStatus;
+  name?: string;
+  checked_in_at?: string | null;
+  retryAfterMin?: number;
+} | null;
 
 const RESULT_STYLES: Record<CheckInStatus, { bg: string; label: string }> = {
   ok: { bg: "bg-menta", label: "ENTRADA VÁLIDA" },
@@ -25,6 +30,7 @@ const RESULT_STYLES: Record<CheckInStatus, { bg: string; label: string }> = {
   waitlist: { bg: "bg-rojo", label: "EN LISTA DE ESPERA — SIN ENTRADA" },
   notfound: { bg: "bg-rojo", label: "QR NO VÁLIDO" },
   badpin: { bg: "bg-rojo", label: "PIN INCORRECTO" },
+  locked: { bg: "bg-rojo", label: "BLOQUEADO — DEMASIADOS INTENTOS" },
   error: { bg: "bg-rojo", label: "ERROR — REINTENTA" },
 };
 
@@ -37,8 +43,31 @@ function CheckinPage() {
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState<Result>(null);
   const [manualToken, setManualToken] = useState("");
+  const [pinError, setPinError] = useState("");
+  const [checkingPin, setCheckingPin] = useState(false);
   const scannerRef = useRef<import("html5-qrcode").Html5Qrcode | null>(null);
   const busyRef = useRef(false);
+
+  const submitPin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pin.trim() || checkingPin) return;
+    setCheckingPin(true);
+    setPinError("");
+    try {
+      // Sonda: token falso que nunca coincide con un código real.
+      // Si el PIN es correcto, el servidor responde "notfound" (no "badpin").
+      const res = await checkIn({ data: { pin, token: "__PINCHECK__" } });
+      if (res.status === "badpin") setPinError("PIN incorrecto.");
+      else if (res.status === "locked") {
+        const h = Math.max(1, Math.round((res.retryAfterMin ?? 120) / 60));
+        setPinError(`Demasiados intentos. Vuelve a probar en ~${h} h.`);
+      } else setUnlocked(true);
+    } catch {
+      setPinError("No se pudo verificar el PIN.");
+    } finally {
+      setCheckingPin(false);
+    }
+  };
 
   const runCheckIn = async (raw: string) => {
     const token = normalizeGuestCode(raw);
@@ -104,13 +133,7 @@ function CheckinPage() {
   if (!unlocked) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-6 bg-background">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (pin.trim()) setUnlocked(true);
-          }}
-          className="w-full max-w-xs flex flex-col gap-4"
-        >
+        <form onSubmit={submitPin} className="w-full max-w-xs flex flex-col gap-4">
           <p className="font-display uppercase tracking-widest text-xs text-white/50 text-center">
             Check-in · Staff
           </p>
@@ -125,10 +148,12 @@ function CheckinPage() {
           />
           <button
             type="submit"
-            className="px-6 py-3 bg-orange text-black font-display font-bold uppercase tracking-widest text-sm"
+            disabled={checkingPin}
+            className="px-6 py-3 bg-orange text-black font-display font-bold uppercase tracking-widest text-sm disabled:opacity-50"
           >
-            Entrar
+            {checkingPin ? "…" : "Entrar"}
           </button>
+          {pinError && <p className="text-red-500 text-sm text-center">{pinError}</p>}
         </form>
       </div>
     );
@@ -149,6 +174,11 @@ function CheckinPage() {
           {result.status === "already" && result.checked_in_at && (
             <p className="font-body text-xs mt-1 opacity-70">
               Entró a las {new Date(result.checked_in_at).toLocaleTimeString("es-ES")}
+            </p>
+          )}
+          {result.status === "locked" && result.retryAfterMin != null && (
+            <p className="font-body text-xs mt-1 opacity-70">
+              Vuelve a probar en ~{Math.max(1, Math.round(result.retryAfterMin / 60))} h
             </p>
           )}
         </div>

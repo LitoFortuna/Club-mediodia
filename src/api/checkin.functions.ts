@@ -5,10 +5,14 @@ import { sendMail } from "@/lib/mailer.server";
 import { generateQrPng } from "@/lib/qr.server";
 import { renderConfirmationEmail } from "@/lib/concert-email.server";
 import { CONCERT, normalizeGuestCode } from "@/lib/concert";
+import { checkPinWithLockout, type PinGateResult } from "@/lib/pin-guard.server";
 
-function pinOk(pin: string): boolean {
-  const expected = process.env.CHECKIN_PIN;
-  return !!expected && pin === expected;
+function pinDeniedMessage(gate: Extract<PinGateResult, { ok: false }>): string {
+  if (gate.locked) {
+    const h = Math.max(1, Math.round((gate.retryAfterMin ?? 120) / 60));
+    return `Demasiados intentos fallidos. Vuelve a probar dentro de ~${h} h.`;
+  }
+  return "PIN incorrecto.";
 }
 
 function baseUrl() {
@@ -22,7 +26,14 @@ const checkInSchema = z.object({
   token: z.string().trim().min(4).max(200),
 });
 
-export type CheckInStatus = "ok" | "already" | "notfound" | "badpin" | "waitlist" | "error";
+export type CheckInStatus =
+  | "ok"
+  | "already"
+  | "notfound"
+  | "badpin"
+  | "locked"
+  | "waitlist"
+  | "error";
 
 export const checkInGuest = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => checkInSchema.parse(input))
@@ -30,8 +41,12 @@ export const checkInGuest = createServerFn({ method: "POST" })
     status: CheckInStatus;
     name?: string;
     checked_in_at?: string | null;
+    retryAfterMin?: number;
   }> => {
-    if (!pinOk(data.pin)) return { status: "badpin" };
+    const gate = await checkPinWithLockout(data.pin);
+    if (!gate.ok) {
+      return { status: gate.locked ? "locked" : "badpin", retryAfterMin: gate.retryAfterMin };
+    }
 
     const code = normalizeGuestCode(data.token);
     if (!code) return { status: "notfound" };
@@ -110,6 +125,7 @@ export const listConcertGuests = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ pin: z.string().trim().min(1) }).parse(input))
   .handler(async ({ data }): Promise<{
     ok: boolean;
+    message?: string;
     guests: RosterGuest[];
     capacity: number;
     totalConfirmed: number;
@@ -119,14 +135,15 @@ export const listConcertGuests = createServerFn({ method: "POST" })
   }> => {
     const empty = {
       ok: false,
-      guests: [],
+      guests: [] as RosterGuest[],
       capacity: CONCERT.capacity,
       totalConfirmed: 0,
       totalWaitlist: 0,
       totalCheckedIn: 0,
       totalRegistrations: 0,
     };
-    if (!pinOk(data.pin)) return empty;
+    const gate = await checkPinWithLockout(data.pin);
+    if (!gate.ok) return { ...empty, message: pinDeniedMessage(gate) };
 
     try {
       const guests = await fetchRoster();
@@ -153,7 +170,8 @@ export const cancelGuest = createServerFn({ method: "POST" })
     z.object({ pin: z.string().trim().min(1), code: z.string().trim().min(1) }).parse(input),
   )
   .handler(async ({ data }): Promise<{ ok: boolean; message: string }> => {
-    if (!pinOk(data.pin)) return { ok: false, message: "PIN incorrecto." };
+    const gate = await checkPinWithLockout(data.pin);
+    if (!gate.ok) return { ok: false, message: pinDeniedMessage(gate) };
     try {
       const code = normalizeGuestCode(data.code);
       const ref = adminDb.collection("concert_guests").doc(code);
@@ -172,7 +190,8 @@ export const cancelGuest = createServerFn({ method: "POST" })
 export const promoteWaitlist = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ pin: z.string().trim().min(1) }).parse(input))
   .handler(async ({ data }): Promise<{ ok: boolean; message: string; promoted: number }> => {
-    if (!pinOk(data.pin)) return { ok: false, message: "PIN incorrecto.", promoted: 0 };
+    const gate = await checkPinWithLockout(data.pin);
+    if (!gate.ok) return { ok: false, message: pinDeniedMessage(gate), promoted: 0 };
 
     try {
       const guests = await fetchRoster();
