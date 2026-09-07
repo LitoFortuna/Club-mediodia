@@ -4,7 +4,7 @@
 
 **Psicodelia doméstica desde la terraza**
 
-[![Web Oficial](https://img.shields.io/badge/Web-clubmediodia.web.app-ff5500?style=for-the-badge&logo=googlechrome&logoColor=white)](https://clubmediodia.web.app/)
+[![Web Oficial](https://img.shields.io/badge/Web-clubmediodia.es-ff5500?style=for-the-badge&logo=googlechrome&logoColor=white)](https://clubmediodia.es/)
 [![Spotify](https://img.shields.io/badge/Spotify-Club_Mediod%C3%ADa-1DB954?style=for-the-badge&logo=spotify&logoColor=white)](https://open.spotify.com/artist/573822769419)
 [![Instagram](https://img.shields.io/badge/Instagram-@club.mediodia-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/club.mediodia/)
 [![YouTube](https://img.shields.io/badge/YouTube-Club_Mediod%C3%ADa-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/channel/UCobKsproqA8miDdGqqVNwRA)
@@ -50,7 +50,7 @@
 ## 📬 Contacto & Booking
 
 - 📧 **Información general y booking:** [info@clubmediodia.es](mailto:info@clubmediodia.es)
-- 🌐 **Sitio Web:** [https://clubmediodia.web.app/](https://clubmediodia.web.app/)
+- 🌐 **Sitio Web:** [https://clubmediodia.es/](https://clubmediodia.es/)
 
 ---
 
