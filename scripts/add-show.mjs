@@ -25,12 +25,13 @@ const db = getFirestore();
 
 const show = {
   city: "Barcelona",
-  venue: "Hangar 05",
-  show_date: "2026-09-11",
-  show_time: "19:00",
+  venue: "Paral·lel 62",
+  show_date: "2026-11-28",
+  // Sin hora, precio ni enlace de entradas confirmados todavía:
+  // dejándolos vacíos, la tarjeta se muestra como "Próximamente".
+  show_time: null,
   sold_out: false,
-  // La entrada es gratuita reservando en la propia web, no una venta externa
-  ticket_url: "https://clubmediodia.es/entradas",
+  ticket_url: null,
   poster_url: null,
   created_at: new Date().toISOString(),
 };
