@@ -70,10 +70,14 @@ export const subscribeNewsletter = createServerFn({ method: "POST" })
 
 export const confirmNewsletter = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
-    z.object({ token: z.string().trim().min(10).max(128) }).parse(input),
+    z.object({ token: z.string().trim().max(200) }).parse(input),
   )
   .handler(async ({ data }): Promise<{ ok: boolean; message: string }> => {
     try {
+      if (data.token.length < 10) {
+        return { ok: false, message: "Este enlace de confirmación no es válido o ha caducado." };
+      }
+
       const q = await adminDb
         .collection("newsletter_subscribers")
         .where("token", "==", data.token)

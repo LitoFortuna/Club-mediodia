@@ -13,7 +13,11 @@ export const Route = createFileRoute("/newsletter/confirmar")({
   loaderDeps: ({ search }) => ({ t: search.t }),
   loader: async ({ deps }) => {
     if (!deps.t) return { ok: false, message: "Falta el código de confirmación." };
-    return confirmNewsletter({ data: { token: deps.t } });
+    try {
+      return await confirmNewsletter({ data: { token: deps.t } });
+    } catch {
+      return { ok: false, message: "No pudimos procesar la confirmación. Inténtalo más tarde." };
+    }
   },
   component: ConfirmarPage,
 });
