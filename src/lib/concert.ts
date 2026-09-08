@@ -18,7 +18,7 @@ export const CONCERT = {
   maxGuestsPerRegistration: 9,
   // Aforo: nº de personas con entrada confirmada. Al llenarse, el resto
   // entra en lista de espera por orden cronológico de reserva.
-  capacity: 90,
+  capacity: 80,
 } as const;
 
 export function formatConcertDateEs(): string {
