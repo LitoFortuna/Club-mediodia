@@ -17,6 +17,7 @@ import { Route as ElClubRouteImport } from './routes/el-club'
 import { Route as EntradasRouteImport } from './routes/entradas'
 import { Route as MusicaRouteImport } from './routes/musica'
 import { Route as ShowsRouteImport } from './routes/shows'
+import { Route as NewsletterConfirmarRouteImport } from './routes/newsletter.confirmar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +59,11 @@ const ShowsRoute = ShowsRouteImport.update({
   path: '/shows',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsletterConfirmarRoute = NewsletterConfirmarRouteImport.update({
+  id: '/newsletter/confirmar',
+  path: '/newsletter/confirmar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/entradas': typeof EntradasRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
+  '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/entradas': typeof EntradasRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
+  '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/entradas': typeof EntradasRoute
   '/musica': typeof MusicaRoute
   '/shows': typeof ShowsRoute
+  '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/entradas'
     | '/musica'
     | '/shows'
+    | '/newsletter/confirmar'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/entradas'
     | '/musica'
     | '/shows'
+    | '/newsletter/confirmar'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/entradas'
     | '/musica'
     | '/shows'
+    | '/newsletter/confirmar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   EntradasRoute: typeof EntradasRoute
   MusicaRoute: typeof MusicaRoute
   ShowsRoute: typeof ShowsRoute
+  NewsletterConfirmarRoute: typeof NewsletterConfirmarRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShowsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/newsletter/confirmar': {
+      id: '/newsletter/confirmar'
+      path: '/newsletter/confirmar'
+      fullPath: '/newsletter/confirmar'
+      preLoaderRoute: typeof NewsletterConfirmarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   EntradasRoute: EntradasRoute,
   MusicaRoute: MusicaRoute,
   ShowsRoute: ShowsRoute,
+  NewsletterConfirmarRoute: NewsletterConfirmarRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

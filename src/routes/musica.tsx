@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { DoubleExposure } from "@/components/DoubleExposure";
 import albumCover from "@/assets/CM_portada.jpg";
+import albumCoverWebp from "@/assets/CM_portada.webp";
 import gallery1 from "@/assets/CM_header.jpg";
+import gallery1Webp from "@/assets/CM_header.webp";
 import { useState } from "react";
 import { musicAlbumLd } from "@/lib/band";
+import { Pic } from "@/components/Pic";
 
 const tracklist = [
   { 
@@ -195,11 +198,13 @@ function MusicaPage() {
       <section className="px-6 pt-16 pb-20 md:pt-24 bg-background">
         <div className="mx-auto max-w-6xl grid md:grid-cols-[1.1fr_1fr] gap-12 items-center">
           <div className="relative group">
-            <img
-              src={albumCover}
-              alt="Portada Un globo en la terraza"
+            <Pic
+              jpg={albumCover}
+              webp={albumCoverWebp}
+              alt="Portada del álbum «Un globo en la terraza»"
               width={1024}
               height={1024}
+              fetchPriority="high"
               className="w-full grayscale contrast-125 border border-white/10"
             />
             <div className="absolute -bottom-10 -right-10 big-number opacity-10 pointer-events-none select-none">
@@ -358,14 +363,26 @@ function MusicaPage() {
             <span className="text-accent">DOMÉSTICA</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="overflow-hidden border border-white/10">
-              <img src={gallery1} alt="Club Mediodía en una azotea de Barcelona" loading="lazy" width={1280} height={1024}
-                   className="w-full grayscale hover:grayscale-0 transition-all duration-1000 object-cover h-full scale-105 hover:scale-100" />
-            </div>
-            <div className="overflow-hidden border border-white/10">
-              <img src={albumCover} alt="Portada del álbum «Un globo en la terraza»" loading="lazy" width={1024} height={1024}
-                   className="w-full grayscale hover:grayscale-0 transition-all duration-1000 object-cover h-full scale-105 hover:scale-100" />
-            </div>
+            <Pic
+              jpg={gallery1}
+              webp={gallery1Webp}
+              alt="Club Mediodía en una azotea de Barcelona"
+              loading="lazy"
+              width={1280}
+              height={1024}
+              wrapperClassName="overflow-hidden border border-white/10 block"
+              className="w-full grayscale hover:grayscale-0 transition-all duration-1000 object-cover h-full scale-105 hover:scale-100"
+            />
+            <Pic
+              jpg={albumCover}
+              webp={albumCoverWebp}
+              alt="Portada del álbum «Un globo en la terraza»"
+              loading="lazy"
+              width={1024}
+              height={1024}
+              wrapperClassName="overflow-hidden border border-white/10 block"
+              className="w-full grayscale hover:grayscale-0 transition-all duration-1000 object-cover h-full scale-105 hover:scale-100"
+            />
           </div>
         </div>
       </section>

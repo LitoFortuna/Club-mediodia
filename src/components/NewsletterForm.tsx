@@ -5,6 +5,7 @@ import { subscribeNewsletter } from "@/api/newsletter.functions";
 export function NewsletterForm() {
   const subscribe = useServerFn(subscribeNewsletter);
   const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -12,7 +13,7 @@ export function NewsletterForm() {
     e.preventDefault();
     setStatus("loading");
     try {
-      const res = await subscribe({ data: { email } });
+      const res = await subscribe({ data: { email, website } });
       setMessage(res.message);
       setStatus(res.ok ? "ok" : "error");
       if (res.ok) setEmail("");
@@ -24,6 +25,16 @@ export function NewsletterForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-xl">
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        aria-hidden="true"
+        className="hidden"
+      />
       <input
         type="email"
         required

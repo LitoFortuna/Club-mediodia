@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Club Mediodia//Concierto 11-09-2026//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:concierto-2026-09-11@clubmediodia.es
+DTSTAMP:20260908T000000Z
+DTSTART:20260911T170000Z
+DTEND:20260911T203000Z
+SUMMARY:Club Mediodía en directo — Hangar 05
+LOCATION:Hangar 05\, Carrer Bassols 5\, 08026 Barcelona
+DESCRIPTION:Club Mediodía presenta en directo «Un globo en la terraza». Puertas 18:45\, inicio 19:00. Entrada libre reservando en https://clubmediodia.es/entradas
+URL:https://clubmediodia.es/entradas
+END:VEVENT
+END:VCALENDAR

@@ -11,18 +11,25 @@ export function ShowCard({ show }: { show: Show }) {
   const month = months[d.getMonth()];
   const year = d.getFullYear();
   const poster = show.poster_url ?? null;
+  // Si el cartel es un .jpg servido por nosotros, hay una versión .webp al lado
+  const posterWebp = poster && poster.startsWith("/") && poster.endsWith(".jpg")
+    ? poster.replace(/\.jpg$/, ".webp")
+    : null;
 
   return (
     <div className="group relative flex flex-col md:flex-row gap-0 border border-white/10 overflow-hidden transition-all hover:border-orange/40">
       {/* POSTER */}
       {poster && (
         <div className="relative w-full md:w-48 aspect-[3/4] md:aspect-auto shrink-0 overflow-hidden">
-          <img
-            src={poster}
-            alt={`Cartel ${show.city}`}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+          <picture>
+            {posterWebp && <source srcSet={posterWebp} type="image/webp" />}
+            <img
+              src={poster}
+              alt={`Cartel ${show.city}`}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          </picture>
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/60 md:block hidden" />
         </div>
       )}

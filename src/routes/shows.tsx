@@ -5,7 +5,7 @@ import { DoubleExposure } from "@/components/DoubleExposure";
 import { ShowCard } from "@/components/ShowCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { CONCERT } from "@/lib/concert";
-import { concertEventLd } from "@/lib/band";
+import { showEventLd } from "@/lib/band";
 import type { Show } from "@/lib/types";
 
 // Usa el cartel del concierto anunciado si el show no trae poster propio
@@ -36,20 +36,29 @@ const getShows = createServerFn({ method: "GET" }).handler(async () => {
 });
 
 export const Route = createFileRoute("/shows")({
-  head: () => ({
-    meta: [
-      { title: "Shows — Club Mediodía" },
-      {
-        name: "description",
-        content:
-          "Próximas fechas de Club Mediodía en directo. Presentación del álbum «Un globo en la terraza» en Hangar 05, Barcelona, el 11 de septiembre de 2026.",
-      },
-      { property: "og:title", content: "Shows — Club Mediodía" },
-      { property: "og:description", content: "Próximas fechas y entradas de Club Mediodía." },
-    ],
-    links: [{ rel: "canonical", href: "https://clubmediodia.es/shows" }],
-    scripts: [{ type: "application/ld+json", children: concertEventLd() }],
-  }),
+  head: ({ loaderData }) => {
+    const today = new Date().toISOString().slice(0, 10);
+    const upcoming = (loaderData?.shows ?? [])
+      .filter((s) => s.show_date >= today)
+      .map(withConcertPoster);
+    return {
+      meta: [
+        { title: "Shows — Club Mediodía" },
+        {
+          name: "description",
+          content:
+            "Próximas fechas de Club Mediodía en directo. Presentación del álbum «Un globo en la terraza» en Hangar 05, Barcelona, el 11 de septiembre de 2026.",
+        },
+        { property: "og:title", content: "Shows — Club Mediodía" },
+        { property: "og:description", content: "Próximas fechas y entradas de Club Mediodía." },
+      ],
+      links: [{ rel: "canonical", href: "https://clubmediodia.es/shows" }],
+      scripts: upcoming.map((s) => ({
+        type: "application/ld+json",
+        children: showEventLd(s),
+      })),
+    };
+  },
   loader: () => getShows(),
   component: ShowsPage,
   errorComponent: ({ error }) => (

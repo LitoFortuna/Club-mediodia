@@ -1,7 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import headerImg from "@/assets/CM_header.jpg";
+import headerImgWebp from "@/assets/CM_header.webp";
 import stickerImg from "@/assets/CM_logo_sticker_blackwhite.png";
 import symbolImg from "@/assets/CM_simbolo-negativo.png";
+import { Pic } from "@/components/Pic";
 
 export const Route = createFileRoute("/el-club")({
   head: () => ({
@@ -22,9 +24,11 @@ function ElClubPage() {
     <div className="bg-black text-white selection:bg-orange selection:text-black">
       {/* HERO SECTION */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        <img
-          src={headerImg}
-          alt="Club Mediodía Band"
+        <Pic
+          jpg={headerImg}
+          webp={headerImgWebp}
+          alt="Club Mediodía"
+          fetchPriority="high"
           className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
@@ -155,12 +159,12 @@ function ElClubPage() {
           <h2 className="font-display text-4xl md:text-7xl font-black uppercase tracking-tighter mb-12">
             ¿Quieres ser parte <br /> del <span className="text-orange">mediodía</span>?
           </h2>
-          <a
-            href="/contacto"
+          <Link
+            to="/contacto"
             className="inline-block px-12 py-5 bg-orange text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-white hover:scale-105"
           >
             Únete al club
-          </a>
+          </Link>
         </div>
       </section>
     </div>

@@ -37,6 +37,7 @@ export async function sendMail(opts: {
   to: string;
   subject: string;
   html: string;
+  replyTo?: string;
   attachments?: MailAttachment[];
 }) {
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
@@ -51,6 +52,7 @@ export async function sendMail(opts: {
   return transporter.sendMail({
     from,
     to: opts.to,
+    replyTo: opts.replyTo,
     subject: opts.subject,
     html: opts.html,
     attachments: opts.attachments,

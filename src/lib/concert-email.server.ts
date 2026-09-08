@@ -1,13 +1,27 @@
 // Plantillas de email del concierto — SOLO servidor
-import { CONCERT, formatConcertDateEs, formatGuestCode } from "@/lib/concert";
+import {
+  CONCERT,
+  CONCERT_GOOGLE_CALENDAR_URL,
+  CONCERT_ICS_URL,
+  CONCERT_MAPS_URL,
+  formatConcertDateEs,
+  formatGuestCode,
+} from "@/lib/concert";
+import { escapeHtml } from "@/lib/escape";
 
-function escapeHtml(s: string) {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+function baseUrl(): string {
+  return process.env.PUBLIC_BASE_URL || "https://clubmediodia.es";
 }
+
+const calendarBlock = `
+    <p style="margin:16px 0 6px;font-size:13px;">Guárdatelo en el calendario:</p>
+    <p style="margin:0 0 4px;">
+      <a href="${CONCERT_GOOGLE_CALENDAR_URL}" style="color:#C12523;">Google Calendar</a>
+      &nbsp;·&nbsp;
+      <a href="${baseUrl()}${CONCERT_ICS_URL}" style="color:#C12523;">Apple / Outlook (.ics)</a>
+      &nbsp;·&nbsp;
+      <a href="${CONCERT_MAPS_URL}" style="color:#C12523;">Cómo llegar</a>
+    </p>`;
 
 interface Person {
   name: string;
@@ -15,8 +29,7 @@ interface Person {
 }
 
 function posterUrl(): string {
-  const base = process.env.PUBLIC_BASE_URL || "https://clubmediodia.es";
-  return `${base}${CONCERT.posterPath}`;
+  return `${baseUrl()}${CONCERT.posterPath}`;
 }
 
 const posterImg = `<img src="${posterUrl()}" alt="Cartel del concierto" width="480" style="display:block;width:100%;max-width:480px;height:auto;margin:0 0 20px;border:1px solid #e5e5e5;" />`;
@@ -50,6 +63,7 @@ export function renderConfirmationEmail(people: Person[], cids: string[]): strin
       <p style="margin:0;">${formatConcertDateEs()}</p>
       <p style="margin:0;">Puertas: ${CONCERT.doorsTime}h &middot; Inicio: ${CONCERT.startTime}h</p>
       <p style="margin:12px 0 0;font-size:13px;color:#555;">${CONCERT.priceInfo}.</p>
+      ${calendarBlock}
     </div>
 
     <p style="margin:0 0 8px;">Presenta este código QR en la puerta — <strong>uno por persona</strong>:</p>

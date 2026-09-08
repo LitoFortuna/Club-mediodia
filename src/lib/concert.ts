@@ -10,8 +10,10 @@ export const CONCERT = {
   doorsTime: "18:45",
   startTime: "19:00",
   priceInfo: "Entrada libre reservando desde la web",
-  // Cartel: archivo en public/ (el nombre debe coincidir EXACTO, distingue mayúsculas)
-  posterPath: "/Cartel-11-septiembre.png",
+  // Cartel: archivos en public/ (cartel-11-septiembre.jpg + .webp).
+  // .jpg para email y Open Graph (universal); .webp lo usa <Pic> en la web.
+  posterPath: "/cartel-11-septiembre.jpg",
+  posterPathWebp: "/cartel-11-septiembre.webp",
   // Las inscripciones se cierran al empezar este instante (medianoche del 12 en Madrid)
   registrationDeadlineISO: "2026-09-12T00:00:00+02:00",
   // Máximo de acompañantes por inscripción (además del titular)
@@ -48,3 +50,23 @@ export function formatGuestCode(code: string): string {
   const c = normalizeGuestCode(code);
   return c.length > 3 ? `${c.slice(0, 3)}-${c.slice(3)}` : c;
 }
+
+// --- Enlaces de "añadir al calendario" y "cómo llegar" ---
+// 19:00 Europe/Madrid (CEST) = 17:00Z; fin estimado 22:30 local = 20:30Z.
+const CAL_START = "20260911T170000Z";
+const CAL_END = "20260911T203000Z";
+const CAL_TITLE = `${CONCERT.bandName} en directo — ${CONCERT.venue}`;
+const CAL_DETAILS = `Club Mediodía presenta «Un globo en la terraza». Puertas ${CONCERT.doorsTime}, inicio ${CONCERT.startTime}. Entrada libre reservando en https://clubmediodia.es/entradas`;
+
+export const CONCERT_ICS_URL = "/concierto-club-mediodia.ics";
+
+export const CONCERT_GOOGLE_CALENDAR_URL =
+  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+  `&text=${encodeURIComponent(CAL_TITLE)}` +
+  `&dates=${CAL_START}/${CAL_END}` +
+  `&location=${encodeURIComponent(CONCERT.address)}` +
+  `&details=${encodeURIComponent(CAL_DETAILS)}`;
+
+export const CONCERT_MAPS_URL =
+  "https://www.google.com/maps/search/?api=1&query=" +
+  encodeURIComponent(`${CONCERT.venue} ${CONCERT.address}`);

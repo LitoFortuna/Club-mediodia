@@ -1,5 +1,6 @@
 // Datos de la banda y del álbum + generadores de JSON-LD (schema.org) para SEO/GEO.
 import { CONCERT } from "@/lib/concert";
+import type { Show } from "@/lib/types";
 
 export const SITE_URL = "https://clubmediodia.es";
 
@@ -75,6 +76,61 @@ export function musicAlbumLd(): string {
       byArtist: { "@id": `${SITE_URL}/#band` },
     })),
   });
+}
+
+// Direcciones postales conocidas por nombre de sala (para el JSON-LD de /shows)
+const VENUE_ADDRESSES: Record<string, { streetAddress: string; postalCode: string }> = {
+  "Hangar 05": { streetAddress: "Carrer Bassols, 5", postalCode: "08026" },
+};
+
+// Offset aproximado de Europe/Madrid: CEST (+02:00) de abril a octubre, CET (+01:00) el resto.
+function madridOffset(dateISO: string): string {
+  const month = Number(dateISO.slice(5, 7));
+  return month >= 4 && month <= 10 ? "+02:00" : "+01:00";
+}
+
+function abs(url: string): string {
+  return url.startsWith("http") ? url : `${SITE_URL}${url}`;
+}
+
+// MusicEvent para un concierto cualquiera de Firestore (usado en /shows).
+export function showEventLd(show: Show): string {
+  const addr = VENUE_ADDRESSES[show.venue];
+  const event: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "MusicEvent",
+    name: `${BAND.name} en directo — ${show.venue}`,
+    startDate: show.show_time
+      ? `${show.show_date}T${show.show_time}:00${madridOffset(show.show_date)}`
+      : show.show_date,
+    eventStatus: show.sold_out
+      ? "https://schema.org/EventSoldOut"
+      : "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: {
+      "@type": "Place",
+      name: show.venue,
+      address: {
+        "@type": "PostalAddress",
+        ...(addr ? { streetAddress: addr.streetAddress, postalCode: addr.postalCode } : {}),
+        addressLocality: show.city,
+        addressCountry: "ES",
+      },
+    },
+    performer: bandNode,
+    organizer: { "@type": "MusicGroup", name: BAND.name, url: BAND.url },
+  };
+  if (show.poster_url) event.image = abs(show.poster_url);
+  if (show.ticket_url) {
+    event.offers = {
+      "@type": "Offer",
+      url: abs(show.ticket_url),
+      availability: show.sold_out
+        ? "https://schema.org/SoldOut"
+        : "https://schema.org/InStock",
+    };
+  }
+  return JSON.stringify(event);
 }
 
 export function concertEventLd(): string {

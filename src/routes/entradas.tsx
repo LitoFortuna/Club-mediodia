@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MapPin, Clock, Ticket } from "lucide-react";
 import { EntradasForm } from "@/components/EntradasForm";
+import { AddToCalendar } from "@/components/AddToCalendar";
+import { Pic } from "@/components/Pic";
 import { getConcertAvailability } from "@/api/concert.functions";
 import { CONCERT, formatConcertDateEs, isRegistrationOpen } from "@/lib/concert";
 import { concertEventLd } from "@/lib/band";
@@ -20,7 +22,7 @@ export const Route = createFileRoute("/entradas")({
         { property: "og:description", content: desc },
         { property: "og:image", content: poster },
         { property: "og:image:secure_url", content: poster },
-        { property: "og:image:type", content: "image/png" },
+        { property: "og:image:type", content: "image/jpeg" },
         { property: "og:image:width", content: "1200" },
         { property: "og:image:height", content: "1600" },
         { property: "og:image:alt", content: `Cartel del concierto de ${CONCERT.bandName}` },
@@ -75,14 +77,20 @@ function EntradasPage() {
                 {CONCERT.priceInfo}.
               </p>
             </div>
+
+            <div className="mt-8">
+              <AddToCalendar />
+            </div>
           </div>
 
-          <img
-            src={CONCERT.posterPath}
+          <Pic
+            jpg={CONCERT.posterPath}
+            webp={CONCERT.posterPathWebp}
             alt={`Cartel del concierto de ${CONCERT.bandName}`}
             className="w-full max-w-sm mx-auto border border-white/10"
             width={1200}
             height={1600}
+            fetchPriority="high"
           />
         </div>
       </section>

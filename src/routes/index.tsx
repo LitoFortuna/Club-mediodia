@@ -4,7 +4,10 @@ import { adminDb } from "@/lib/firebase.server";
 import { DoubleExposure } from "@/components/DoubleExposure";
 import balloon from "@/assets/balloon.png";
 import albumCover from "@/assets/CM_portada.jpg";
+import albumCoverWebp from "@/assets/CM_portada.webp";
 import bandPhoto from "@/assets/CM_header.jpg";
+import bandPhotoWebp from "@/assets/CM_header.webp";
+import { Pic } from "@/components/Pic";
 
 const getNextShow = createServerFn({ method: "GET" }).handler(async () => {
   const today = new Date().toISOString().slice(0, 10);
@@ -96,10 +99,13 @@ function Index() {
           <div className="order-1 lg:order-2 relative">
             <div className="relative aspect-square w-full max-w-md mx-auto">
               <div className="absolute -inset-4 border border-orange/30 translate-x-4 translate-y-4 -z-10" />
-              <img
-                src={albumCover}
-                alt="Portada del álbum"
+              <Pic
+                jpg={albumCover}
+                webp={albumCoverWebp}
+                alt="Portada del álbum «Un globo en la terraza» de Club Mediodía"
+                wrapperClassName="block w-full h-full"
                 className="w-full h-full object-cover bw-high-contrast hard-shadow shadow-orange/20"
+                fetchPriority="high"
               />
               <div className="absolute -bottom-6 -right-6 text-8xl font-display font-black text-orange/10 select-none">
                 01
@@ -142,9 +148,11 @@ function Index() {
         <section className="py-32 bg-zinc-950 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
             <div className="relative">
-              <img
-                src={bandPhoto}
-                alt="La banda"
+              <Pic
+                jpg={bandPhoto}
+                webp={bandPhotoWebp}
+                alt="Club Mediodía"
+                loading="lazy"
                 className="w-full aspect-[4/5] object-cover bw-high-contrast grayscale opacity-50"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
