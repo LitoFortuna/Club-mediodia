@@ -336,10 +336,13 @@ function MusicaPage() {
 
           <div className="mt-16 flex flex-wrap gap-4 justify-center">
             {[
-              { label: "Amazon Music", url: "https://music.amazon.es/albums/B0GY1YWF7B" },
-              { label: "Bandcamp", url: "https://bandcamp.com" },
-              { label: "Apple Music", url: "https://music.apple.com" },
-              { label: "YouTube", url: "https://www.youtube.com/channel/UCobKsproqA8miDdGqqVNwRA" },
+              { label: "YouTube Music", url: "https://music.youtube.com/@Club.Mediod%C3%ADa" },
+              { label: "Amazon Music", url: "https://music.amazon.es/artists/B0GY23XKNS" },
+              { label: "Deezer", url: "https://www.deezer.com/album/966629901" },
+              { label: "Tidal", url: "https://tidal.com/artist/78353738" },
+              { label: "iHeartRadio", url: "https://www.iheart.com/artist/id-50487368/albums/id-396201091" },
+              { label: "Apple Music", url: "https://music.apple.com/us/album/un-globo-en-la-terraza/6807041396" },
+              { label: "iTunes", url: "https://music.apple.com/us/album/un-globo-en-la-terraza/6807041396" },
             ].map((p) => (
               <a
                 key={p.label}
