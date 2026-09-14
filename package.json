@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "node scripts/generate-sitemap.mjs && vite build",
     "build:firebase": "npm run build && powershell -Command \"if (Test-Path functions/dist) { Remove-Item -Recurse -Force functions/dist }; New-Item -ItemType Directory -Path functions/dist; Copy-Item -Recurse -Filter * dist/server/* functions/dist/\"",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",

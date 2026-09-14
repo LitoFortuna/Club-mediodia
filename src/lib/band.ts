@@ -89,7 +89,7 @@ function madridOffset(dateISO: string): string {
   return month >= 4 && month <= 10 ? "+02:00" : "+01:00";
 }
 
-function abs(url: string): string {
+export function abs(url: string): string {
   return url.startsWith("http") ? url : `${SITE_URL}${url}`;
 }
 

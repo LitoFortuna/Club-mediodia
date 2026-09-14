@@ -12,6 +12,19 @@ export interface Show {
   created_at: string;
 }
 
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price_cents: number;      // precio en céntimos (evita errores de coma flotante)
+  currency: string;         // "EUR"
+  image_url: string | null;
+  buy_url: string | null;   // Payment Link de Stripe/PayPal; null = "Próximamente"
+  sold_out: boolean;
+  order: number;            // orden manual de aparición
+  created_at: string;
+}
+
 export interface ContactMessage {
   id?: string;
   reason: "booking" | "prensa" | "management" | "general";

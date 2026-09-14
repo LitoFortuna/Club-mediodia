@@ -5,7 +5,7 @@ import { DoubleExposure } from "@/components/DoubleExposure";
 import { ShowCard } from "@/components/ShowCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { CONCERT } from "@/lib/concert";
-import { showEventLd } from "@/lib/band";
+import { showEventLd, abs } from "@/lib/band";
 import type { Show } from "@/lib/types";
 
 // Usa el cartel del concierto anunciado si el show no trae poster propio
@@ -41,6 +41,8 @@ export const Route = createFileRoute("/shows")({
     const upcoming = (loaderData?.shows ?? [])
       .filter((s) => s.show_date >= today)
       .map(withConcertPoster);
+    const posterPath = upcoming.find((s) => s.poster_url)?.poster_url ?? CONCERT.posterPath;
+    const poster = abs(posterPath);
     return {
       meta: [
         { title: "Shows — Club Mediodía" },
@@ -51,6 +53,11 @@ export const Route = createFileRoute("/shows")({
         },
         { property: "og:title", content: "Shows — Club Mediodía" },
         { property: "og:description", content: "Próximas fechas y entradas de Club Mediodía." },
+        { property: "og:image", content: poster },
+        { property: "og:image:secure_url", content: poster },
+        { property: "og:image:type", content: "image/jpeg" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: poster },
       ],
       links: [{ rel: "canonical", href: "https://clubmediodia.es/shows" }],
       scripts: upcoming.map((s) => ({
