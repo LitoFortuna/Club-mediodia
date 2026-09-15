@@ -16,7 +16,9 @@ import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as ElClubRouteImport } from './routes/el-club'
 import { Route as EntradasRouteImport } from './routes/entradas'
 import { Route as MusicaRouteImport } from './routes/musica'
+import { Route as PrensaRouteImport } from './routes/prensa'
 import { Route as ShowsRouteImport } from './routes/shows'
+import { Route as MusicaSlugRouteImport } from './routes/musica.$slug'
 import { Route as NewsletterConfirmarRouteImport } from './routes/newsletter.confirmar'
 
 const IndexRoute = IndexRouteImport.update({
@@ -54,10 +56,20 @@ const MusicaRoute = MusicaRouteImport.update({
   path: '/musica',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrensaRoute = PrensaRouteImport.update({
+  id: '/prensa',
+  path: '/prensa',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShowsRoute = ShowsRouteImport.update({
   id: '/shows',
   path: '/shows',
   getParentRoute: () => rootRouteImport,
+} as any)
+const MusicaSlugRoute = MusicaSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => MusicaRoute,
 } as any)
 const NewsletterConfirmarRoute = NewsletterConfirmarRouteImport.update({
   id: '/newsletter/confirmar',
@@ -72,8 +84,10 @@ export interface FileRoutesByFullPath {
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
   '/entradas': typeof EntradasRoute
-  '/musica': typeof MusicaRoute
+  '/musica': typeof MusicaRouteWithChildren
+  '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
+  '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
 export interface FileRoutesByTo {
@@ -83,8 +97,10 @@ export interface FileRoutesByTo {
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
   '/entradas': typeof EntradasRoute
-  '/musica': typeof MusicaRoute
+  '/musica': typeof MusicaRouteWithChildren
+  '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
+  '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
 export interface FileRoutesById {
@@ -95,8 +111,10 @@ export interface FileRoutesById {
   '/contacto': typeof ContactoRoute
   '/el-club': typeof ElClubRoute
   '/entradas': typeof EntradasRoute
-  '/musica': typeof MusicaRoute
+  '/musica': typeof MusicaRouteWithChildren
+  '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
+  '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
 export interface FileRouteTypes {
@@ -109,7 +127,9 @@ export interface FileRouteTypes {
     | '/el-club'
     | '/entradas'
     | '/musica'
+    | '/prensa'
     | '/shows'
+    | '/musica/$slug'
     | '/newsletter/confirmar'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -120,7 +140,9 @@ export interface FileRouteTypes {
     | '/el-club'
     | '/entradas'
     | '/musica'
+    | '/prensa'
     | '/shows'
+    | '/musica/$slug'
     | '/newsletter/confirmar'
   id:
     | '__root__'
@@ -131,7 +153,9 @@ export interface FileRouteTypes {
     | '/el-club'
     | '/entradas'
     | '/musica'
+    | '/prensa'
     | '/shows'
+    | '/musica/$slug'
     | '/newsletter/confirmar'
   fileRoutesById: FileRoutesById
 }
@@ -142,7 +166,8 @@ export interface RootRouteChildren {
   ContactoRoute: typeof ContactoRoute
   ElClubRoute: typeof ElClubRoute
   EntradasRoute: typeof EntradasRoute
-  MusicaRoute: typeof MusicaRoute
+  MusicaRoute: typeof MusicaRouteWithChildren
+  PrensaRoute: typeof PrensaRoute
   ShowsRoute: typeof ShowsRoute
   NewsletterConfirmarRoute: typeof NewsletterConfirmarRoute
 }
@@ -198,12 +223,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MusicaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prensa': {
+      id: '/prensa'
+      path: '/prensa'
+      fullPath: '/prensa'
+      preLoaderRoute: typeof PrensaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shows': {
       id: '/shows'
       path: '/shows'
       fullPath: '/shows'
       preLoaderRoute: typeof ShowsRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/musica/$slug': {
+      id: '/musica/$slug'
+      path: '/$slug'
+      fullPath: '/musica/$slug'
+      preLoaderRoute: typeof MusicaSlugRouteImport
+      parentRoute: typeof MusicaRoute
     }
     '/newsletter/confirmar': {
       id: '/newsletter/confirmar'
@@ -215,6 +254,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MusicaRouteChildren {
+  MusicaSlugRoute: typeof MusicaSlugRoute
+}
+
+const MusicaRouteChildren: MusicaRouteChildren = {
+  MusicaSlugRoute: MusicaSlugRoute,
+}
+
+const MusicaRouteWithChildren =
+  MusicaRoute._addFileChildren(MusicaRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AsistentesRoute: AsistentesRoute,
@@ -222,7 +272,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactoRoute: ContactoRoute,
   ElClubRoute: ElClubRoute,
   EntradasRoute: EntradasRoute,
-  MusicaRoute: MusicaRoute,
+  MusicaRoute: MusicaRouteWithChildren,
+  PrensaRoute: PrensaRoute,
   ShowsRoute: ShowsRoute,
   NewsletterConfirmarRoute: NewsletterConfirmarRoute,
 }

@@ -1,6 +1,7 @@
 // Datos de la banda y del álbum + generadores de JSON-LD (schema.org) para SEO/GEO.
 import { CONCERT } from "@/lib/concert";
 import type { Show } from "@/lib/types";
+import { TRACKS, type Track } from "@/lib/tracks";
 
 export const SITE_URL = "https://clubmediodia.es";
 
@@ -30,17 +31,7 @@ export const ALBUM = {
     "https://open.spotify.com/album/6C6u8Zv8Lxhx95zv3I4guY",
     "https://music.amazon.es/albums/B0GY1YWF7B",
   ],
-  tracks: [
-    { name: "Domingo", duration: "PT4M10S" },
-    { name: "Aquí y Ahora (Amigo)", duration: "PT3M6S" },
-    { name: "Tirito", duration: "PT2M46S" },
-    { name: "Perdido", duration: "PT3M4S" },
-    { name: "Las Mañanas", duration: "PT3M44S" },
-    { name: "Mundial '94", duration: "PT4M29S" },
-    { name: "Rimpiangere", duration: "PT3M21S" },
-    { name: "Versiones", duration: "PT3M11S" },
-  ],
-} as const;
+};
 
 const bandNode = {
   "@type": "MusicGroup",
@@ -65,16 +56,43 @@ export function musicAlbumLd(): string {
     name: ALBUM.name,
     byArtist: bandNode,
     datePublished: ALBUM.datePublished,
-    numTracks: ALBUM.tracks.length,
+    numTracks: TRACKS.length,
     image: ALBUM.image,
     sameAs: [...ALBUM.sameAs],
-    track: ALBUM.tracks.map((t, i) => ({
+    track: TRACKS.map((t, i) => ({
       "@type": "MusicRecording",
       position: i + 1,
-      name: t.name,
-      duration: t.duration,
+      name: t.title,
+      duration: t.durationISO,
+      url: `${SITE_URL}/musica/${t.slug}`,
       byArtist: { "@id": `${SITE_URL}/#band` },
     })),
+  });
+}
+
+// MusicRecording + letra para la página individual de cada canción (/musica/$slug).
+export function musicRecordingLd(track: Track, position: number): string {
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "MusicRecording",
+    name: track.title,
+    duration: track.durationISO,
+    position,
+    url: `${SITE_URL}/musica/${track.slug}`,
+    byArtist: { "@id": `${SITE_URL}/#band` },
+    inAlbum: {
+      "@type": "MusicAlbum",
+      name: ALBUM.name,
+      url: `${SITE_URL}/musica`,
+    },
+    recordingOf: {
+      "@type": "MusicComposition",
+      name: track.title,
+      lyrics: {
+        "@type": "CreativeWork",
+        text: track.lyrics,
+      },
+    },
   });
 }
 

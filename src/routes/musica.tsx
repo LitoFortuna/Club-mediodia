@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { DoubleExposure } from "@/components/DoubleExposure";
 import albumCover from "@/assets/CM_portada.jpg";
 import albumCoverWebp from "@/assets/CM_portada.webp";
@@ -6,166 +6,8 @@ import gallery1 from "@/assets/CM_header.jpg";
 import gallery1Webp from "@/assets/CM_header.webp";
 import { useState } from "react";
 import { musicAlbumLd } from "@/lib/band";
+import { TRACKS as tracklist } from "@/lib/tracks";
 import { Pic } from "@/components/Pic";
-
-const tracklist = [
-  { 
-    n: "01", 
-    title: "Domingo", 
-    duration: "4:10",
-    lyrics: `Esta vez salió más poético nena,
-me abriste los brazos y me regalaste tu espacio mental.
-
-Noé ya viene la lluvia,
-Noé ya viene la lluvia, Noé,
-ya viene…
-
-¿Domingo, dónde estás?
-¿Domingo, dónde estás?
-Domingo, la lluvia mental.`
-  },
-  { 
-    n: "02", 
-    title: "Aquí y Ahora (Amigo)", 
-    duration: "3:06",
-    lyrics: `Buscábamos sentidos para el amor,
-vimos decaer de nuevo el sol.
-Amigo no me dejes descansar,
-los días más felices van a pasar.
-
-Buscábamos sentidos para el amor,
-vimos decaer de nuevo el sol.
-Amigo no me dejes descansar,
-los días más felices van a pasar
-
-Y no regresan, no regresan,
-no regresan, no… 
-
-Miro al espejo y me lleva hacia adentro,
-miro el reflejo y me trae un recuerdo
-
-Que no regresa, no regresa.`
-  },
-  { 
-    n: "03", 
-    title: "Tirito", 
-    duration: "2:46",
-    lyrics: `Nos sobran Adanes, pecados capitales,
-Iluminan mi ciudad nubarrones de otredad,
-Y cerrás los ojos y miras miles de años transformados,
-Un panal y vos la reina, gobernás haces colmena.
-Sin vos me cansa, con vos no alcanza…
-Sin vos me cansa, con vos no alcanza…
-
-Memoria borrosa, paraíso infernal,
-tímpano sentimental, en la ventana el calor se va.
-
-Cerrás los ojos y miras miles de años transformados,
-un panal y vos la reina, gobernás haces colmena.
-Sin vos me cansa, con vos no alcanza…
-
-Llamarada siempre inocua, se quema mi piel,
-tirito adentro y en la calle falta amor.
-Sin vos me cansa, con vos no alcanza.`
-  },
-  { 
-    n: "04", 
-    title: "Perdido", 
-    duration: "3:04",
-    lyrics: `Si me perdí es porque a veces no entiendo,
-Si me perdí es porque a veces mambeo.
-
-Yo vi la piel, sentí la piel psicodélica.
-
-Si me perdí es porque nadie importaba,
-Si me perdí es porque el mañana no llegaba.
-
-Yo vi la piel, sentí la piel psicodélica.
-
-Si me perdí es porque con humo no miraba,
-Déjalo así, a veces me encuentro.`
-  },
-  { 
-    n: "05", 
-    title: "Las Mañanas", 
-    duration: "3:44",
-    lyrics: `Las mañanas eran para vos
-Y no me despertabas a desayunar
-La corbata me ahorcaba
-Mientras tecleaba para madurar
-
-Desde el banco me avisaban
-Sin papeles puedes ser deudor
-Mis caricias no llegaban
-Ahora es tiempo para descansar
-
-Mañana las mañanas serán mías
-Sin opciones para postergar
-Llegas tarde a trabajar.`
-  },
-  { 
-    n: "06", 
-    title: "Mundial '94", 
-    duration: "4:29",
-    lyrics: `Contemplo la idea
-De que todos venimos a pedazos
-Y nos vamos armando mal
-
-Me esquiva la pelota
-Y el mundo me tira para abajo
-Si no comparto con vos
-
-Acepto la idea
-De que todos venimos a pedazos
-Y nos vamos armando mal
-
-Me esquiva la pelota
-Y el mundo me tira para abajo
-Si no comparto con vos`
-  },
-  { 
-    n: "07", 
-    title: "Rimpiangere", 
-    duration: "3:21",
-    lyrics: `Barrio de las letras yo te extraño
-Me veo en tus soles reflejar
-Necesito descansar
-Son tus años son mis sueños
-Los que infringen la obviedad
-
-Miel y polen se escurren por mis dedos
-Dicen no se puede alcanzarán las manos
-Una fábula sin viento
-Escapa donde no hay más viento
-
-Al sur siempre un tormento
-Un po' un posible encuentro
-
-Nuestro virulento porvenir
-Nuestro virulento porvenir
-Nuestro virulento porvenir`
-  },
-  { 
-    n: "08", 
-    title: "Versiones", 
-    duration: "3:11",
-    lyrics: `(Instrumental)
-
-Las mañanas eran para vos
-Y no me despertabas a desayunar
-La corbata me ahorcaba
-Mientras tecleaba para madurar
-
-Desde el banco me avisaban
-Sin papeles puedes ser deudor
-Mis caricias no llegaban
-Ahora es tiempo para descansar
-
-Mañana las mañanas serán mías
-Sin opciones para postergar
-Llegas tarde a trabajar.`
-  },
-];
 
 export const Route = createFileRoute("/musica")({
   head: () => ({
@@ -277,6 +119,13 @@ function MusicaPage() {
                 <div className="font-body text-base leading-relaxed text-white/70 whitespace-pre-wrap max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
                   {tracklist[selectedTrack].lyrics}
                 </div>
+                <Link
+                  to="/musica/$slug"
+                  params={{ slug: tracklist[selectedTrack].slug }}
+                  className="mt-6 inline-block font-display uppercase tracking-widest text-[10px] text-cielo/70 hover:text-cielo transition-colors"
+                >
+                  Enlace directo a esta canción →
+                </Link>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full py-20 text-center border border-dashed border-white/10 opacity-30">
