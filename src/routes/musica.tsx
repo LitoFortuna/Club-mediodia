@@ -177,7 +177,7 @@ function MusicaPage() {
               </div>
               <div className="mt-8 p-4 border border-white/5 bg-white/2">
                 <p className="font-body text-xs text-white/40 text-center italic">
-                  Club Mediodía | @ DioBar Live Aftermovie
+                  Club Mediodía | Aftermovie
                 </p>
               </div>
             </div>
