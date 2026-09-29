@@ -241,6 +241,12 @@ function CheckinPage() {
       >
         Ver listado de apuntados →
       </Link>
+      <Link
+        to="/shows-admin"
+        className="block mt-3 font-display uppercase tracking-widest text-[10px] text-white/40 hover:text-orange"
+      >
+        Gestionar conciertos →
+      </Link>
     </div>
   );
 }

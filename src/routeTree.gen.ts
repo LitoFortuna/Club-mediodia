@@ -18,6 +18,7 @@ import { Route as EntradasRouteImport } from './routes/entradas'
 import { Route as MusicaRouteImport } from './routes/musica'
 import { Route as PrensaRouteImport } from './routes/prensa'
 import { Route as ShowsRouteImport } from './routes/shows'
+import { Route as ShowsAdminRouteImport } from './routes/shows-admin'
 import { Route as MusicaSlugRouteImport } from './routes/musica.$slug'
 import { Route as NewsletterConfirmarRouteImport } from './routes/newsletter.confirmar'
 
@@ -66,6 +67,11 @@ const ShowsRoute = ShowsRouteImport.update({
   path: '/shows',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShowsAdminRoute = ShowsAdminRouteImport.update({
+  id: '/shows-admin',
+  path: '/shows-admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MusicaSlugRoute = MusicaSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/musica': typeof MusicaRouteWithChildren
   '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
+  '/shows-admin': typeof ShowsAdminRoute
   '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/musica': typeof MusicaRouteWithChildren
   '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
+  '/shows-admin': typeof ShowsAdminRoute
   '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/musica': typeof MusicaRouteWithChildren
   '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
+  '/shows-admin': typeof ShowsAdminRoute
   '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/musica'
     | '/prensa'
     | '/shows'
+    | '/shows-admin'
     | '/musica/$slug'
     | '/newsletter/confirmar'
   fileRoutesByTo: FileRoutesByTo
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/musica'
     | '/prensa'
     | '/shows'
+    | '/shows-admin'
     | '/musica/$slug'
     | '/newsletter/confirmar'
   id:
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/musica'
     | '/prensa'
     | '/shows'
+    | '/shows-admin'
     | '/musica/$slug'
     | '/newsletter/confirmar'
   fileRoutesById: FileRoutesById
@@ -169,6 +181,7 @@ export interface RootRouteChildren {
   MusicaRoute: typeof MusicaRouteWithChildren
   PrensaRoute: typeof PrensaRoute
   ShowsRoute: typeof ShowsRoute
+  ShowsAdminRoute: typeof ShowsAdminRoute
   NewsletterConfirmarRoute: typeof NewsletterConfirmarRoute
 }
 
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShowsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shows-admin': {
+      id: '/shows-admin'
+      path: '/shows-admin'
+      fullPath: '/shows-admin'
+      preLoaderRoute: typeof ShowsAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/musica/$slug': {
       id: '/musica/$slug'
       path: '/$slug'
@@ -275,6 +295,7 @@ const rootRouteChildren: RootRouteChildren = {
   MusicaRoute: MusicaRouteWithChildren,
   PrensaRoute: PrensaRoute,
   ShowsRoute: ShowsRoute,
+  ShowsAdminRoute: ShowsAdminRoute,
   NewsletterConfirmarRoute: NewsletterConfirmarRoute,
 }
 export const routeTree = rootRouteImport
