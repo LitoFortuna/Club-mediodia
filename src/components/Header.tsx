@@ -1,7 +1,10 @@
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 const logo = "/logo.png";
+
+const SECRET_CLICKS = 4;
+const SECRET_WINDOW_MS = 1500;
 
 const links = [
   { to: "/", label: "Inicio" },
@@ -14,15 +17,28 @@ const links = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const clickCount = useRef(0);
+  const lastClickAt = useRef(0);
+
+  const onLogoClick = (e: React.MouseEvent) => {
+    const now = Date.now();
+    clickCount.current = now - lastClickAt.current <= SECRET_WINDOW_MS ? clickCount.current + 1 : 1;
+    lastClickAt.current = now;
+
+    if (clickCount.current >= SECRET_CLICKS) {
+      clickCount.current = 0;
+      e.preventDefault();
+      navigate({ to: "/admin" });
+      return;
+    }
+    setOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-black border-b border-white/5">
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-        <Link
-          to="/"
-          onClick={() => setOpen(false)}
-          className="h-8 md:h-10 block"
-        >
+        <Link to="/" onClick={onLogoClick} className="h-8 md:h-10 block">
           <img src={logo} alt="Club Mediodía" className="h-full object-contain" />
         </Link>
 

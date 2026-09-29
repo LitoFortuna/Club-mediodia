@@ -8,8 +8,11 @@ import { useState } from "react";
 import { musicAlbumLd } from "@/lib/band";
 import { TRACKS as tracklist } from "@/lib/tracks";
 import { Pic } from "@/components/Pic";
+import { getPublicSiteContent } from "@/api/content.functions";
+import { youtubeEmbedUrl } from "@/lib/youtube";
 
 export const Route = createFileRoute("/musica")({
+  loader: () => getPublicSiteContent(),
   head: () => ({
     meta: [
       { title: "Música — Club Mediodía" },
@@ -32,6 +35,7 @@ export const Route = createFileRoute("/musica")({
 });
 
 function MusicaPage() {
+  const content = Route.useLoaderData();
   const [selectedTrack, setSelectedTrack] = useState<number | null>(0);
 
   return (
@@ -168,7 +172,7 @@ function MusicaPage() {
               <div className="aspect-video relative">
                 <iframe
                   title="YouTube"
-                  src="https://www.youtube.com/embed/KOLy_CiVJJE?list=PLSMCWp0cxjKQ"
+                  src={youtubeEmbedUrl(content.youtube_video_url)}
                   className="w-full h-full grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -184,15 +188,7 @@ function MusicaPage() {
           </div>
 
           <div className="mt-16 flex flex-wrap gap-4 justify-center">
-            {[
-              { label: "YouTube Music", url: "https://music.youtube.com/@Club.Mediod%C3%ADa" },
-              { label: "Amazon Music", url: "https://music.amazon.es/artists/B0GY23XKNS" },
-              { label: "Deezer", url: "https://www.deezer.com/album/966629901" },
-              { label: "Tidal", url: "https://tidal.com/artist/78353738" },
-              { label: "iHeartRadio", url: "https://www.iheart.com/artist/id-50487368/albums/id-396201091" },
-              { label: "Apple Music", url: "https://music.apple.com/us/album/un-globo-en-la-terraza/6807041396" },
-              { label: "iTunes", url: "https://music.apple.com/us/album/un-globo-en-la-terraza/6807041396" },
-            ].map((p) => (
+            {content.streaming_links.map((p) => (
               <a
                 key={p.label}
                 href={p.url}

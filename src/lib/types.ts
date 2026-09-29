@@ -12,6 +12,15 @@ export interface Show {
   created_at: string;
 }
 
+export interface SiteContent {
+  bio_corta: string;
+  bio_larga: string[]; // párrafos
+  members: { name: string; role: string }[];
+  streaming_links: { label: string; url: string }[];
+  youtube_video_url: string; // URL normal de YouTube (youtu.be o watch)
+  updated_at: string;
+}
+
 export interface ContactMessage {
   id?: string;
   reason: "booking" | "prensa" | "management" | "general";

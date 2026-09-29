@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BAND, ALBUM, SITE_URL } from "@/lib/band";
+import { getPublicSiteContent } from "@/api/content.functions";
 import { Download } from "lucide-react";
 
 export const Route = createFileRoute("/prensa")({
+  loader: () => getPublicSiteContent(),
   head: () => ({
     meta: [
       { title: "Prensa / EPK — Club Mediodía" },
@@ -22,22 +24,6 @@ export const Route = createFileRoute("/prensa")({
   }),
   component: PrensaPage,
 });
-
-const bioCorta =
-  "Club Mediodía es un trío de Barcelona que explora la psicodelia doméstica: canciones que viven en el " +
-  "espacio entre el recuerdo y la distorsión. Su álbum debut, «Un globo en la terraza» (1 de mayo de 2026), " +
-  "retrata la vida cotidiana atravesada por estados mentales cambiantes — recuerdos, ansiedad, nostalgia, deseo.";
-
-const bioLarga = [
-  "Club Mediodía no es solo una banda; es un estado mental. Nacidos en la penumbra de una terraza calurosa, " +
-    "el trío barcelonés busca capturar el sonido de lo que se olvida.",
-  "Su música habita en el espacio entre el recuerdo y la distorsión. «Un globo en la terraza», su álbum debut, " +
-    "retrata la vida cotidiana atravesada por estados mentales cambiantes: recuerdos, ansiedad, nostalgia, deseo. " +
-    "Momentos comunes que, vistos desde dentro, se vuelven extraños, intensos o ligeramente irreales.",
-  "Grabado en El Patio Estudio (Barcelona) y producido por Daniel O'Connell (O'Connell Mastering), el disco reúne " +
-    "ocho canciones que van de la psicodelia doméstica a la memoria borrosa, siempre con un pie en la terraza y " +
-    "otro en el mediodía mental.",
-];
 
 const downloads = [
   {
@@ -63,6 +49,8 @@ const downloads = [
 ];
 
 function PrensaPage() {
+  const content = Route.useLoaderData();
+
   return (
     <div className="bg-black text-white selection:bg-orange selection:text-black">
       {/* HERO */}
@@ -75,7 +63,7 @@ function PrensaPage() {
             PRENSA <span className="text-menta">& EPK</span>
           </h1>
           <p className="mt-8 font-body text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed">
-            {bioCorta}
+            {content.bio_corta}
           </p>
         </div>
       </section>
@@ -120,7 +108,7 @@ function PrensaPage() {
               Miembros
             </h2>
             <ul className="space-y-4 font-body text-sm">
-              {BAND.members.map((m) => (
+              {content.members.map((m) => (
                 <li key={m.name} className="border-b border-white/5 pb-3">
                   <p className="text-white font-semibold">{m.name}</p>
                   <p className="text-gray-500">{m.role}</p>
@@ -138,7 +126,7 @@ function PrensaPage() {
             Biografía
           </h2>
           <div className="space-y-6 font-body text-base md:text-lg text-gray-400 leading-relaxed">
-            {bioLarga.map((p, i) => (
+            {content.bio_larga.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
           </div>

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AsistentesRouteImport } from './routes/asistentes'
 import { Route as CheckinRouteImport } from './routes/checkin'
 import { Route as ContactoRouteImport } from './routes/contacto'
@@ -18,13 +19,17 @@ import { Route as EntradasRouteImport } from './routes/entradas'
 import { Route as MusicaRouteImport } from './routes/musica'
 import { Route as PrensaRouteImport } from './routes/prensa'
 import { Route as ShowsRouteImport } from './routes/shows'
-import { Route as ShowsAdminRouteImport } from './routes/shows-admin'
 import { Route as MusicaSlugRouteImport } from './routes/musica.$slug'
 import { Route as NewsletterConfirmarRouteImport } from './routes/newsletter.confirmar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AsistentesRoute = AsistentesRouteImport.update({
@@ -67,11 +72,6 @@ const ShowsRoute = ShowsRouteImport.update({
   path: '/shows',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ShowsAdminRoute = ShowsAdminRouteImport.update({
-  id: '/shows-admin',
-  path: '/shows-admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MusicaSlugRoute = MusicaSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -85,6 +85,7 @@ const NewsletterConfirmarRoute = NewsletterConfirmarRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/asistentes': typeof AsistentesRoute
   '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
@@ -93,12 +94,12 @@ export interface FileRoutesByFullPath {
   '/musica': typeof MusicaRouteWithChildren
   '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
-  '/shows-admin': typeof ShowsAdminRoute
   '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/asistentes': typeof AsistentesRoute
   '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
@@ -107,13 +108,13 @@ export interface FileRoutesByTo {
   '/musica': typeof MusicaRouteWithChildren
   '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
-  '/shows-admin': typeof ShowsAdminRoute
   '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/asistentes': typeof AsistentesRoute
   '/checkin': typeof CheckinRoute
   '/contacto': typeof ContactoRoute
@@ -122,7 +123,6 @@ export interface FileRoutesById {
   '/musica': typeof MusicaRouteWithChildren
   '/prensa': typeof PrensaRoute
   '/shows': typeof ShowsRoute
-  '/shows-admin': typeof ShowsAdminRoute
   '/musica/$slug': typeof MusicaSlugRoute
   '/newsletter/confirmar': typeof NewsletterConfirmarRoute
 }
@@ -130,6 +130,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/asistentes'
     | '/checkin'
     | '/contacto'
@@ -138,12 +139,12 @@ export interface FileRouteTypes {
     | '/musica'
     | '/prensa'
     | '/shows'
-    | '/shows-admin'
     | '/musica/$slug'
     | '/newsletter/confirmar'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/asistentes'
     | '/checkin'
     | '/contacto'
@@ -152,12 +153,12 @@ export interface FileRouteTypes {
     | '/musica'
     | '/prensa'
     | '/shows'
-    | '/shows-admin'
     | '/musica/$slug'
     | '/newsletter/confirmar'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/asistentes'
     | '/checkin'
     | '/contacto'
@@ -166,13 +167,13 @@ export interface FileRouteTypes {
     | '/musica'
     | '/prensa'
     | '/shows'
-    | '/shows-admin'
     | '/musica/$slug'
     | '/newsletter/confirmar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AsistentesRoute: typeof AsistentesRoute
   CheckinRoute: typeof CheckinRoute
   ContactoRoute: typeof ContactoRoute
@@ -181,7 +182,6 @@ export interface RootRouteChildren {
   MusicaRoute: typeof MusicaRouteWithChildren
   PrensaRoute: typeof PrensaRoute
   ShowsRoute: typeof ShowsRoute
-  ShowsAdminRoute: typeof ShowsAdminRoute
   NewsletterConfirmarRoute: typeof NewsletterConfirmarRoute
 }
 
@@ -192,6 +192,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/asistentes': {
@@ -250,13 +257,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShowsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/shows-admin': {
-      id: '/shows-admin'
-      path: '/shows-admin'
-      fullPath: '/shows-admin'
-      preLoaderRoute: typeof ShowsAdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/musica/$slug': {
       id: '/musica/$slug'
       path: '/$slug'
@@ -287,6 +287,7 @@ const MusicaRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AsistentesRoute: AsistentesRoute,
   CheckinRoute: CheckinRoute,
   ContactoRoute: ContactoRoute,
@@ -295,7 +296,6 @@ const rootRouteChildren: RootRouteChildren = {
   MusicaRoute: MusicaRouteWithChildren,
   PrensaRoute: PrensaRoute,
   ShowsRoute: ShowsRoute,
-  ShowsAdminRoute: ShowsAdminRoute,
   NewsletterConfirmarRoute: NewsletterConfirmarRoute,
 }
 export const routeTree = rootRouteImport

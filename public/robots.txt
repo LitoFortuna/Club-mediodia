@@ -2,6 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /checkin
 Disallow: /asistentes
-Disallow: /shows-admin
+Disallow: /admin
 
 Sitemap: https://clubmediodia.es/sitemap.xml
