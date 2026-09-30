@@ -91,6 +91,7 @@ function EntradasPage() {
                 address={FEATURED_SHOW.address}
                 startUTC={FEATURED_SHOW.calStartUTC}
                 endUTC={FEATURED_SHOW.calEndUTC}
+                mapsUrl={FEATURED_SHOW.mapsUrl}
               />
             </div>
           </div>

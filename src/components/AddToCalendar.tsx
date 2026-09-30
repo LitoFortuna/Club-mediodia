@@ -7,6 +7,8 @@ type Props = {
   /** Formato Google Calendar UTC, ej. "20261022T180000Z" */
   startUTC: string;
   endUTC: string;
+  /** URL de Google Maps a usar tal cual; si se omite, se genera una búsqueda a partir de `address`. */
+  mapsUrl?: string;
 };
 
 function icsDataUrl({ title, details, address, startUTC, endUTC }: Props): string {
@@ -38,7 +40,9 @@ export function AddToCalendar(props: Props) {
     `&dates=${startUTC}/${endUTC}` +
     `&location=${encodeURIComponent(address)}` +
     `&details=${encodeURIComponent(details)}`;
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  const mapsUrl =
+    props.mapsUrl ??
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 
   return (
     <div className="flex flex-wrap gap-3">

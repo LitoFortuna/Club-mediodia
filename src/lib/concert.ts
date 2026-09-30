@@ -53,6 +53,8 @@ export const FEATURED_SHOW = {
   // 20:00 Europe/Madrid (CEST, +02:00) = 18:00Z; fin estimado 23:00 local = 21:00Z
   calStartUTC: "20261022T180000Z",
   calEndUTC: "20261022T210000Z",
+  mapsUrl:
+    "https://www.google.com/maps/place/Diobar/@41.3852818,2.1855102,19.83z/data=!4m15!1m8!3m7!1s0x12a4a301f56796e7:0x6628401821fcda60!2sAv.+del+Marqu%C3%A8s+de+l'Argentera,+27,+Ciutat+Vella,+08003+Barcelona!3b1!8m2!3d41.3855517!4d2.185501!16s%2Fg%2F11q2x77ny2!3m5!1s0x12a4a301f55dddff:0x6651593e99c7060c!8m2!3d41.385504!4d2.185461!16s%2Fg%2F1hc908cb1?entry=ttu&g_ep=EgoyMDI2MDkyOC4wIKXMDSoASAFQAw%3D%3D",
 } as const;
 
 export function isRegistrationOpen(): boolean {
