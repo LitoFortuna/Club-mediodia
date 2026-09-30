@@ -25,14 +25,14 @@ const db = getFirestore();
 
 const show = {
   city: "Barcelona",
-  venue: "Paral·lel 62",
-  show_date: "2026-11-28",
-  // Sin hora, precio ni enlace de entradas confirmados todavía:
-  // dejándolos vacíos, la tarjeta se muestra como "Próximamente".
-  show_time: null,
+  venue: "Diobar",
+  show_date: "2026-10-22",
+  show_time: "20:00",
+  // Ciclo "Doble o Nada" (Diobar): Club Mediodía + Paula Simón.
+  // Sin precio ni enlace de entradas confirmados todavía.
   sold_out: false,
   ticket_url: null,
-  poster_url: null,
+  poster_url: "/diobar-22-octubre.jpg",
   created_at: new Date().toISOString(),
 };
 
