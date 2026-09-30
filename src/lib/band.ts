@@ -1,5 +1,5 @@
 // Datos de la banda y del álbum + generadores de JSON-LD (schema.org) para SEO/GEO.
-import { CONCERT } from "@/lib/concert";
+import { CONCERT, FEATURED_SHOW } from "@/lib/concert";
 import type { Show } from "@/lib/types";
 
 export const SITE_URL = "https://clubmediodia.es";
@@ -79,8 +79,9 @@ export function musicAlbumLd(): string {
 }
 
 // Direcciones postales conocidas por nombre de sala (para el JSON-LD de /shows)
-const VENUE_ADDRESSES: Record<string, { streetAddress: string; postalCode: string }> = {
+const VENUE_ADDRESSES: Record<string, { streetAddress: string; postalCode?: string }> = {
   "Hangar 05": { streetAddress: "Carrer Bassols, 5", postalCode: "08026" },
+  "DioBar": { streetAddress: "Av. Marquès de l'Argentera, 27" },
 };
 
 // Offset aproximado de Europe/Madrid: CEST (+02:00) de abril a octubre, CET (+01:00) el resto.
@@ -131,6 +132,21 @@ export function showEventLd(show: Show): string {
     };
   }
   return JSON.stringify(event);
+}
+
+// MusicEvent para el show destacado en /entradas (venta externa, ver FEATURED_SHOW)
+export function featuredShowEventLd(): string {
+  return showEventLd({
+    id: "featured",
+    city: FEATURED_SHOW.city,
+    venue: FEATURED_SHOW.venue,
+    show_date: FEATURED_SHOW.dateISO,
+    show_time: FEATURED_SHOW.startTime,
+    sold_out: false,
+    ticket_url: FEATURED_SHOW.ticketUrl,
+    poster_url: FEATURED_SHOW.posterUrl,
+    created_at: "",
+  });
 }
 
 export function concertEventLd(): string {

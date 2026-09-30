@@ -23,13 +23,37 @@ export const CONCERT = {
   capacity: 80,
 } as const;
 
-export function formatConcertDateEs(): string {
-  return new Date(`${CONCERT.dateISO}T00:00:00`).toLocaleDateString("es-ES", {
+export function formatDateEs(dateISO: string): string {
+  return new Date(`${dateISO}T00:00:00`).toLocaleDateString("es-ES", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
 }
+
+export function formatConcertDateEs(): string {
+  return formatDateEs(CONCERT.dateISO);
+}
+
+// --- Próximo show destacado en /entradas, con venta de entradas externa ---
+// (a diferencia de CONCERT, que es el concierto con reserva/QR propios del
+// 11 de septiembre, ya cerrado). Edítalo aquí para el próximo evento.
+export const FEATURED_SHOW = {
+  bandName: "Club Mediodía",
+  title: "Club Mediodía + Paula Simón — Doble o Nada",
+  venue: "DioBar",
+  address: "Av. Marquès de l'Argentera, 27, Barcelona",
+  city: "Barcelona",
+  dateISO: "2026-10-22",
+  startTime: "20:00",
+  priceInfo: "Entrada 8,26 € + 0,20 € gastos de gestión",
+  posterUrl:
+    "https://d2il8hfach02z9.cloudfront.net/uploads/event/poster/df16d2660686459b07324014b9b5ca4199b56345/event_m_261022-paulasimon-clubmediodia.png?v=1790780319",
+  ticketUrl: "https://entradium.com/events/doble-o-nada-club-mediodia-paula-simon",
+  // 20:00 Europe/Madrid (CEST, +02:00) = 18:00Z; fin estimado 23:00 local = 21:00Z
+  calStartUTC: "20261022T180000Z",
+  calEndUTC: "20261022T210000Z",
+} as const;
 
 export function isRegistrationOpen(): boolean {
   return new Date() < new Date(CONCERT.registrationDeadlineISO);
@@ -42,7 +66,10 @@ export const GUEST_CODE_LENGTH = 6;
 
 // Limpia lo que teclee/escanee el staff: mayúsculas y solo letras/números.
 export function normalizeGuestCode(raw: string): string {
-  return raw.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return raw
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "");
 }
 
 // Formato bonito para mostrar: ABC-D23
