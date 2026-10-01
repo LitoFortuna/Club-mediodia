@@ -1,26 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import {
-  listShowsAdmin,
-  createShow,
-  updateShow,
-  deleteShow,
-} from "@/api/shows-admin.functions";
+import { listShowsAdmin, createShow, updateShow, deleteShow } from "@/api/shows-admin.functions";
 import { getSiteContentAdmin, updateSiteContent } from "@/api/content.functions";
-import type { Show, SiteContent } from "@/lib/types";
+import {
+  listProductsAdmin,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "@/api/products-admin.functions";
+import type { Show, SiteContent, Product } from "@/lib/types";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
-    meta: [
-      { title: "Admin — Club Mediodía" },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
+    meta: [{ title: "Admin — Club Mediodía" }, { name: "robots", content: "noindex, nofollow" }],
   }),
   component: AdminPage,
 });
 
-type Tab = "shows" | "content";
+type Tab = "shows" | "products" | "content";
 
 function AdminPage() {
   const [pin, setPin] = useState("");
@@ -98,15 +96,29 @@ function AdminPage() {
           <button
             onClick={() => setTab("shows")}
             className={`px-4 py-2 font-display uppercase tracking-widest text-[10px] border ${
-              tab === "shows" ? "bg-orange text-black border-orange" : "border-white/20 text-white/50"
+              tab === "shows"
+                ? "bg-orange text-black border-orange"
+                : "border-white/20 text-white/50"
             }`}
           >
             Conciertos
           </button>
           <button
+            onClick={() => setTab("products")}
+            className={`px-4 py-2 font-display uppercase tracking-widest text-[10px] border ${
+              tab === "products"
+                ? "bg-orange text-black border-orange"
+                : "border-white/20 text-white/50"
+            }`}
+          >
+            Tienda
+          </button>
+          <button
             onClick={() => setTab("content")}
             className={`px-4 py-2 font-display uppercase tracking-widest text-[10px] border ${
-              tab === "content" ? "bg-orange text-black border-orange" : "border-white/20 text-white/50"
+              tab === "content"
+                ? "bg-orange text-black border-orange"
+                : "border-white/20 text-white/50"
             }`}
           >
             Contenido
@@ -114,7 +126,9 @@ function AdminPage() {
         </div>
       </div>
 
-      {tab === "shows" ? <ShowsTab pin={pin} /> : <ContentTab pin={pin} />}
+      {tab === "shows" && <ShowsTab pin={pin} />}
+      {tab === "products" && <ProductsTab pin={pin} />}
+      {tab === "content" && <ContentTab pin={pin} />}
     </div>
   );
 }
@@ -379,6 +393,308 @@ function ShowsTab({ pin }: { pin: string }) {
       {(shows ?? []).length === 0 && (
         <p className="text-center text-white/30 py-12 font-display uppercase tracking-widest text-xs">
           Aún no hay conciertos
+        </p>
+      )}
+    </div>
+  );
+}
+
+/* =============================== TIENDA ================================ */
+
+type ProductFormState = {
+  name: string;
+  description: string;
+  price: string; // € como texto, ej. "8,26" — se convierte a price_cents al guardar
+  currency: string;
+  image_url: string;
+  buy_url: string;
+  sold_out: boolean;
+  order: string;
+};
+
+const EMPTY_PRODUCT_FORM: ProductFormState = {
+  name: "",
+  description: "",
+  price: "",
+  currency: "EUR",
+  image_url: "",
+  buy_url: "",
+  sold_out: false,
+  order: "0",
+};
+
+function productToForm(p: Product): ProductFormState {
+  return {
+    name: p.name,
+    description: p.description,
+    price: (p.price_cents / 100).toFixed(2).replace(".", ","),
+    currency: p.currency,
+    image_url: p.image_url ?? "",
+    buy_url: p.buy_url ?? "",
+    sold_out: p.sold_out,
+    order: String(p.order),
+  };
+}
+
+function parsePriceToCents(price: string): number | null {
+  const normalized = price.trim().replace(",", ".");
+  const value = Number(normalized);
+  if (!Number.isFinite(value) || value < 0) return null;
+  return Math.round(value * 100);
+}
+
+function formatPriceEur(cents: number, currency: string): string {
+  return new Intl.NumberFormat("es-ES", { style: "currency", currency }).format(cents / 100);
+}
+
+function ProductsTab({ pin }: { pin: string }) {
+  const list = useServerFn(listProductsAdmin);
+  const create = useServerFn(createProduct);
+  const update = useServerFn(updateProduct);
+  const del = useServerFn(deleteProduct);
+
+  const [products, setProducts] = useState<Product[] | null>(null);
+  const [loaded, setLoaded] = useState(false);
+  const [notice, setNotice] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<ProductFormState>(EMPTY_PRODUCT_FORM);
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  const refresh = async () => {
+    const res = await list({ data: { pin } });
+    if (res.ok) setProducts(res.products);
+    setLoaded(true);
+  };
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!loaded) {
+    return <p className="text-white/40 text-sm">Cargando…</p>;
+  }
+
+  const startCreate = () => {
+    setEditingId("new");
+    setForm({ ...EMPTY_PRODUCT_FORM, order: String((products?.length ?? 0) + 1) });
+    setFormError("");
+  };
+
+  const startEdit = (p: Product) => {
+    setEditingId(p.id);
+    setForm(productToForm(p));
+    setFormError("");
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm(EMPTY_PRODUCT_FORM);
+    setFormError("");
+  };
+
+  const onSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const price_cents = parsePriceToCents(form.price);
+    if (price_cents === null) {
+      setFormError("Precio inválido. Usa un número, ej. 8,26");
+      return;
+    }
+    setSaving(true);
+    setFormError("");
+    setNotice("");
+    try {
+      const fields = {
+        name: form.name,
+        description: form.description,
+        price_cents,
+        currency: form.currency,
+        image_url: form.image_url,
+        buy_url: form.buy_url,
+        sold_out: form.sold_out,
+        order: Number(form.order) || 0,
+      };
+      const res =
+        editingId === "new"
+          ? await create({ data: { pin, fields } })
+          : await update({ data: { pin, id: editingId as string, fields } });
+
+      if (!res.ok) {
+        setFormError(res.message);
+      } else {
+        setNotice(res.message);
+        cancelEdit();
+        await refresh();
+      }
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : "Datos inválidos.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const onDelete = async (p: Product) => {
+    if (!confirm(`¿Eliminar "${p.name}"?`)) return;
+    setNotice("");
+    const res = await del({ data: { pin, id: p.id } });
+    setNotice(res.message);
+    await refresh();
+  };
+
+  return (
+    <div>
+      {editingId === null && (
+        <button
+          onClick={startCreate}
+          className="mb-4 px-4 py-2 bg-orange text-black font-display font-bold uppercase tracking-widest text-xs"
+        >
+          + Añadir
+        </button>
+      )}
+
+      {notice && <p className="text-menta text-sm mb-4">{notice}</p>}
+
+      {editingId !== null && (
+        <form
+          onSubmit={onSave}
+          className="mb-8 p-4 border border-white/10 bg-white/5 flex flex-col gap-3"
+        >
+          <p className="font-display uppercase tracking-widest text-[10px] text-orange">
+            {editingId === "new" ? "Nuevo producto" : "Editar producto"}
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <label className="col-span-2 flex flex-col gap-1 text-xs text-white/50">
+              Nombre
+              <input
+                required
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm"
+              />
+            </label>
+            <label className="col-span-2 flex flex-col gap-1 text-xs text-white/50">
+              Descripción
+              <textarea
+                rows={2}
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                className="px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-white/50">
+              Precio (€)
+              <input
+                required
+                placeholder="8,26"
+                value={form.price}
+                onChange={(e) => setForm({ ...form, price: e.target.value })}
+                className="px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-white/50">
+              Moneda
+              <input
+                required
+                value={form.currency}
+                onChange={(e) => setForm({ ...form, currency: e.target.value })}
+                className="px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm"
+              />
+            </label>
+            <label className="col-span-2 flex flex-col gap-1 text-xs text-white/50">
+              Imagen (ruta ya subida a la web, opcional)
+              <input
+                placeholder="/mi-producto.jpg"
+                value={form.image_url}
+                onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                className="px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm"
+              />
+            </label>
+            <label className="col-span-2 flex flex-col gap-1 text-xs text-white/50">
+              Enlace de compra (Payment Link de Stripe/PayPal, opcional)
+              <input
+                placeholder="https://…"
+                value={form.buy_url}
+                onChange={(e) => setForm({ ...form, buy_url: e.target.value })}
+                className="px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs text-white/50">
+              Orden
+              <input
+                type="number"
+                value={form.order}
+                onChange={(e) => setForm({ ...form, order: e.target.value })}
+                className="px-3 py-2 bg-zinc-950 border border-white/10 text-white text-sm"
+              />
+            </label>
+            <label className="flex items-center gap-2 text-xs text-white/50">
+              <input
+                type="checkbox"
+                checked={form.sold_out}
+                onChange={(e) => setForm({ ...form, sold_out: e.target.checked })}
+              />
+              Agotado
+            </label>
+          </div>
+          {formError && <p className="text-red-500 text-xs">{formError}</p>}
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-5 py-2 bg-orange text-black font-display font-bold uppercase tracking-widest text-xs disabled:opacity-50"
+            >
+              {saving ? "Guardando…" : "Guardar"}
+            </button>
+            <button
+              type="button"
+              onClick={cancelEdit}
+              className="px-5 py-2 border border-white/20 text-white/60 font-display uppercase tracking-widest text-xs"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      )}
+
+      <ul className="divide-y divide-white/5 border-y border-white/10">
+        {(products ?? []).map((p) => (
+          <li key={p.id} className="flex items-center gap-3 py-3">
+            <div className="flex-1 min-w-0">
+              <p className="text-white text-sm">
+                {p.name}
+                {p.sold_out && (
+                  <span className="ml-2 text-[10px] uppercase tracking-widest text-rojo">
+                    Agotado
+                  </span>
+                )}
+              </p>
+              <p className="text-white/40 text-xs truncate">
+                {formatPriceEur(p.price_cents, p.currency)}
+                {!p.buy_url && !p.sold_out && (
+                  <span className="ml-2 text-arena/70">Próximamente</span>
+                )}
+              </p>
+            </div>
+            <button
+              onClick={() => startEdit(p)}
+              className="shrink-0 text-[10px] uppercase tracking-widest text-white/40 hover:text-orange"
+            >
+              Editar
+            </button>
+            <button
+              onClick={() => onDelete(p)}
+              className="shrink-0 text-[10px] uppercase tracking-widest text-white/30 hover:text-rojo"
+            >
+              Eliminar
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      {(products ?? []).length === 0 && (
+        <p className="text-center text-white/30 py-12 font-display uppercase tracking-widest text-xs">
+          Aún no hay productos
         </p>
       )}
     </div>
