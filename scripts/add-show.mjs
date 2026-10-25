@@ -25,14 +25,13 @@ const db = getFirestore();
 
 const show = {
   city: "Barcelona",
-  venue: "Diobar",
-  show_date: "2026-10-22",
+  venue: "Paral·lel 62",
+  show_date: "2026-11-28",
   show_time: "20:00",
-  // Ciclo "Doble o Nada" (Diobar): Club Mediodía + Paula Simón.
-  // Sin precio ni enlace de entradas confirmados todavía.
+  // Entrada anticipada 15 € (después 17,50 €), venta por OneBox.
   sold_out: false,
-  ticket_url: null,
-  poster_url: "/diobar-22-octubre.jpg",
+  ticket_url: "https://tickets.oneboxtds.com/p62/select/3054815",
+  poster_url: "/og-default.jpg",
   created_at: new Date().toISOString(),
 };
 

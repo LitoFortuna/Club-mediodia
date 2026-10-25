@@ -100,6 +100,7 @@ export function musicRecordingLd(track: Track, position: number): string {
 const VENUE_ADDRESSES: Record<string, { streetAddress: string; postalCode?: string }> = {
   "Hangar 05": { streetAddress: "Carrer Bassols, 5", postalCode: "08026" },
   "DioBar": { streetAddress: "Av. Marquès de l'Argentera, 27" },
+  "Paral·lel 62": { streetAddress: "Av. del Paral·lel, 62", postalCode: "08001" },
 };
 
 // Offset aproximado de Europe/Madrid: CEST (+02:00) de abril a octubre, CET (+01:00) el resto.

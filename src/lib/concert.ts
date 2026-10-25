@@ -40,21 +40,23 @@ export function formatConcertDateEs(): string {
 // 11 de septiembre, ya cerrado). Edítalo aquí para el próximo evento.
 export const FEATURED_SHOW = {
   bandName: "Club Mediodía",
-  title: "Club Mediodía + Paula Simón — Doble o Nada",
-  venue: "DioBar",
-  address: "Av. Marquès de l'Argentera, 27, Barcelona",
+  title: "Club Mediodía en directo — Paral·lel 62",
+  venue: "Paral·lel 62",
+  address: "Av. del Paral·lel, 62, 08001 Barcelona",
   city: "Barcelona",
-  dateISO: "2026-10-22",
+  dateISO: "2026-11-28",
   startTime: "20:00",
-  priceInfo: "Entrada 8,26 € + 0,20 € gastos de gestión",
-  posterUrl:
-    "https://d2il8hfach02z9.cloudfront.net/uploads/event/poster/df16d2660686459b07324014b9b5ca4199b56345/event_m_261022-paulasimon-clubmediodia.png?v=1790780319",
-  ticketUrl: "https://entradium.com/events/doble-o-nada-club-mediodia-paula-simon",
-  // 20:00 Europe/Madrid (CEST, +02:00) = 18:00Z; fin estimado 23:00 local = 21:00Z
-  calStartUTC: "20261022T180000Z",
-  calEndUTC: "20261022T210000Z",
+  priceInfo: "Entrada anticipada 15 € (después 17,50 €)",
+  // TODO: sustituir por el cartel oficial del 28 de noviembre cuando exista.
+  posterUrl: "/og-default.jpg",
+  ticketUrl: "https://tickets.oneboxtds.com/p62/select/3054815",
+  ticketProvider: "OneBox",
+  // 20:00 Europe/Madrid (CET, +01:00) = 19:00Z; fin estimado 22:30 local = 21:30Z
+  calStartUTC: "20261128T190000Z",
+  calEndUTC: "20261128T213000Z",
   mapsUrl:
-    "https://www.google.com/maps/place/Diobar/@41.3852818,2.1855102,19.83z/data=!4m15!1m8!3m7!1s0x12a4a301f56796e7:0x6628401821fcda60!2sAv.+del+Marqu%C3%A8s+de+l'Argentera,+27,+Ciutat+Vella,+08003+Barcelona!3b1!8m2!3d41.3855517!4d2.185501!16s%2Fg%2F11q2x77ny2!3m5!1s0x12a4a301f55dddff:0x6651593e99c7060c!8m2!3d41.385504!4d2.185461!16s%2Fg%2F1hc908cb1?entry=ttu&g_ep=EgoyMDI2MDkyOC4wIKXMDSoASAFQAw%3D%3D",
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent("Paral·lel 62, Av. del Paral·lel, 62, 08001 Barcelona"),
 } as const;
 
 export function isRegistrationOpen(): boolean {

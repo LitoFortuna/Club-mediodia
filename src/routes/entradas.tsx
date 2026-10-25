@@ -9,7 +9,7 @@ export const Route = createFileRoute("/entradas")({
     const poster = FEATURED_SHOW.posterUrl;
     const dateEs = formatDateEs(FEATURED_SHOW.dateISO);
     const title = `${FEATURED_SHOW.title} — ${dateEs}`;
-    const desc = `${FEATURED_SHOW.bandName} en ${FEATURED_SHOW.venue}, ${FEATURED_SHOW.city}, el ${dateEs}. Entradas en Entradium.`;
+    const desc = `${FEATURED_SHOW.bandName} en ${FEATURED_SHOW.venue}, ${FEATURED_SHOW.city}, el ${dateEs}. Entradas en ${FEATURED_SHOW.ticketProvider}.`;
     return {
       meta: [
         { title: `Entradas ${FEATURED_SHOW.dateISO} — Club Mediodía` },
@@ -80,7 +80,7 @@ function EntradasPage() {
                 Comprar entradas
               </a>
               <p className="mt-2 font-body text-xs text-white/30">
-                Venta gestionada por Entradium.
+                Venta gestionada por {FEATURED_SHOW.ticketProvider}.
               </p>
             </div>
 
@@ -100,7 +100,7 @@ function EntradasPage() {
             src={FEATURED_SHOW.posterUrl}
             alt={`Cartel de ${FEATURED_SHOW.title}`}
             width={1200}
-            height={1600}
+            height={1200}
             fetchPriority="high"
             className="w-full max-w-sm mx-auto border border-white/10"
           />
