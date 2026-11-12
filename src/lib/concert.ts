@@ -47,8 +47,7 @@ export const FEATURED_SHOW = {
   address: "Av. del Paral·lel, 62, 08001 Barcelona",
   city: "Barcelona",
   dateISO: "2026-11-28",
-  doorsTime: "20:00",
-  startTime: "20:30",
+  startTime: "20:00",
   priceInfo: "Entrada general 15 €",
   ageNote: "Evento para mayores de 18 años",
   // Cartel oficial alojado en DICE (cuadrado, 768×768).
@@ -56,7 +55,7 @@ export const FEATURED_SHOW = {
     "https://dice-media.imgix.net/attachments/2026-11-06/2cd7a96b-81ae-48e2-87ff-51804eccac6b.jpg?rect=0%2C0%2C768%2C768",
   ticketUrl: "https://dice.fm/event/x9vq7e-club-mediodia-28th-nov-parallel-62-barcelona-tickets?lng=es",
   ticketProvider: "DICE",
-  // Puertas 20:00 Europe/Madrid (CET, +01:00) = 19:00Z; fin 23:00 local = 22:00Z
+  // Inicio 20:00 Europe/Madrid (CET, +01:00) = 19:00Z; fin 23:00 local = 22:00Z
   calStartUTC: "20261128T190000Z",
   calEndUTC: "20261128T220000Z",
   mapsUrl:
