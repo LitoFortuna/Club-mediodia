@@ -62,13 +62,18 @@ function EntradasPage() {
               </p>
               <p className="flex items-center gap-3">
                 <Clock size={20} className="text-orange shrink-0" />
-                {formatDateEs(FEATURED_SHOW.dateISO)} · Inicio {FEATURED_SHOW.startTime}h
+                {formatDateEs(FEATURED_SHOW.dateISO)} · Puertas {FEATURED_SHOW.doorsTime}h · Concierto{" "}
+                {FEATURED_SHOW.startTime}h
               </p>
               <p className="flex items-center gap-3">
                 <Ticket size={20} className="text-orange shrink-0" />
-                {FEATURED_SHOW.priceInfo}.
+                {FEATURED_SHOW.priceInfo}. {FEATURED_SHOW.ageNote}.
               </p>
             </div>
+
+            <p className="mt-8 max-w-xl font-body text-base text-white/60 leading-relaxed">
+              {FEATURED_SHOW.description}
+            </p>
 
             <div className="mt-10">
               <a

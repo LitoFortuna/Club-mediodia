@@ -27,11 +27,12 @@ const show = {
   city: "Barcelona",
   venue: "Paral·lel 62",
   show_date: "2026-11-28",
-  show_time: "20:00",
-  // Entrada anticipada 15 € (después 17,50 €), venta por OneBox.
+  show_time: "20:30",
+  // Puertas 20:00. Entrada general 15 €, venta por DICE.
   sold_out: false,
-  ticket_url: "https://tickets.oneboxtds.com/p62/select/3054815",
-  poster_url: "/og-default.jpg",
+  ticket_url: "https://dice.fm/event/x9vq7e-club-mediodia-28th-nov-parallel-62-barcelona-tickets?lng=es",
+  poster_url:
+    "https://dice-media.imgix.net/attachments/2026-11-06/2cd7a96b-81ae-48e2-87ff-51804eccac6b.jpg?rect=0%2C0%2C768%2C768",
   created_at: new Date().toISOString(),
 };
 

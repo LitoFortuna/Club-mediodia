@@ -40,20 +40,25 @@ export function formatConcertDateEs(): string {
 // 11 de septiembre, ya cerrado). Edítalo aquí para el próximo evento.
 export const FEATURED_SHOW = {
   bandName: "Club Mediodía",
-  title: "Club Mediodía en directo — Paral·lel 62",
+  title: "Club Mediodía — Todas nuestras canciones",
+  description:
+    "El 28 de noviembre nos despedimos del año como se merece: un show especial en el que tocaremos todas nuestras canciones, de la primera a la última. Una noche para cantarlas juntos antes de cerrar 2026.",
   venue: "Paral·lel 62",
   address: "Av. del Paral·lel, 62, 08001 Barcelona",
   city: "Barcelona",
   dateISO: "2026-11-28",
-  startTime: "20:00",
-  priceInfo: "Entrada anticipada 15 € (después 17,50 €)",
-  // TODO: sustituir por el cartel oficial del 28 de noviembre cuando exista.
-  posterUrl: "/og-default.jpg",
-  ticketUrl: "https://tickets.oneboxtds.com/p62/select/3054815",
-  ticketProvider: "OneBox",
-  // 20:00 Europe/Madrid (CET, +01:00) = 19:00Z; fin estimado 22:30 local = 21:30Z
+  doorsTime: "20:00",
+  startTime: "20:30",
+  priceInfo: "Entrada general 15 €",
+  ageNote: "Evento para mayores de 18 años",
+  // Cartel oficial alojado en DICE (cuadrado, 768×768).
+  posterUrl:
+    "https://dice-media.imgix.net/attachments/2026-11-06/2cd7a96b-81ae-48e2-87ff-51804eccac6b.jpg?rect=0%2C0%2C768%2C768",
+  ticketUrl: "https://dice.fm/event/x9vq7e-club-mediodia-28th-nov-parallel-62-barcelona-tickets?lng=es",
+  ticketProvider: "DICE",
+  // Puertas 20:00 Europe/Madrid (CET, +01:00) = 19:00Z; fin 23:00 local = 22:00Z
   calStartUTC: "20261128T190000Z",
-  calEndUTC: "20261128T213000Z",
+  calEndUTC: "20261128T220000Z",
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=" +
     encodeURIComponent("Paral·lel 62, Av. del Paral·lel, 62, 08001 Barcelona"),
