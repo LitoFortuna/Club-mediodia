@@ -12,7 +12,7 @@ export const Route = createFileRoute("/entradas")({
     const desc = `${FEATURED_SHOW.bandName} en ${FEATURED_SHOW.venue}, ${FEATURED_SHOW.city}, el ${dateEs}. Entradas en ${FEATURED_SHOW.ticketProvider}.`;
     return {
       meta: [
-        { title: `Entradas ${FEATURED_SHOW.dateISO} — Club Mediodía` },
+        { title: `Entradas ${dateEs} — Club Mediodía` },
         { name: "description", content: desc },
         { property: "og:type", content: "website" },
         { property: "og:url", content: "https://clubmediodia.es/entradas" },

@@ -64,6 +64,27 @@ export const FEATURED_SHOW = {
     encodeURIComponent("Paral·lel 62, Av. del Paral·lel, 62, 08001 Barcelona"),
 } as const;
 
+// El show del próximo concierto vive en Firestore (/admin), pero a menudo se da de
+// alta antes de tener hora, enlace de entradas o cartel. Si coincide la fecha con
+// FEATURED_SHOW, rellena solo lo que falte para que /, /shows y /entradas cuenten
+// lo mismo. Lo que se edite en /admin tiene prioridad.
+export function withFeaturedShowDefaults<
+  T extends {
+    show_date: string;
+    show_time?: string | null;
+    ticket_url?: string | null;
+    poster_url?: string | null;
+  },
+>(show: T): T {
+  if (show.show_date !== FEATURED_SHOW.dateISO) return show;
+  return {
+    ...show,
+    show_time: show.show_time || FEATURED_SHOW.startTime,
+    ticket_url: show.ticket_url || FEATURED_SHOW.ticketUrl,
+    poster_url: show.poster_url || FEATURED_SHOW.posterUrl,
+  };
+}
+
 export function isRegistrationOpen(): boolean {
   return new Date() < new Date(CONCERT.registrationDeadlineISO);
 }

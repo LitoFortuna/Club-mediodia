@@ -4,15 +4,17 @@ import { adminDb } from "@/lib/firebase.server";
 import { DoubleExposure } from "@/components/DoubleExposure";
 import { ShowCard } from "@/components/ShowCard";
 import { NewsletterForm } from "@/components/NewsletterForm";
-import { CONCERT } from "@/lib/concert";
+import { CONCERT, formatDateEs, withFeaturedShowDefaults } from "@/lib/concert";
 import { showEventLd, abs } from "@/lib/band";
 import type { Show } from "@/lib/types";
 
 // Usa el cartel del concierto anunciado si el show no trae poster propio
 function withConcertPoster(s: Show): Show {
-  return s.show_date === CONCERT.dateISO && !s.poster_url
-    ? { ...s, poster_url: CONCERT.posterPath }
-    : s;
+  const withPoster =
+    s.show_date === CONCERT.dateISO && !s.poster_url
+      ? { ...s, poster_url: CONCERT.posterPath }
+      : s;
+  return withFeaturedShowDefaults(withPoster);
 }
 
 const getShows = createServerFn({ method: "GET" }).handler(async () => {
@@ -43,14 +45,14 @@ export const Route = createFileRoute("/shows")({
       .map(withConcertPoster);
     const posterPath = upcoming.find((s) => s.poster_url)?.poster_url ?? CONCERT.posterPath;
     const poster = abs(posterPath);
+    const next = upcoming[0];
+    const description = next
+      ? `Próximas fechas de Club Mediodía en directo. Próximo concierto: ${next.venue}, ${next.city}, el ${formatDateEs(next.show_date)}.`
+      : "Próximas fechas de Club Mediodía en directo.";
     return {
       meta: [
         { title: "Shows — Club Mediodía" },
-        {
-          name: "description",
-          content:
-            "Próximas fechas de Club Mediodía en directo. Presentación del álbum «Un globo en la terraza» en Hangar 05, Barcelona, el 11 de septiembre de 2026.",
-        },
+        { name: "description", content: description },
         { property: "og:title", content: "Shows — Club Mediodía" },
         { property: "og:description", content: "Próximas fechas y entradas de Club Mediodía." },
         { property: "og:image", content: poster },

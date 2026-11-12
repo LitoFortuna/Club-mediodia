@@ -8,6 +8,7 @@ import albumCoverWebp from "@/assets/CM_portada.webp";
 import bandPhoto from "@/assets/CM_header.jpg";
 import bandPhotoWebp from "@/assets/CM_header.webp";
 import { Pic } from "@/components/Pic";
+import { withFeaturedShowDefaults } from "@/lib/concert";
 
 const getNextShow = createServerFn({ method: "GET" }).handler(async () => {
   const today = new Date().toISOString().slice(0, 10);
@@ -21,7 +22,7 @@ const getNextShow = createServerFn({ method: "GET" }).handler(async () => {
 
     if (snapshot.empty) return { show: null };
     const doc = snapshot.docs[0];
-    return { show: { id: doc.id, ...doc.data() } };
+    return { show: withFeaturedShowDefaults({ id: doc.id, ...doc.data() } as any) };
   } catch (err) {
     console.error("getNextShow error:", err);
     return { show: null };
@@ -35,7 +36,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Vivimos en el mediodía mental. Club Mediodía: psicodelia doméstica y memoria borrosa. Nuevo álbum próximamente.",
+          "Vivimos en el mediodía mental. Club Mediodía: psicodelia doméstica y memoria borrosa. Nuevo álbum: «Un globo en la terraza», ya disponible.",
       },
       { property: "og:title", content: "Club Mediodía — Un globo en la terraza" },
       {
@@ -173,12 +174,24 @@ function Index() {
                 <p className="text-xl font-display font-bold uppercase">{show.venue}</p>
                 <p className="text-gray-500 font-display uppercase tracking-widest text-sm">{show.show_time ? `${show.show_time}H` : "HORARIO POR CONFIRMAR"}</p>
               </div>
-              <Link
-                to="/shows"
-                className="inline-block px-10 py-4 bg-white text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-arena hover:text-black"
-              >
-                Ver todas las fechas
-              </Link>
+              <div className="flex flex-wrap gap-4">
+                {show.ticket_url && !show.sold_out && (
+                  <a
+                    href={show.ticket_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block px-10 py-4 bg-orange text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-white hover:scale-105 active:scale-95"
+                  >
+                    Comprar entradas
+                  </a>
+                )}
+                <Link
+                  to="/shows"
+                  className="inline-block px-10 py-4 bg-white text-black font-display font-bold uppercase tracking-widest text-sm transition-all hover:bg-arena hover:text-black"
+                >
+                  Ver todas las fechas
+                </Link>
+              </div>
             </div>
           </div>
         </section>
