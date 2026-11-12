@@ -27,8 +27,8 @@ const show = {
   city: "Barcelona",
   venue: "Paral·lel 62",
   show_date: "2026-11-28",
-  show_time: "20:00",
-  // Puertas y concierto a las 20:00. Entrada general 15 €, venta por DICE.
+  show_time: "20:30",
+  // Puertas 20:00. Entrada general 15 €, venta por DICE.
   sold_out: false,
   ticket_url: "https://dice.fm/event/x9vq7e-club-mediodia-28th-nov-parallel-62-barcelona-tickets?lng=es",
   poster_url:
